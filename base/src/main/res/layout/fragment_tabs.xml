@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayout.Vertical.Full">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        style="@style/ViewPager" >
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/tab_strip"
+            style="@style/PagerTabStrip"/>
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

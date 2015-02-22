@@ -1,0 +1,18 @@
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_refresh"
+    style="@style/SwipeRefreshLayout">
+    <LinearLayout
+        style="@style/LinearLayout.Vertical.Full">
+        <TextView
+            android:id="@+id/swipe_label"
+            style="@style/TextView.Loading" />
+        <ListView
+            android:id="@id/android:list"
+            style="@style/ListView"/>
+        <TextView
+            android:id="@id/android:empty"
+            android:text="@string/no_results"
+            style="@style/TextView.Empty" />
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

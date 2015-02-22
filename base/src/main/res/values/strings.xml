@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Base</string>
+
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="minute">minute</string>
+    <string name="minutes">minutes</string>
+    <string name="second">second</string>
+    <string name="seconds">seconds</string>
+
+    <string name="loading_">Loading…</string>
+    <string name="searching_">Searching…</string>
+    <string name="downloading_">Downloading…</string>
+    <string name="uploading_">Uploading…</string>
+
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="not_saved">Not saved</string>
+    <string name="saved">Saved</string>
+    <string name="unsaved_changes">Unsaved changes</string>
+    <string name="would_you_like_to_save_your_changes_">Would you like to save your changes?</string>
+
+    <string name="unhandled_exception">Unhandled Exception</string>
+    <string name="exit_application">Exit Application</string>
+    <string name="restart_application">Restart Application</string>
+
+    <string name="unknown_exception">Unknown Exception</string>
+    <string name="last_synchronization">Last Synchronization</string>
+    <string name="connection_timeout_exception">Connection Timed Out</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="unknown_host_exception">Unknown Host Exception</string>
+
+    <string name="verify_internet_connection">Please verify your internet connection and try synchronizing again.</string>
+    <string name="no_synchronization">Initial Synchronization Required</string>
+    <string name="missing_permissions">Missing Permissions</string>
+    <string name="contact_admin_missing_permissions">Please contact your admin to ensure you have the correct account permissions and then resynchronize the application.</string>
+    <string name="error_saving_changes">Error Saving Changes</string>
+    <string name="error_loading_form">Error Loading Form</string>
+    <string name="restarting_application">There was an error loading the form, if the problem continues try closing and restarting the application.</string>
+    <string name="location_service_disabled">Location Service Disabled</string>
+    <string name="enable_location_service">Location Service is currently disabled, would you like to visit Settings to enable it?</string>
+    <string name="unable_location_settings">Unable Launch Location Settings</string>
+    <string name="visit_location_settings">Please visit your Location &amp; Security Settings to enable location service.</string>
+    <string name="missing_required_fields">Missing Required Fields</string>
+    <string name="enter_required_fields">Please ensure all required fields have been answered before saving the form</string>
+    <string name="server_maintenance_mode">The server is currently in maintenance mode, please try to resynchronize again later.</string>
+    <string name="host_connect_exception">There was a problem connecting to the server, please verify your internet connection and try again.</string>
+    <string name="invalid_credentials">Invalid Credentials</string>
+    <string name="invalid_credentials_description">The email or password you entered is incorrect, please try again.</string>
+    <string name="signup_failed">Signup Failed</string>
+    <string name="signup_failed_description">There was a problem signing up, please verify all required information and try again.</string>
+    <string name="unprocessable_entity">The server was unable to process the request.</string>
+    <string name="unhandled_exception_description">Our support team has been notified of the problem, and will submit an app update as soon as the issue is resolved.</string>
+    <string name="database_changed">Database Changed</string>
+    <string name="database_changed_description">The database schema has recently changed, the old database will be removed requiring you to restart the application.</string>
+    <string name="no_results">No Results</string>
+    <string name="posting_">Posting...</string>
+    <string name="exiting_">Exiting...</string>
+    <string name="shutting_down_">Shutting down...</string>
+
+</resources>
