@@ -136,8 +136,6 @@ public abstract class BaseApplication extends android.app.Application {
         }.showOk(R.string.exit_application);
     }
 
-    protected abstract void onUncaughtException(Throwable throwable);
-
     public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 
         @Override
@@ -150,6 +148,7 @@ public abstract class BaseApplication extends android.app.Application {
                     Looper.prepare();
                     try {
                         if (isDatabaseException(throwable)) {
+                            onDeleteDatabase();
                             showDatabaseException();
                         }
                         else {
@@ -165,4 +164,8 @@ public abstract class BaseApplication extends android.app.Application {
             }).start();
         }
     }
+
+    public abstract void onDeleteDatabase();
+
+    protected abstract void onUncaughtException(Throwable throwable);
 }
