@@ -68,6 +68,8 @@ public abstract class BaseApplication extends android.app.Application {
         System.exit(0);
     }
 
+    public abstract void deleteDatabase();
+
     public String getVersion() {
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -136,6 +138,8 @@ public abstract class BaseApplication extends android.app.Application {
         }.showOk(R.string.exit_application);
     }
 
+    protected abstract void onUncaughtException(Throwable throwable);
+
     public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 
         @Override
@@ -148,7 +152,7 @@ public abstract class BaseApplication extends android.app.Application {
                     Looper.prepare();
                     try {
                         if (isDatabaseException(throwable)) {
-                            onDeleteDatabase();
+                            deleteDatabase();
                             showDatabaseException();
                         }
                         else {
@@ -165,7 +169,4 @@ public abstract class BaseApplication extends android.app.Application {
         }
     }
 
-    public abstract void onDeleteDatabase();
-
-    protected abstract void onUncaughtException(Throwable throwable);
 }
