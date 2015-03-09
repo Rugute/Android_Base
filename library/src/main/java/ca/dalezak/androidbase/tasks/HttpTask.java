@@ -178,7 +178,7 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                         JSONObject jsonObject = (JSONObject)json;
                         M model = onHandleResponse(jsonObject);
                         if (callback != null) {
-                            callback.onTaskProgress(this, model, 1, 1);
+                            callback.onTaskProgress(this, 1, 1);
                         }
                     }
                     else if (json instanceof JSONArray) {
@@ -189,7 +189,7 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 M model = onHandleResponse(jsonObject);
                                 if (callback != null) {
-                                    callback.onTaskProgress(this, model, jsonArray.length(), i + 1);
+                                    callback.onTaskProgress(this, jsonArray.length(), i + 1);
                                 }
                             }
                             catch (JSONException e) {

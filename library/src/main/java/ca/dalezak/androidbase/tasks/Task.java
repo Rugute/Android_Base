@@ -11,15 +11,15 @@ public abstract class Task<T extends Task, M extends BaseModel>
         extends AsyncTask<Object, M, Exception>
         implements DialogInterface.OnCancelListener {
 
-    public interface Callback<T extends Task, M extends BaseModel> {
+    public interface Callback<T extends Task> {
         public void onTaskStarted(T task);
         public void onTaskCancelled(T task);
-        public void onTaskProgress(T task, M model, int total, int progress);
+        public void onTaskProgress(T task, int total, int progress);
         public void onTaskFinished(T task);
         public void onTaskFailed(T task, Exception exception);
     }
 
-    protected Task.Callback<T, M> callback;
+    protected Task.Callback<T> callback;
     protected final int message;
     protected final Context context;
     protected boolean progress;
@@ -53,11 +53,11 @@ public abstract class Task<T extends Task, M extends BaseModel>
         return pending;
     }
 
-    public void register(Task.Callback<T, M> callback) {
+    public void register(Task.Callback<T> callback) {
         this.callback = callback;
     }
 
-    public void unregister(Task.Callback<T, M> callback) {
+    public void unregister(Task.Callback<T> callback) {
         this.callback = null;
     }
 

@@ -6,9 +6,9 @@ import ca.dalezak.androidbase.utils.UIRunnable;
 
 import java.util.LinkedList;
 
-public abstract class Queue<T extends Task> implements Task.Callback<T, BaseModel> {
+public abstract class Queue<T extends Task> implements Task.Callback<T> {
 
-    public interface Callback<T extends Task> extends Task.Callback<T, BaseModel> {
+    public interface Callback<T extends Task> extends Task.Callback<T> {
         public void onQueueStarted(int total);
         public void onQueueResumed();
         public void onQueueProgress(int total, int progress);
@@ -143,11 +143,11 @@ public abstract class Queue<T extends Task> implements Task.Callback<T, BaseMode
         }}.run();
     }
 
-    public void onTaskProgress(final T task, final BaseModel model, final int total, final int progress) {
+    public void onTaskProgress(final T task, final int total, final int progress) {
         Log.i(this, "onTaskProgress %s %d / %d", task.getClass().getSimpleName(), progress, total);
         new UIRunnable(){ public void uiRun() {
             for (Callback callback : callbacks) {
-                callback.onTaskProgress(task, model, total, tasks.size());
+                callback.onTaskProgress(task, total, tasks.size());
             }
         }}.run();
     }

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -290,4 +293,24 @@ public abstract class BaseFragment extends android.app.Fragment {
         }
     }
 
+    protected boolean isDebug() {
+        try {
+            PackageManager packageManager = getActivity().getPackageManager();
+            String packageName = getActivity().getPackageName();
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            return (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            Log.e(this, "PackageManager.NameNotFoundException", e);
+        }
+        return true;
+    }
+
+    protected boolean isPortrait() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    protected boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
 }

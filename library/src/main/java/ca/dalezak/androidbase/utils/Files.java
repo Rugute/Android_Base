@@ -1,5 +1,6 @@
 package ca.dalezak.androidbase.utils;
 
+import android.os.Environment;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
 
@@ -11,6 +12,25 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Files {
+
+    public static File getVideosDirectory() {
+        File rootDirectory = isExternalStorageWritable()
+                ? Environment.getExternalStorageDirectory()
+                : Environment.getDataDirectory();
+        return new File(rootDirectory, "videos");
+    }
+
+    public static File getImagesDirectory() {
+        File rootDirectory = isExternalStorageWritable()
+                ? Environment.getExternalStorageDirectory()
+                : Environment.getDataDirectory();
+        return new File(rootDirectory, "images");
+    }
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
 
     public static String getMimeType(String url) {
         String type = null;
