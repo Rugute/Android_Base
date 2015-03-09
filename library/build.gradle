@@ -48,7 +48,7 @@ dependencies {
 def siteUrl = 'https://github.com/dalezak/Android_Base'
 def gitUrl = 'https://github.com/dalezak/Android_Base.git'
 
-group = "ca.dalezak"
+group = "ca.dalezak.androidbase"
 
 install {
     repositories.mavenInstaller {
