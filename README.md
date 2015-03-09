@@ -1,5 +1,7 @@
 # Android Base
 
+### A base library for Android projects.
+
 ## License
 
     The MIT License (MIT)
