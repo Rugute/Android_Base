@@ -49,9 +49,6 @@ import java.util.Set;
 
 public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
 
-    private Map<String, Object> headers = new HashMap<>();
-    private Map<String, Object> parameters = new HashMap<>();
-
     protected static final String ETAG = "ETag";
     protected static final String ACCEPT = "Accept";
     protected static final String CONTENT_TYPE = "Content-Type";
@@ -62,17 +59,14 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
     protected static final String AUTHORIZATION = "Authorization";
     protected static final String BASIC = "Basic";
+    protected static final String SLASH = "/";
+
+    private Map<String, Object> headers = new HashMap<>();
+    private Map<String, Object> parameters = new HashMap<>();
 
     protected URI uri;
-
     protected String username;
     protected String password;
-
-    private static Context context;
-
-    public static void initialize(Context cxt) {
-        context = cxt;
-    }
 
     protected HttpTask(Context context, URI uri) {
         super(context);
@@ -84,15 +78,15 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
         this.uri = uri;
     }
 
-    protected HttpTask(Context context, URI uri, int message, boolean progress) {
-        super(context, message, progress);
-        this.uri = uri;
-    }
-
     protected HttpTask(Context context, String server, String path) {
         super(context);
         try {
-            this.uri = new URI(String.format("%s%s", server, path));
+            if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
+                this.uri = new URI(server + path);
+            }
+            else {
+                this.uri = new URI(server + SLASH + path);
+            }
         }
         catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -102,60 +96,59 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected HttpTask(Context context, String server, String path, int message)  {
         super(context, message);
         try {
-            this.uri = new URI(String.format("%s%s", server, path));
+            if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
+                this.uri = new URI(server + path);
+            }
+            else {
+                this.uri = new URI(server + SLASH + path);
+            }
         }
         catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected HttpTask(Context context, String server, String path, int message, boolean progress) {
-        super(context, message, progress);
-        try {
-            this.uri = new URI(String.format("%s%s", server, path));
-        }
-        catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    protected Context getContext() {
+        return context;
     }
 
-    public void addHeader(String key, Object object) {
+    protected void addHeader(String key, Object object) {
         headers.put(key, object);
     }
 
-    public Set<String> getHeaderKeys() {
+    protected Set<String> getHeaderKeys() {
         return headers.keySet();
     }
 
-    public Object getHeader(String key) {
+    protected Object getHeader(String key) {
         return headers.get(key);
     }
 
-    public void addParameter(String key, Object object) {
+    protected void addParameter(String key, Object object) {
         parameters.put(key, object);
     }
 
-    public Set<String> getParameterKeys() {
+    protected Set<String> getParameterKeys() {
         return parameters.keySet();
     }
 
-    public Object getParameter(String key) {
+    protected Object getParameter(String key) {
         return parameters.get(key);
     }
 
-    public String getUsername() {
+    protected String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    protected void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
+    protected String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    protected void setPassword(String password) {
         this.password = password;
     }
 
@@ -264,7 +257,7 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                     Header etag = response.getFirstHeader(ETAG);
                     if (etag != null) {
                         Log.i(this, "Not Modified %s", etag.getValue());
-                        saveETag(uri, etag.getValue());
+                        setETag(uri, etag.getValue());
                     }
                     return null;
                 }
@@ -331,32 +324,32 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
 
     protected abstract M onHandleResponse(JSONObject json) throws JSONException;
 
-    protected static SharedPreferences prefs() {
-        return context.getSharedPreferences(context.getClass().getName(), Activity.MODE_PRIVATE);
+    protected static SharedPreferences prefs(Context context) {
+        return context.getSharedPreferences(HttpTask.class.getName(), Activity.MODE_PRIVATE);
     }
 
-    protected static SharedPreferences.Editor editor() {
-        return context.getSharedPreferences(context.getClass().getName(), Activity.MODE_PRIVATE).edit();
+    protected static SharedPreferences.Editor editor(Context context) {
+        return context.getSharedPreferences(HttpTask.class.getName(), Activity.MODE_PRIVATE).edit();
     }
 
     protected boolean hasETag(URI uri) {
-        return prefs().getAll().size() > 0 && prefs().contains(uri.toString());
+        return prefs(context).getAll().size() > 0 && prefs(context).contains(uri.toString());
     }
 
     protected String getETag(URI uri) {
-        return prefs().getString(uri.toString(), null);
+        return prefs(context).getString(uri.toString(), null);
     }
 
-    protected void saveETag(URI uri, String etag) {
-        editor().putString(uri.toString(), etag).commit();
+    protected void setETag(URI uri, String etag) {
+        editor(context).putString(uri.toString(), etag).commit();
     }
 
-    public static void clearETags() {
-        Map<String,?> keys = prefs().getAll();
-        for (Map.Entry<String,?> entry : keys.entrySet()){
+    public static void clearETags(Context context) {
+        Map<String,?> keys = prefs(context).getAll();
+        for (Map.Entry<String,?> entry : keys.entrySet()) {
             String key = entry.getKey();
             if (key.startsWith("http")) {
-                editor().remove(key).commit();
+                editor(context).remove(key).commit();
             }
         }
     }

@@ -14,7 +14,6 @@ public class Prefs {
     public class Keys {
         public static final String USERNAME = "username";
         public static final String PASSWORD = "password";
-        public static final String GOOGLE_CLOUD_MESSAGING = "google_cloud_messaging";
     }
 
     public static Context context;
@@ -45,22 +44,6 @@ public class Prefs {
 
     public static void setPassword(String password) {
         save(Keys.PASSWORD, password);
-    }
-
-    public static Boolean hasGoogleCloudMessaging() {
-        return contains(Keys.GOOGLE_CLOUD_MESSAGING) && !Strings.isNullOrEmpty(getString(Keys.GOOGLE_CLOUD_MESSAGING));
-    }
-
-    public static String getGoogleCloudMessaging() {
-        return getString(Keys.GOOGLE_CLOUD_MESSAGING);
-    }
-
-    public static void setGoogleCloudMessaging(String registration) {
-        save(Keys.GOOGLE_CLOUD_MESSAGING, registration);
-    }
-
-    public static void removeGoogleCloudMessaging() {
-        remove(Keys.GOOGLE_CLOUD_MESSAGING);
     }
 
     public static boolean exists(Context context) {
@@ -397,6 +380,4 @@ public class Prefs {
     protected static SharedPreferences.Editor editor(Context context) {
         return context.getSharedPreferences(context.getClass().getName(), Activity.MODE_PRIVATE).edit();
     }
-
 }
-

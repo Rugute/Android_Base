@@ -26,7 +26,6 @@ public abstract class BaseApplication extends android.app.Application {
         super.onCreate();
         Log.i(this, "onCreate");
         Prefs.initialize(this);
-        HttpTask.initialize(this);
         LocationManager.initialize(this);
     }
 
@@ -36,7 +35,7 @@ public abstract class BaseApplication extends android.app.Application {
         Log.i(this, "onTerminate");
     }
 
-    protected String getServer() {
+    public String getServer() {
         return getManifest("API_SERVER");
     }
 
@@ -110,7 +109,7 @@ public abstract class BaseApplication extends android.app.Application {
         return 0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE);
     }
 
-    private boolean isDatabaseException(Throwable throwable) {
+    protected boolean isDatabaseException(Throwable throwable) {
         if (throwable != null && throwable.getMessage() != null) {
             if (throwable.getMessage().contains("no such column") && throwable instanceof android.database.sqlite.SQLiteException) {
                 return true;
@@ -120,7 +119,7 @@ public abstract class BaseApplication extends android.app.Application {
         return false;
     }
 
-    private void showDatabaseException() {
+    protected void showDatabaseException() {
         Log.i(this, "showDatabaseException");
         new AlertDialog(getActivity(), R.string.database_changed, R.string.database_changed_description) {
             @Override
@@ -130,7 +129,7 @@ public abstract class BaseApplication extends android.app.Application {
         }.showOk(ca.dalezak.androidbase.R.string.restart_application);
     }
 
-    private void showUnhandledException() {
+    protected void showUnhandledException() {
         Log.i(this, "showUnhandledException");
         new AlertDialog(getActivity(), R.string.unhandled_exception, R.string.unhandled_exception_description) {
             @Override

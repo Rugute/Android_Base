@@ -22,27 +22,17 @@ public abstract class Task<T extends Task, M extends BaseModel>
     protected Task.Callback<T, M> callback;
     protected final int message;
     protected final Context context;
-    protected boolean progress;
-
     protected boolean executing = false;
     protected boolean pending = true;
 
     protected Task(Context context) {
         this.context = context;
         this.message = R.string.loading_;
-        this.progress = false;
     }
 
     protected Task(Context context, int message) {
         this.context = context;
         this.message = message;
-        this.progress = false;
-    }
-
-    protected Task(Context context, int message, boolean progress) {
-        this.context = context;
-        this.message = message;
-        this.progress = progress;
     }
 
     public boolean isExecuting() {
@@ -53,20 +43,16 @@ public abstract class Task<T extends Task, M extends BaseModel>
         return pending;
     }
 
+    public int getMessage() {
+        return message;
+    }
+
     public void register(Task.Callback<T, M> callback) {
         this.callback = callback;
     }
 
     public void unregister(Task.Callback<T, M> callback) {
         this.callback = null;
-    }
-
-    public String getMessage() {
-        return context != null ? context.getString(message) : null;
-    }
-
-    public boolean showsProgress() {
-        return progress;
     }
 
     @Override

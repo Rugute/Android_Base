@@ -32,20 +32,12 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
         super(context, uri, message);
     }
 
-    protected HttpPostTask(Context context, URI uri, int message, boolean progress) {
-        super(context, uri, message, progress);
-    }
-
     protected HttpPostTask(Context context, String server, String path) {
         super(context, server, path, R.string.posting_);
     }
 
     protected HttpPostTask(Context context,String server, String path, int message) {
         super(context, server, path, message);
-    }
-
-    protected HttpPostTask(Context context,String server, String path, int message, boolean progress) {
-        super(context, server, path, message, progress);
     }
 
     @Override

@@ -20,20 +20,12 @@ public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
         super(context, uri, message);
     }
 
-    protected HttpGetTask(Context context, URI uri, int message, boolean progress) {
-        super(context, uri, message, progress);
-    }
-
     protected HttpGetTask(Context context, String server, String path) {
         super(context, server, path, R.string.downloading_);
     }
 
     protected HttpGetTask(Context context,String server, String path, int message) {
         super(context, server, path, message);
-    }
-
-    protected HttpGetTask(Context context,String server, String path, int message, boolean progress) {
-        super(context, server, path, message, progress);
     }
 
     @Override
