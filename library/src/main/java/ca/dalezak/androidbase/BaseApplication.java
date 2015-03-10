@@ -26,7 +26,7 @@ public abstract class BaseApplication extends android.app.Application {
         super.onCreate();
         Log.i(this, "onCreate");
         Prefs.initialize(this);
-        HttpTask.initialize(getServer());
+        HttpTask.initialize(this);
         LocationManager.initialize(this);
     }
 

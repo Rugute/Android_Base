@@ -7,31 +7,42 @@ import org.apache.http.client.methods.HttpGet;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Log;
-import ca.dalezak.androidbase.utils.Prefs;
 
 import java.net.URI;
 
 public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
 
-    protected HttpGetTask(Context context, String path) {
-        super(context, path, R.string.downloading_);
+    protected HttpGetTask(Context context, URI uri) {
+        super(context, uri, R.string.downloading_);
     }
 
-    protected HttpGetTask(Context context, String path, int message) {
-        super(context, path, message);
+    protected HttpGetTask(Context context, URI uri, int message) {
+        super(context, uri, message);
     }
 
-    protected HttpGetTask(Context context, String path, int message, boolean progress) {
-        super(context, path, message, progress);
+    protected HttpGetTask(Context context, URI uri, int message, boolean progress) {
+        super(context, uri, message, progress);
+    }
+
+    protected HttpGetTask(Context context, String server, String path) {
+        super(context, server, path, R.string.downloading_);
+    }
+
+    protected HttpGetTask(Context context,String server, String path, int message) {
+        super(context, server, path, message);
+    }
+
+    protected HttpGetTask(Context context,String server, String path, int message, boolean progress) {
+        super(context, server, path, message, progress);
     }
 
     @Override
     protected HttpRequest getHttpRequest(URI uri) {
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setHeader(CONTENT_TYPE, APPLICATION_JSON);
-        if (Prefs.hasETag(uri)) {
-            Log.i(this, "ETag %s", Prefs.getETag(uri));
-            httpGet.setHeader(IF_NONE_MATCH, Prefs.getETag(uri));
+        if (hasETag(uri)) {
+            Log.i(this, "ETag %s", getETag(uri));
+            httpGet.setHeader(IF_NONE_MATCH, getETag(uri));
         }
         return httpGet;
     }

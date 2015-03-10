@@ -28,18 +28,18 @@ public abstract class Task<T extends Task, M extends BaseModel>
     protected boolean pending = true;
 
     protected Task(Context context) {
-        this(context, R.string.loading_, false, false);
+        this.context = context;
+        this.message = R.string.loading_;
+        this.progress = false;
     }
 
     protected Task(Context context, int message) {
-        this(context, message, false, false);
+        this.context = context;
+        this.message = message;
+        this.progress = false;
     }
 
     protected Task(Context context, int message, boolean progress) {
-        this(context, message, progress, false);
-    }
-
-    protected Task(Context context, int message, boolean progress, boolean cancellable) {
         this.context = context;
         this.message = message;
         this.progress = progress;

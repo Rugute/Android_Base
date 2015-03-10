@@ -12,16 +12,28 @@ import java.net.URI;
 
 public abstract class HttpPutTask<M extends BaseModel> extends HttpPostTask<M> {
 
-    protected HttpPutTask(Context context, String path) {
-        super(context, path, R.string.uploading_);
+    protected HttpPutTask(Context context, URI uri) {
+        super(context, uri, R.string.uploading_);
     }
 
-    protected HttpPutTask(Context context, String path, int message) {
-        super(context, path, message);
+    protected HttpPutTask(Context context, URI uri, int message) {
+        super(context, uri, message);
     }
 
-    protected HttpPutTask(Context context, String path, int message, boolean progress) {
-        super(context, path, message, progress);
+    protected HttpPutTask(Context context, URI uri, int message, boolean progress) {
+        super(context, uri, message, progress);
+    }
+
+    protected HttpPutTask(Context context, String server, String path) {
+        super(context, server, path, R.string.uploading_);
+    }
+
+    protected HttpPutTask(Context context,String server, String path, int message) {
+        super(context, server, path, message);
+    }
+
+    protected HttpPutTask(Context context,String server, String path, int message, boolean progress) {
+        super(context, server, path, message, progress);
     }
 
     @Override

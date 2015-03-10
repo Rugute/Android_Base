@@ -1,6 +1,8 @@
 package ca.dalezak.androidbase.tasks;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Base64;
 
 import org.apache.http.Header;
@@ -32,7 +34,6 @@ import org.json.JSONTokener;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Log;
-import ca.dalezak.androidbase.utils.Prefs;
 import ca.dalezak.androidbase.utils.Strings;
 
 import java.io.BufferedReader;
@@ -42,8 +43,14 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
+
+    private Map<String, Object> headers = new HashMap<>();
+    private Map<String, Object> parameters = new HashMap<>();
 
     protected static final String ETAG = "ETag";
     protected static final String ACCEPT = "Accept";
@@ -53,35 +60,87 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected static final String APPLICATION_JSON = "application/json";
     protected static final String MULTIPART_FORM_DATA = "multipart/form-data";
     protected static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
-    protected static final String COOKIE = "Cookie";
     protected static final String AUTHORIZATION = "Authorization";
     protected static final String BASIC = "Basic";
 
-    protected static String server;
-    protected final String path;
+    protected URI uri;
 
     protected String username;
     protected String password;
 
-    public static void initialize(String server) {
-        HttpTask.server = server;
+    private static Context context;
+
+    public static void initialize(Context cxt) {
+        context = cxt;
     }
 
-    protected HttpTask(Context context, String path) {
-        this(context, path, 0, false);
+    protected HttpTask(Context context, URI uri) {
+        super(context);
+        this.uri = uri;
     }
 
-    protected HttpTask(Context context, String path, int message) {
-        this(context, path, message, false);
+    protected HttpTask(Context context, URI uri, int message) {
+        super(context, message);
+        this.uri = uri;
     }
 
-    protected HttpTask(Context context, String path, int message, boolean progress) {
+    protected HttpTask(Context context, URI uri, int message, boolean progress) {
         super(context, message, progress);
-        this.path = path;
+        this.uri = uri;
     }
 
-    public String getServer() {
-        return server;
+    protected HttpTask(Context context, String server, String path) {
+        super(context);
+        try {
+            this.uri = new URI(String.format("%s%s", server, path));
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected HttpTask(Context context, String server, String path, int message)  {
+        super(context, message);
+        try {
+            this.uri = new URI(String.format("%s%s", server, path));
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected HttpTask(Context context, String server, String path, int message, boolean progress) {
+        super(context, message, progress);
+        try {
+            this.uri = new URI(String.format("%s%s", server, path));
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addHeader(String key, Object object) {
+        headers.put(key, object);
+    }
+
+    public Set<String> getHeaderKeys() {
+        return headers.keySet();
+    }
+
+    public Object getHeader(String key) {
+        return headers.get(key);
+    }
+
+    public void addParameter(String key, Object object) {
+        parameters.put(key, object);
+    }
+
+    public Set<String> getParameterKeys() {
+        return parameters.keySet();
+    }
+
+    public Object getParameter(String key) {
+        return parameters.get(key);
     }
 
     public String getUsername() {
@@ -109,11 +168,10 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
         HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
         HttpConnectionParams.setSoTimeout(httpParameters, 30000);
         DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-        //TODO remove dependencies to Prefs
-        if (Prefs.hasUsername() && Prefs.hasPassword()) {
+        if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
             AuthScope authScope = new AuthScope(uri.getHost(), AuthScope.ANY_PORT);
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(Prefs.getUsername(), Prefs.getPassword());
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             credentialsProvider.setCredentials(authScope, credentials);
             httpClient.setCredentialsProvider(credentialsProvider);
         }
@@ -145,22 +203,23 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected Exception doInBackground(Object... params) {
         try {
             onPrepareRequest();
-            URI uri = new URI(String.format("%s%s", server, path));
             Log.i(this, "Request %s", uri);
             HttpHost httpHost = getHttpHost(uri);
             HttpClient httpClient = getHttpClient(uri);
             HttpContext httpContext = getHttpContext();
             HttpRequest httpRequest = getHttpRequest(uri);
             httpRequest.setHeader(ACCEPT, APPLICATION_JSON);
-            if (Prefs.hasCookie()) {
-                Log.i(this, "Cookie %s", Prefs.getCookie());
-                httpRequest.setHeader(COOKIE, Prefs.getCookie());
-            }
-            if (Prefs.hasUsername() && Prefs.hasPassword()) {
-                Log.i(this, "Username %s Password %s", Prefs.getUsername(), Prefs.getPassword());
-                String credentials = String.format("%s:%s", Prefs.getUsername(), Prefs.getPassword());
+            if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
+                Log.i(this, "Username %s Password %s", username, password);
+                String credentials = String.format("%s:%s", username, password);
                 String credentialsBase64 = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 httpRequest.setHeader(AUTHORIZATION, String.format("%s %s", BASIC, credentialsBase64));
+            }
+            for (String key : getHeaderKeys()) {
+                Object value = getHeader(key);
+                if (value != null) {
+                    httpRequest.setHeader(key, value.toString());
+                }
             }
             Log.i(this, "Method %s", httpRequest.getClass().getSimpleName());
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
@@ -205,7 +264,7 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                     Header etag = response.getFirstHeader(ETAG);
                     if (etag != null) {
                         Log.i(this, "Not Modified %s", etag.getValue());
-                        Prefs.saveETag(uri, etag.getValue());
+                        saveETag(uri, etag.getValue());
                     }
                     return null;
                 }
@@ -249,10 +308,6 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
             Log.w(this, "JSONException %s", ex.getMessage());
             return ex;
         }
-        catch (URISyntaxException ex) {
-            Log.w(this, "URISyntaxException %s", ex.getMessage());
-            return ex;
-        }
         catch(UnknownHostException ex) {
             Log.w(this, "UnknownHostException %s", ex.getMessage());
             return new UnknownHostException(context.getString(R.string.unknown_host_exception));
@@ -275,4 +330,34 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected abstract void onPrepareRequest();
 
     protected abstract M onHandleResponse(JSONObject json) throws JSONException;
+
+    protected static SharedPreferences prefs() {
+        return context.getSharedPreferences(context.getClass().getName(), Activity.MODE_PRIVATE);
+    }
+
+    protected static SharedPreferences.Editor editor() {
+        return context.getSharedPreferences(context.getClass().getName(), Activity.MODE_PRIVATE).edit();
+    }
+
+    protected boolean hasETag(URI uri) {
+        return prefs().getAll().size() > 0 && prefs().contains(uri.toString());
+    }
+
+    protected String getETag(URI uri) {
+        return prefs().getString(uri.toString(), null);
+    }
+
+    protected void saveETag(URI uri, String etag) {
+        editor().putString(uri.toString(), etag).commit();
+    }
+
+    public static void clearETags() {
+        Map<String,?> keys = prefs().getAll();
+        for (Map.Entry<String,?> entry : keys.entrySet()){
+            String key = entry.getKey();
+            if (key.startsWith("http")) {
+                editor().remove(key).commit();
+            }
+        }
+    }
 }

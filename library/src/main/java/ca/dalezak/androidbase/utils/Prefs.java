@@ -14,7 +14,6 @@ public class Prefs {
     public class Keys {
         public static final String USERNAME = "username";
         public static final String PASSWORD = "password";
-        public static final String COOKIE = "cookie";
         public static final String GOOGLE_CLOUD_MESSAGING = "google_cloud_messaging";
     }
 
@@ -22,21 +21,6 @@ public class Prefs {
 
     public static void initialize(Context cxt) {
         context = cxt;
-    }
-
-    public static void clearCookie() {
-        remove(Keys.COOKIE);
-    }
-    public static void setCookie(String cookie) {
-        save(Keys.COOKIE, cookie);
-    }
-
-    public static String getCookie() {
-        return getString(Keys.COOKIE, null);
-    }
-
-    public static Boolean hasCookie() {
-        return contains(Keys.COOKIE) && !Strings.isNullOrEmpty(getString(Keys.COOKIE));
     }
 
     public static Boolean hasUsername() {
@@ -77,29 +61,6 @@ public class Prefs {
 
     public static void removeGoogleCloudMessaging() {
         remove(Keys.GOOGLE_CLOUD_MESSAGING);
-    }
-
-    public static boolean hasETag(URI uri) {
-        return contains(uri.toString());
-    }
-
-    public static String getETag(URI uri) {
-        return getString(uri.toString());
-    }
-
-    public static void saveETag(URI uri, String etag) {
-        save(uri.toString(), etag);
-    }
-
-    public static void clearETags() {
-        Map<String,?> keys = prefs(context).getAll();
-        for (Map.Entry<String,?> entry : keys.entrySet()){
-            String key = entry.getKey();
-            if (key.startsWith("http")) {
-                Log.i(Prefs.class, "Deleting ETag %s", key);
-                remove(entry.getKey());
-            }
-        }
     }
 
     public static boolean exists(Context context) {

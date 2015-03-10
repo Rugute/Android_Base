@@ -24,18 +24,28 @@ import java.util.Map;
 
 public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
 
-    private Map<String, Object> parameters = new HashMap<String, Object>();
-
-    protected HttpPostTask(Context context, String path) {
-        super(context, path, R.string.posting_);
+    protected HttpPostTask(Context context, URI uri) {
+        super(context, uri, R.string.posting_);
     }
 
-    protected HttpPostTask(Context context, String path, int message) {
-        super(context, path, message);
+    protected HttpPostTask(Context context, URI uri, int message) {
+        super(context, uri, message);
     }
 
-    protected HttpPostTask(Context context, String path,  int message, boolean progress) {
-        super(context, path, message, progress);
+    protected HttpPostTask(Context context, URI uri, int message, boolean progress) {
+        super(context, uri, message, progress);
+    }
+
+    protected HttpPostTask(Context context, String server, String path) {
+        super(context, server, path, R.string.posting_);
+    }
+
+    protected HttpPostTask(Context context,String server, String path, int message) {
+        super(context, server, path, message);
+    }
+
+    protected HttpPostTask(Context context,String server, String path, int message, boolean progress) {
+        super(context, server, path, message, progress);
     }
 
     @Override
@@ -53,16 +63,12 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
         return httpPost;
     }
 
-    public void addParameter(String key, Object object) {
-        parameters.put(key, object);
-    }
-
     protected HttpEntity getMultipartEntity() {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setBoundary(String.format("---------------------------%s", UUID.getRandom()));
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        for (String key : parameters.keySet()) {
-            Object value = parameters.get(key);
+        for (String key : getParameterKeys()) {
+            Object value = getParameter(key);
             if (value instanceof File) {
                 File file = (File) value;
                 Log.i(this, "%s=%s", key, file.getPath());
@@ -80,8 +86,8 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
     protected HttpEntity getStringEntity() {
         try {
             JSONObject jsonObject = new JSONObject();
-            for (String key : parameters.keySet()) {
-                Object value = parameters.get(key);
+            for (String key : getParameterKeys()) {
+                Object value = getParameter(key);
                 if (value != null) {
                     Log.i(this, "%s=%s", key, value);
                     jsonObject.put(key, value);
@@ -103,8 +109,8 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
     }
 
     protected boolean isMultipartEntity() {
-        for (String key : parameters.keySet()) {
-            Object value = parameters.get(key);
+        for (String key : getParameterKeys()) {
+            Object value = getParameter(key);
             if (value instanceof File) {
                 return true;
             }
