@@ -1,8 +1,10 @@
 package ca.dalezak.androidbase.tasks;
 
-public class HttpQueue extends Queue<HttpTask> {
+import ca.dalezak.androidbase.models.BaseModel;
 
-    public interface Callback extends Queue.Callback<HttpTask> {
+public class HttpQueue extends Queue<HttpTask, BaseModel> {
+
+    public interface Callback extends Queue.Callback<HttpTask, BaseModel> {
     }
 
     private final static HttpQueue instance = new HttpQueue();

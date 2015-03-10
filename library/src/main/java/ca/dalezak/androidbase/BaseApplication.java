@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Looper;
 
 import ca.dalezak.androidbase.activities.ShutdownActivity;
+import ca.dalezak.androidbase.managers.LocationManager;
 import ca.dalezak.androidbase.tasks.HttpTask;
 import ca.dalezak.androidbase.utils.AlertDialog;
 import ca.dalezak.androidbase.utils.Log;
@@ -26,6 +27,7 @@ public abstract class BaseApplication extends android.app.Application {
         Log.i(this, "onCreate");
         Prefs.initialize(this);
         HttpTask.initialize(getServer());
+        LocationManager.initialize(this);
     }
 
     @Override

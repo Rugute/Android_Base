@@ -6,9 +6,9 @@ import ca.dalezak.androidbase.utils.UIRunnable;
 
 import java.util.LinkedList;
 
-public abstract class Queue<T extends Task> implements Task.Callback<T> {
+public abstract class Queue<T extends Task, M extends BaseModel> implements Task.Callback<T, M> {
 
-    public interface Callback<T extends Task> extends Task.Callback<T> {
+    public interface Callback<T extends Task, M extends BaseModel> extends Task.Callback<T, M> {
         public void onQueueStarted(int total);
         public void onQueueResumed();
         public void onQueueProgress(int total, int progress);
@@ -19,7 +19,7 @@ public abstract class Queue<T extends Task> implements Task.Callback<T> {
     }
 
     protected final LinkedList<T> tasks = new LinkedList<T>();
-    protected final LinkedList<Callback<T>> callbacks = new LinkedList<Callback<T>>();
+    protected final LinkedList<Callback<T, M>> callbacks = new LinkedList<Callback<T, M>>();
 
     private int total;
     private boolean running;
@@ -32,14 +32,14 @@ public abstract class Queue<T extends Task> implements Task.Callback<T> {
         tasks.clear();
     }
 
-    public Queue<T> add(T task) {
+    public Queue<T, M> add(T task) {
         total += 1;
         task.register(this);
         tasks.add(task);
         return this;
     }
 
-    public Queue<T> add(T...tasks) {
+    public Queue<T, M> add(T...tasks) {
         for (T task : tasks) {
             total += 1;
             task.register(this);
@@ -126,11 +126,11 @@ public abstract class Queue<T extends Task> implements Task.Callback<T> {
         }
     }
 
-    public void register(Callback<T> callback) {
+    public void register(Callback<T, M> callback) {
         callbacks.add(callback);
     }
 
-    public void unregister(Callback<T> callback) {
+    public void unregister(Callback<T, M> callback) {
         callbacks.remove(callback);
     }
 
@@ -143,11 +143,11 @@ public abstract class Queue<T extends Task> implements Task.Callback<T> {
         }}.run();
     }
 
-    public void onTaskProgress(final T task, final int total, final int progress) {
+    public void onTaskProgress(final T task, final M model, final int total, final int progress) {
         Log.i(this, "onTaskProgress %s %d / %d", task.getClass().getSimpleName(), progress, total);
         new UIRunnable(){ public void uiRun() {
             for (Callback callback : callbacks) {
-                callback.onTaskProgress(task, total, tasks.size());
+                callback.onTaskProgress(task, model, total, tasks.size());
             }
         }}.run();
     }
