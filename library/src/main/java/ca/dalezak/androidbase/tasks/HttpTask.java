@@ -251,6 +251,10 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                             }
                         }
                     }
+                    Header etag = response.getFirstHeader(ETAG);
+                    if (etag != null) {
+                        setETag(uri, etag.getValue());
+                    }
                     return null;
                 }
                 else  if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_MODIFIED) {
