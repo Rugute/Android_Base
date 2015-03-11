@@ -1,6 +1,7 @@
 package ca.dalezak.androidbase.tasks;
 
 import android.content.Context;
+import android.net.Uri;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +10,7 @@ import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Log;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
 
@@ -30,18 +32,31 @@ public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
 
     @Override
     protected HttpRequest getHttpRequest(URI uri) {
+        try {
+            Uri.Builder builder = Uri.parse(uri.toString()).buildUpon();
+            for (String key : getParameterKeys()) {
+                Object value = getParameter(key);
+                if (value != null) {
+                    builder.appendQueryParameter(key, value.toString());
+                }
+            }
+            uri = new URI(builder.toString());
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setHeader(CONTENT_TYPE, APPLICATION_JSON);
         if (hasETag(uri)) {
             Log.i(this, "ETag %s", getETag(uri));
             httpGet.setHeader(IF_NONE_MATCH, getETag(uri));
         }
-        for (String key : getParameterKeys()) {
-            Object value = getParameter(key);
-            if (value != null) {
-                httpGet.getParams().setParameter(key, value);
-            }
-        }
+//        for (String key : getParameterKeys()) {
+//            Object value = getParameter(key);
+//            if (value != null) {
+//                httpGet.getParams().setParameter(key, value);
+//            }
+//        }
         return httpGet;
     }
 

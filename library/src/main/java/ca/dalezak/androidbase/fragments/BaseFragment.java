@@ -25,7 +25,6 @@ import ca.dalezak.androidbase.BaseApplication;
 import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Controls;
 import ca.dalezak.androidbase.utils.Log;
-import ca.dalezak.androidbase.utils.UIRunnable;
 
 public abstract class BaseFragment extends android.app.Fragment {
 
@@ -218,47 +217,41 @@ public abstract class BaseFragment extends android.app.Fragment {
         showLoading(getString(message), total, progress);
     }
 
-    protected void showLoading(final CharSequence message) {
-        new UIRunnable(){ public void uiRun() {
-            if (dialog == null && getActivity() != null) {
-                dialog = new ProgressDialog(getActivity());
-            }
-            if (dialog != null) {
-                dialog.setMessage(message);
-                dialog.setIndeterminate(true);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.show();
-            }
-        }}.run();
+    protected void showLoading(CharSequence message) {
+        if (dialog == null && getActivity() != null) {
+            dialog = new ProgressDialog(getActivity());
+        }
+        if (dialog != null) {
+            dialog.setMessage(message);
+            dialog.setIndeterminate(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.show();
+        }
     }
 
-    protected void showLoading(final CharSequence message, final int total, final int progress) {
-        new UIRunnable(){ public void uiRun() {
-            if (dialog != null && dialog.isIndeterminate()) {
-                dialog.dismiss();
-                dialog = null;
-            }
-            if (dialog == null && getActivity() != null) {
-                dialog = new ProgressDialog(getActivity());
-            }
-            if (dialog != null) {
-                dialog.setMessage(message);
-                dialog.setMax(total);
-                dialog.setProgress(progress);
-                dialog.setIndeterminate(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog.show();
-            }
-        }}.run();
+    protected void showLoading(CharSequence message, int total, int progress) {
+        if (dialog != null && dialog.isIndeterminate()) {
+            dialog.dismiss();
+            dialog = null;
+        }
+        if (dialog == null && getActivity() != null) {
+            dialog = new ProgressDialog(getActivity());
+        }
+        if (dialog != null) {
+            dialog.setMessage(message);
+            dialog.setMax(total);
+            dialog.setProgress(progress);
+            dialog.setIndeterminate(false);
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.show();
+        }
     }
 
     protected void hideLoading() {
-        new UIRunnable(){ public void uiRun() {
-            if (dialog != null) {
-                dialog.dismiss();
-                dialog = null;
-            }
-        }}.run();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 
     protected String getStringExtra(String name) {
