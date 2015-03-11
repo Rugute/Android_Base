@@ -112,6 +112,10 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
         return context;
     }
 
+    protected URI getURI() {
+        return uri;
+    }
+
     protected void addHeader(String key, Object object) {
         headers.put(key, object);
     }
