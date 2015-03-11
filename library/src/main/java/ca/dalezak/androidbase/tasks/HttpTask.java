@@ -200,14 +200,14 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected Exception doInBackground(Object... params) {
         try {
             onPrepareRequest();
-            Log.i(this, "Request %s", uri);
+            Log.i(this, "URI %s", uri.toString());
             HttpHost httpHost = getHttpHost(uri);
             HttpClient httpClient = getHttpClient(uri);
             HttpContext httpContext = getHttpContext();
             HttpRequest httpRequest = getHttpRequest(uri);
+            Log.i(this, "Request %s", httpRequest.toString());
             httpRequest.setHeader(ACCEPT, APPLICATION_JSON);
             if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
-                Log.i(this, "Username %s Password %s", username, password);
                 String credentials = String.format("%s:%s", username, password);
                 String credentialsBase64 = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 httpRequest.setHeader(AUTHORIZATION, String.format("%s %s", BASIC, credentialsBase64));

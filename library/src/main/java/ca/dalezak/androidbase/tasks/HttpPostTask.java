@@ -19,10 +19,10 @@ import ca.dalezak.androidbase.utils.UUID;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
+
+    protected JSONObject postBody;
 
     protected HttpPostTask(Context context, URI uri) {
         super(context, uri, R.string.posting_);
@@ -77,7 +77,13 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
 
     protected HttpEntity getStringEntity() {
         try {
-            JSONObject jsonObject = new JSONObject();
+            JSONObject jsonObject;
+            if (hasPostBody()) {
+                jsonObject = getPostBody();
+            }
+            else {
+                jsonObject = new JSONObject();
+            }
             for (String key : getParameterKeys()) {
                 Object value = getParameter(key);
                 if (value != null) {
@@ -108,5 +114,17 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
             }
         }
         return false;
+    }
+
+    protected JSONObject getPostBody() {
+        return postBody;
+    }
+
+    protected void setPostBody(JSONObject postBody) {
+        this.postBody = postBody;
+    }
+
+    protected boolean hasPostBody() {
+        return postBody != null && postBody.length() > 0;
     }
 }
