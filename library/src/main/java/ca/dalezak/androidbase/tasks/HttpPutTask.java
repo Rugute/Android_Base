@@ -41,7 +41,6 @@ public abstract class HttpPutTask<M extends BaseModel> extends HttpPostTask<M> {
             HttpEntity httpEntity = getStringEntity();
             httpPut.setEntity(httpEntity);
         }
-        Log.i(this, "Request %s", httpPut.getURI());
         return httpPut;
     }
 }

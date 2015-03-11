@@ -42,7 +42,6 @@ public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
                 httpGet.getParams().setParameter(key, value);
             }
         }
-        Log.i(this, "Request %s", httpGet.getURI());
         return httpGet;
     }
 

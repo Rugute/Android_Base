@@ -81,7 +81,10 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected HttpTask(Context context, String server, String path) {
         super(context);
         try {
-            if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
+            if (server.endsWith(SLASH) && path.startsWith(SLASH)) {
+                this.uri = new URI(server + path.substring(1));
+            }
+            else if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
                 this.uri = new URI(server + path);
             }
             else {
@@ -96,7 +99,10 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
     protected HttpTask(Context context, String server, String path, int message)  {
         super(context, message);
         try {
-            if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
+            if (server.endsWith(SLASH) && path.startsWith(SLASH)) {
+                this.uri = new URI(server + path.substring(1));
+            }
+            else if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
                 this.uri = new URI(server + path);
             }
             else {
@@ -216,6 +222,7 @@ public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
                     httpRequest.setHeader(key, value.toString());
                 }
             }
+            Log.i(this, "URI %s", httpRequest.getRequestLine().getUri());
             Log.i(this, "Method %s", httpRequest.getClass().getSimpleName());
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
             if (response != null) {
