@@ -52,6 +52,7 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
             HttpEntity httpEntity = getStringEntity();
             httpPost.setEntity(httpEntity);
         }
+        Log.i(this, "Request %s", httpPost.getURI());
         return httpPost;
     }
 

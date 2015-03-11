@@ -7,6 +7,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPut;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
+import ca.dalezak.androidbase.utils.Log;
 
 import java.net.URI;
 
@@ -40,6 +41,7 @@ public abstract class HttpPutTask<M extends BaseModel> extends HttpPostTask<M> {
             HttpEntity httpEntity = getStringEntity();
             httpPut.setEntity(httpEntity);
         }
+        Log.i(this, "Request %s", httpPut.getURI());
         return httpPut;
     }
 }

@@ -227,9 +227,7 @@ public abstract class BaseFragment extends android.app.Fragment {
                 dialog.setMessage(message);
                 dialog.setIndeterminate(true);
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                if (!dialog.isShowing()) {
-                    dialog.show();
-                }
+                dialog.show();
             }
         }}.run();
     }
@@ -249,9 +247,7 @@ public abstract class BaseFragment extends android.app.Fragment {
                 dialog.setProgress(progress);
                 dialog.setIndeterminate(false);
                 dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                if (!dialog.isShowing()) {
-                    dialog.show();
-                }
+                dialog.show();
             }
         }}.run();
     }
