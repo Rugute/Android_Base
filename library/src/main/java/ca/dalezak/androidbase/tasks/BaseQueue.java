@@ -6,9 +6,9 @@ import ca.dalezak.androidbase.utils.UIRunnable;
 
 import java.util.LinkedList;
 
-public abstract class Queue<T extends Task, M extends BaseModel> implements Task.Callback<T, M> {
+public abstract class BaseQueue<T extends BaseTask, M extends BaseModel> implements BaseTask.Callback<T, M> {
 
-    public interface Callback<T extends Task, M extends BaseModel> extends Task.Callback<T, M> {
+    public interface Callback<T, M> extends BaseTask.Callback<T, M> {
         public void onQueueStarted(int total);
         public void onQueueResumed();
         public void onQueueProgress(int total, int progress);
@@ -18,8 +18,8 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
         public void onQueueFailed(Exception exception);
     }
 
-    protected final LinkedList<T> tasks = new LinkedList<T>();
-    protected final LinkedList<Callback<T, M>> callbacks = new LinkedList<Callback<T, M>>();
+    protected final LinkedList<T> tasks = new LinkedList<>();
+    protected final LinkedList<Callback<T, M>> callbacks = new LinkedList<>();
 
     private int total;
     private boolean running;
@@ -32,14 +32,14 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
         tasks.clear();
     }
 
-    public Queue<T, M> add(T task) {
+    public BaseQueue<T, M> add(T task) {
         total += 1;
         task.register(this);
         tasks.add(task);
         return this;
     }
 
-    public Queue<T, M> add(T...tasks) {
+    public BaseQueue<T, M> add(T...tasks) {
         for (T task : tasks) {
             total += 1;
             task.register(this);
@@ -48,7 +48,7 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
         return this;
     }
 
-    public <T2 extends Task> boolean contains(Class<T2> taskClass) {
+    public <T2 extends BaseTask> boolean contains(Class<T2> taskClass) {
         for (T task : tasks) {
             if (taskClass.isAssignableFrom(task.getClass())) {
                 return true;
@@ -68,7 +68,7 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
                 }
             }}.run();
             if (tasks.size() > 0) {
-                Task task = tasks.peek();
+                BaseTask task = tasks.peek();
                 if (!task.isExecuting()) {
                     task.execute();
                 }
@@ -88,9 +88,9 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
     }
 
     public void pause() {
-        Log.i(this, "Pauses");
+        Log.i(this, "Pause");
         running = false;
-        Task task = tasks.peek();
+        BaseTask task = tasks.peek();
         task.cancel(true);
         new UIRunnable(){ public void uiRun() {
             for (Callback callback : callbacks) {
@@ -101,7 +101,7 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
 
     public void resume() {
         if (!running) {
-            Log.i(this, "Resumed");
+            Log.i(this, "Resume");
             running = true;
             new UIRunnable(){ public void uiRun() {
                 for (Callback callback : callbacks) {
@@ -109,7 +109,7 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
                 }
             }}.run();
             if (tasks.size() > 0) {
-                Task task = tasks.peek();
+                BaseTask task = tasks.peek();
                 task.execute();
             }
             else {
@@ -181,7 +181,7 @@ public abstract class Queue<T extends Task, M extends BaseModel> implements Task
             }
         }}.run();
         if (tasks.size() > 0) {
-            Task nextTask = tasks.peek();
+            BaseTask nextTask = tasks.peek();
             nextTask.execute();
         }
         else {

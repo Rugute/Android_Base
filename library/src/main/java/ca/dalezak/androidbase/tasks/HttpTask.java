@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class HttpTask<M extends BaseModel> extends Task<HttpTask, M> {
+public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M> {
 
     protected static final String ETAG = "ETag";
     protected static final String ACCEPT = "Accept";

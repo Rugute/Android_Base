@@ -7,11 +7,11 @@ import android.os.AsyncTask;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
 
-public abstract class Task<T extends Task, M extends BaseModel>
+public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
         extends AsyncTask<Object, M, Exception>
         implements DialogInterface.OnCancelListener {
 
-    public interface Callback<T extends Task, M extends BaseModel> {
+    public interface Callback<T, M> {
         public void onTaskStarted(T task);
         public void onTaskCancelled(T task);
         public void onTaskProgress(T task, M model, int total, int progress);
@@ -19,18 +19,18 @@ public abstract class Task<T extends Task, M extends BaseModel>
         public void onTaskFailed(T task, Exception exception);
     }
 
-    protected Task.Callback<T, M> callback;
+    protected BaseTask.Callback<T, M> callback;
     protected final int message;
     protected final Context context;
     protected boolean executing = false;
     protected boolean pending = true;
 
-    protected Task(Context context) {
+    protected BaseTask(Context context) {
         this.context = context;
         this.message = R.string.loading_;
     }
 
-    protected Task(Context context, int message) {
+    protected BaseTask(Context context, int message) {
         this.context = context;
         this.message = message;
     }
@@ -47,11 +47,11 @@ public abstract class Task<T extends Task, M extends BaseModel>
         return message;
     }
 
-    public void register(Task.Callback<T, M> callback) {
+    public void register(BaseTask.Callback<T, M> callback) {
         this.callback = callback;
     }
 
-    public void unregister(Task.Callback<T, M> callback) {
+    public void unregister(BaseTask.Callback<T, M> callback) {
         this.callback = null;
     }
 

@@ -51,12 +51,6 @@ public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
             Log.i(this, "ETag %s", getETag(uri));
             httpGet.setHeader(IF_NONE_MATCH, getETag(uri));
         }
-//        for (String key : getParameterKeys()) {
-//            Object value = getParameter(key);
-//            if (value != null) {
-//                httpGet.getParams().setParameter(key, value);
-//            }
-//        }
         return httpGet;
     }
 
