@@ -239,9 +239,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                     else if (json instanceof JSONObject) {
                         JSONObject jsonObject = (JSONObject)json;
                         M model = onHandleResponse(jsonObject);
-                        if (callback != null) {
-                            callback.onTaskProgress(this, model, 1, 1);
-                        }
+                        publishProgress(new Update(model, 1, 1));
                     }
                     else if (json instanceof JSONArray) {
                         JSONArray jsonArray = (JSONArray)json;
@@ -250,9 +248,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                             try {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 M model = onHandleResponse(jsonObject);
-                                if (callback != null) {
-                                    callback.onTaskProgress(this, model, jsonArray.length(), i + 1);
-                                }
+                                publishProgress(new Update(model, jsonArray.length(), i + 1));
                             }
                             catch (JSONException e) {
                                 Log.w(this, "URISyntaxException", e);

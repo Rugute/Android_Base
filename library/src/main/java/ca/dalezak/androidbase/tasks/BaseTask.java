@@ -8,7 +8,7 @@ import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
 
 public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
-        extends AsyncTask<Object, M, Exception>
+        extends AsyncTask<Object, BaseTask.Update, Exception>
         implements DialogInterface.OnCancelListener {
 
     public interface Callback<T, M> {
@@ -17,6 +17,17 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
         public void onTaskProgress(T task, M model, int total, int progress);
         public void onTaskFinished(T task);
         public void onTaskFailed(T task, Exception exception);
+    }
+
+    public class Update {
+        public Update(M model, int total, int progress) {
+            this.model = model;
+            this.total = total;
+            this.progress = progress;
+        }
+        public final M model;
+        public final int progress;
+        public final int total;
     }
 
     protected BaseTask.Callback<T, M> callback;
@@ -66,8 +77,15 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
     }
 
     @Override
-    protected void onProgressUpdate(M...models) {
-        super.onProgressUpdate(models);
+    protected void onProgressUpdate(BaseTask.Update...updates) {
+        super.onProgressUpdate(updates);
+        if (updates != null) {
+            for (BaseTask.Update update : updates) {
+                if (callback != null) {
+                    callback.onTaskProgress((T)this, (M)update.model, update.total, update.progress);
+                }
+            }
+        }
     }
 
     @Override
