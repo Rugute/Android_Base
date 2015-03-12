@@ -103,6 +103,14 @@ public abstract class BaseFragment extends android.app.Fragment {
         Log.i(this, "onActivityCreated");
     }
 
+    public void onSelected() {
+        Log.i(this, "onSelected");
+    }
+
+    public void onUnselected() {
+        Log.i(this, "onUnselected");
+    }
+
     @Override
     public void onStart() {
         super.onStart();

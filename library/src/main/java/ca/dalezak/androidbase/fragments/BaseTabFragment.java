@@ -124,15 +124,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void onTabSelected(int position, boolean animated) {
-//        F fragment = tabsAdapter.getItem(position);
-//        onTabSelected(position, fragment);
-//        current = position;
-//        viewPager.setCurrentItem(position, animated);
         F previousFragment = tabsAdapter.getItem(current);
         if (previousFragment != null && onTabUnselected(current, previousFragment)) {
+            previousFragment.onUnselected();
             F currentFragment = tabsAdapter.getItem(position);
             viewPager.setCurrentItem(position, animated);
             onTabSelected(position, currentFragment);
+            currentFragment.onSelected();
             current = position;
         }
         else {
@@ -145,7 +143,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onFragmentCreated(BaseFragment fragment) {
         Log.i(this, "onFragmentCreated %s", fragment);
         if (current == -1) {
-            onTabSelected(0, tabsAdapter.getItem(0));
+            F currentFragment = tabsAdapter.getItem(0);
+            onTabSelected(0, currentFragment);
+            currentFragment.onSelected();
             current = 0;
         }
     }
@@ -211,8 +211,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             if (current > -1) {
                 F previousFragment = tabsAdapter.getItem(current);
                 if (onTabUnselected(current, previousFragment)) {
+                    previousFragment.onUnselected();
                     F currentFragment = tabsAdapter.getItem(position);
                     onTabSelected(position, currentFragment);
+                    currentFragment.onSelected();
                     current = position;
                 }
                 else {
@@ -223,6 +225,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             else {
                 F currentFragment = tabsAdapter.getItem(position);
                 onTabSelected(position, currentFragment);
+                currentFragment.onSelected();
                 current = position;
             }
         }
