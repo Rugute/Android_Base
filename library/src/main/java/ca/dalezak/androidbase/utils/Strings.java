@@ -228,5 +228,9 @@ public class Strings {
     public static boolean areEqual(String one, String two) {
         return one != null && two != null && one.equals(two);
     }
+
+    public static boolean areEqual(CharSequence one, CharSequence two) {
+        return one != null && two != null && one.equals(two);
+    }
 }
 
