@@ -27,8 +27,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     private List<Integer> tabTitles = new ArrayList<>();
     private List<Class<? extends F>> tabClasses = new ArrayList<>();
 
-    private final String SELECTED_TAB = "Selected Tab";
-
     protected TabsAdapter tabsAdapter;
 
     protected int current = -1;
@@ -60,7 +58,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Prefs.save(getActivity(), SELECTED_TAB, viewPager.getCurrentItem());
     }
 
     @Override
@@ -82,18 +79,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
-            int selectedTab = Prefs.getInt(getActivity(), SELECTED_TAB);
-            if (tabsAdapter.getCount() > selectedTab) {
-                current = selectedTab;
-                viewPager.setCurrentItem(selectedTab, false);
-                onTabSelected(selectedTab, false);
-            }
-            else {
-                viewPager.setCurrentItem(0, false);
-            }
-        }
-        else {
+        if (viewPager.getCurrentItem() == -1) {
             viewPager.setCurrentItem(0, false);
         }
     }
@@ -102,7 +88,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onBackPressed() {
         super.onBackPressed();
         Log.i(this, "onBackPressed");
-        Prefs.remove(getActivity(), SELECTED_TAB);
     }
 
     public void addTab(int title, Class<? extends F> clazz) {

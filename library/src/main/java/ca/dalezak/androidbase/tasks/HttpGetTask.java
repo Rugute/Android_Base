@@ -18,16 +18,32 @@ public abstract class HttpGetTask<M extends BaseModel> extends HttpTask<M> {
         super(context, uri, R.string.downloading_);
     }
 
+    protected HttpGetTask(Context context, URI uri, boolean loading) {
+        super(context, uri, R.string.downloading_, loading);
+    }
+
     protected HttpGetTask(Context context, URI uri, int message) {
         super(context, uri, message);
+    }
+
+    protected HttpGetTask(Context context, URI uri, int message, boolean loading) {
+        super(context, uri, message, loading);
     }
 
     protected HttpGetTask(Context context, String server, String path) {
         super(context, server, path, R.string.downloading_);
     }
 
+    protected HttpGetTask(Context context, String server, String path, boolean loading) {
+        super(context, server, path, R.string.downloading_, loading);
+    }
+
     protected HttpGetTask(Context context,String server, String path, int message) {
         super(context, server, path, message);
+    }
+
+    protected HttpGetTask(Context context,String server, String path, int message, boolean loading) {
+        super(context, server, path, message, loading);
     }
 
     @Override

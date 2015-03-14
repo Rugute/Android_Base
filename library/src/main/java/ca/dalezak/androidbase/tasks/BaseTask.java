@@ -35,15 +35,24 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
     protected final Context context;
     protected boolean executing = false;
     protected boolean pending = true;
+    protected boolean loading = false;
 
     protected BaseTask(Context context) {
-        this.context = context;
-        this.message = R.string.loading_;
+        this(context, R.string.loading_, false);
+    }
+
+    protected BaseTask(Context context, boolean loading) {
+        this(context, R.string.loading_, loading);
     }
 
     protected BaseTask(Context context, int message) {
+        this(context, message, false);
+    }
+
+    protected BaseTask(Context context, int message, boolean loading) {
         this.context = context;
         this.message = message;
+        this.loading = loading;
     }
 
     public boolean isExecuting() {
@@ -52,6 +61,10 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
 
     public boolean isPending() {
         return pending;
+    }
+
+    public boolean isLoading() {
+        return loading;
     }
 
     public int getMessage() {

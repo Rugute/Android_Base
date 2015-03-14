@@ -69,35 +69,36 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
     protected String password;
 
     protected HttpTask(Context context, URI uri) {
-        super(context);
-        this.uri = uri;
+        this(context, uri, R.string.loading_, false);
+    }
+
+    protected HttpTask(Context context, URI uri, boolean loading) {
+        this(context, uri, R.string.loading_, loading);
     }
 
     protected HttpTask(Context context, URI uri, int message) {
-        super(context, message);
+        this(context, uri, message, false);
+    }
+
+    protected HttpTask(Context context, URI uri, int message, boolean loading) {
+        super(context, message, loading);
         this.uri = uri;
     }
 
     protected HttpTask(Context context, String server, String path) {
-        super(context);
-        try {
-            if (server.endsWith(SLASH) && path.startsWith(SLASH)) {
-                this.uri = new URI(server + path.substring(1));
-            }
-            else if (server.endsWith(SLASH) || path.startsWith(SLASH)) {
-                this.uri = new URI(server + path);
-            }
-            else {
-                this.uri = new URI(server + SLASH + path);
-            }
-        }
-        catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        this(context, server, path, R.string.loading_, false);
+    }
+
+    protected HttpTask(Context context, String server, String path, boolean loading) {
+        this(context, server, path, R.string.loading_, loading);
     }
 
     protected HttpTask(Context context, String server, String path, int message)  {
-        super(context, message);
+        this(context, server, path, message, false);
+    }
+
+    protected HttpTask(Context context, String server, String path, int message, boolean loading) {
+        super(context, message, loading);
         try {
             if (server.endsWith(SLASH) && path.startsWith(SLASH)) {
                 this.uri = new URI(server + path.substring(1));
