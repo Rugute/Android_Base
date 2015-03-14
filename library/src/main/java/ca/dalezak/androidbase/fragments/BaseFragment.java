@@ -267,18 +267,6 @@ public abstract class BaseFragment extends android.app.Fragment {
         }
     }
 
-    protected String getStringExtra(String name) {
-        return getIntent().getStringExtra(name);
-    }
-
-    protected boolean hasExtra(Class<? extends BaseModel> clazz) {
-        return getIntent().hasExtra(clazz.getName());
-    }
-
-    protected String getStringExtra(Class<? extends BaseModel> clazz) {
-        return getIntent().getStringExtra(clazz.getName());
-    }
-
     protected void setTitle(String title) {
         getActivity().setTitle(title);
     }
@@ -325,5 +313,65 @@ public abstract class BaseFragment extends android.app.Fragment {
 
     protected boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    protected boolean hasExtra(Class<? extends BaseModel> clazz) {
+        return getIntent().hasExtra(clazz.getName());
+    }
+
+    protected String getStringExtra(String name) {
+        return getIntent().getStringExtra(name);
+    }
+
+    protected String getStringExtra(Class<? extends BaseModel> clazz) {
+        return getIntent().getStringExtra(clazz.getName());
+    }
+
+    protected Boolean getBooleanExtra(String name) {
+        return getIntent().getBooleanExtra(name, false);
+    }
+
+    protected Boolean getBooleanExtra(Class<? extends BaseModel> clazz) {
+        return getIntent().getBooleanExtra(clazz.getName(), false);
+    }
+
+    protected Integer getIntExtra(String name, Integer defaultValue) {
+        return getIntent().getIntExtra(name, defaultValue);
+    }
+
+    protected Integer getIntExtra(Class<? extends BaseModel> clazz, Integer defaultValue) {
+        return getIntent().getIntExtra(clazz.getName(), defaultValue);
+    }
+
+    protected Double getDoubleExtra(String name, Double defaultValue) {
+        return getIntent().getDoubleExtra(name, defaultValue);
+    }
+
+    protected Double getDoubleExtra(Class<? extends BaseModel> clazz, Double defaultValue) {
+        return getIntent().getDoubleExtra(clazz.getName(), defaultValue);
+    }
+
+    protected Float getFloatExtra(String name, Float defaultValue) {
+        return getIntent().getFloatExtra(name, defaultValue);
+    }
+
+    protected Float getFloatExtra(Class<? extends BaseModel> clazz, Float defaultValue) {
+        return getIntent().getFloatExtra(clazz.getName(), defaultValue);
+    }
+
+    protected Long getLongExtra(String name, Long defaultValue) {
+        return getIntent().getLongExtra(name, defaultValue);
+    }
+
+    protected Long getLongExtra(Class<? extends BaseModel> clazz, Long defaultValue) {
+        return getIntent().getLongExtra(clazz.getName(), defaultValue);
+    }
+
+    protected Short getShortExtra(String name, Short defaultValue) {
+        return getIntent().getShortExtra(name, defaultValue);
+    }
+
+    protected Short getShortExtra(Class<? extends BaseModel> clazz, Short defaultValue) {
+        return getIntent().getShortExtra(clazz.getName(), defaultValue);
     }
 }
