@@ -23,9 +23,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpParamsNames;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -173,10 +173,10 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
         HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
         HttpConnectionParams.setSoTimeout(httpParameters, 30000);
         DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-        if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
+        if (!Strings.isNullOrEmpty(getUsername()) && !Strings.isNullOrEmpty(getPassword())) {
             AuthScope authScope = new AuthScope(uri.getHost(), AuthScope.ANY_PORT);
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(getUsername(), getPassword());
             credentialsProvider.setCredentials(authScope, credentials);
             httpClient.setCredentialsProvider(credentialsProvider);
         }
@@ -213,8 +213,8 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
             HttpContext httpContext = getHttpContext();
             HttpRequest httpRequest = getHttpRequest(uri);
             httpRequest.setHeader(ACCEPT, APPLICATION_JSON);
-            if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
-                String credentials = String.format("%s:%s", username, password);
+            if (!Strings.isNullOrEmpty(getUsername()) && !Strings.isNullOrEmpty(getPassword())) {
+                String credentials = String.format("%s:%s", getUsername(), getPassword());
                 String credentialsBase64 = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 httpRequest.setHeader(AUTHORIZATION, String.format("%s %s", BASIC, credentialsBase64));
             }
@@ -229,11 +229,6 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
             for (Header header : httpRequest.getAllHeaders()) {
                 Log.i(this, "Header %s=%s", header.getName(), header.getValue());
             }
-            HttpParamsNames httpParams = (HttpParamsNames)httpRequest.getParams();
-            for (String name : httpParams.getNames()) {
-                Object value = httpRequest.getParams().getParameter(name);
-                Log.i(this, "Param %s=%s", name, value);
-            }
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -242,7 +237,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                 if (statusCode == HttpStatus.SC_OK ||
                     statusCode == HttpStatus.SC_CREATED ||
                     statusCode == HttpStatus.SC_ACCEPTED) {
-                    String responseString = getResponseString(response);
+                    String responseString = EntityUtils.toString(response.getEntity());
                     if (Strings.isNullOrEmpty(responseString)) {
                         Log.i(this, "Response EMPTY");
                         M model = onHandleResponse(new JSONObject());
@@ -311,7 +306,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                     return new HttpResponseException(statusCode, reasonPhrase);
                 }
                 else {
-                    String responseString = getResponseString(response);
+                    String responseString = EntityUtils.toString(response.getEntity());
                     if (!Strings.isNullOrEmpty(responseString)) {
                         JSONObject json = new JSONObject(responseString);
                         return new HttpResponseException(statusCode, json.optString("error", reasonPhrase));
