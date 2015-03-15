@@ -225,6 +225,8 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
             }
             Log.i(this, "URI %s", httpRequest.getRequestLine().getUri());
             Log.i(this, "Method %s", httpRequest.getRequestLine().getMethod());
+            Log.i(this, "Params %s", httpRequest.getParams());
+            Log.i(this, "Headers %s", httpRequest.getAllHeaders());
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
