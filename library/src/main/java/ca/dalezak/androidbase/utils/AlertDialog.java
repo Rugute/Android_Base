@@ -3,6 +3,8 @@ package ca.dalezak.androidbase.utils;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import ca.dalezak.androidbase.R;
+
 public class AlertDialog extends android.app.AlertDialog.Builder {
 
     public AlertDialog(Context context) {
@@ -17,6 +19,26 @@ public class AlertDialog extends android.app.AlertDialog.Builder {
     public AlertDialog(Context context, String title) {
         super(context);
         setTitle(title);
+    }
+
+    public AlertDialog(Context context, Exception exception) {
+        super(context);
+        setTitle(Strings.splitCamelCase(exception.getClass().getSimpleName()));
+        if (!Strings.isNullOrEmpty(exception.getLocalizedMessage())) {
+            setMessage(exception.getLocalizedMessage());
+        }
+        else if (Strings.isNullOrEmpty(exception.getMessage())) {
+            setMessage(exception.getMessage());
+        }
+        else if (exception.getCause() != null && !Strings.isNullOrEmpty(exception.getCause().getLocalizedMessage())) {
+            setMessage(exception.getCause().getLocalizedMessage());
+        }
+        else if (exception.getCause() != null && !Strings.isNullOrEmpty(exception.getCause().getMessage())) {
+            setMessage(exception.getCause().getMessage());
+        }
+        else {
+            setMessage(R.string.unhandled_exception_description);
+        }
     }
 
     public AlertDialog(Context context, int title, int message) {

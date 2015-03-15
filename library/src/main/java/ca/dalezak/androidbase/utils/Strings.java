@@ -232,5 +232,14 @@ public class Strings {
     public static boolean areEqual(CharSequence one, CharSequence two) {
         return one != null && two != null && one.equals(two);
     }
+
+    public static String splitCamelCase(String string) {
+        return string.replaceAll(
+                String.format("%s|%s|%s",
+                        "(?<=[A-Z])(?=[A-Z][a-z])",
+                        "(?<=[^A-Z])(?=[A-Z])",
+                        "(?<=[A-Za-z])(?=[^A-Za-z])"
+                )," ");
+    }
 }
 
