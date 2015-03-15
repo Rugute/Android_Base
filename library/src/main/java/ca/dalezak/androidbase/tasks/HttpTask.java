@@ -37,10 +37,7 @@ import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Log;
 import ca.dalezak.androidbase.utils.Strings;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -50,13 +47,12 @@ import java.util.Set;
 
 public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M> {
 
+    protected static final String UTF_8 = "UTF-8";
     protected static final String ETAG = "ETag";
     protected static final String ACCEPT = "Accept";
     protected static final String CONTENT_TYPE = "Content-Type";
     protected static final String IF_NONE_MATCH = "If-None-Match";
-    protected static final String LINE_SEPARATOR = "line.separator";
     protected static final String APPLICATION_JSON = "application/json";
-    protected static final String MULTIPART_FORM_DATA = "multipart/form-data";
     protected static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
     protected static final String AUTHORIZATION = "Authorization";
     protected static final String BASIC = "Basic";
@@ -185,21 +181,6 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
 
     protected HttpContext getHttpContext() {
         return new BasicHttpContext();
-    }
-
-    protected String getResponseString(HttpResponse response) throws IOException {
-        InputStream inputStream = response.getEntity().getContent();
-        InputStreamReader streamReader = new InputStreamReader(inputStream);
-        BufferedReader reader = new BufferedReader(streamReader);
-        StringBuilder result = new StringBuilder();
-        String line;
-        String newLine = System.getProperty(LINE_SEPARATOR);
-        while ((line = reader.readLine()) != null) {
-            result.append(line);
-            result.append(newLine);
-        }
-        reader.close();
-        return result.toString();
     }
 
     protected abstract HttpRequest getHttpRequest(URI uri);
