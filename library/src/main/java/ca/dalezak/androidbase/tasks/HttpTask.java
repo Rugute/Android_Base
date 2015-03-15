@@ -23,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpParamsNames;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -225,8 +226,14 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
             }
             Log.i(this, "URI %s", httpRequest.getRequestLine().getUri());
             Log.i(this, "Method %s", httpRequest.getRequestLine().getMethod());
-            Log.i(this, "Params %s", httpRequest.getParams());
-            Log.i(this, "Headers %s", httpRequest.getAllHeaders());
+            for (Header header : httpRequest.getAllHeaders()) {
+                Log.i(this, "Header %s=%s", header.getName(), header.getValue());
+            }
+            HttpParamsNames httpParams = (HttpParamsNames)httpRequest.getParams();
+            for (String name : httpParams.getNames()) {
+                Object value = httpRequest.getParams().getParameter(name);
+                Log.i(this, "Param %s=%s", name, value);
+            }
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();

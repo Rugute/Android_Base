@@ -27,7 +27,7 @@ public class AlertDialog extends android.app.AlertDialog.Builder {
         if (!Strings.isNullOrEmpty(exception.getLocalizedMessage())) {
             setMessage(exception.getLocalizedMessage());
         }
-        else if (Strings.isNullOrEmpty(exception.getMessage())) {
+        else if (!Strings.isNullOrEmpty(exception.getMessage())) {
             setMessage(exception.getMessage());
         }
         else if (exception.getCause() != null && !Strings.isNullOrEmpty(exception.getCause().getLocalizedMessage())) {
