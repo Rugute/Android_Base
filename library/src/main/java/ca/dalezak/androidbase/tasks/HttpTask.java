@@ -47,16 +47,15 @@ import java.util.Set;
 
 public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M> {
 
-    protected static final String UTF_8 = "UTF-8";
+    protected static final String SLASH = "/";
     protected static final String ETAG = "ETag";
+    protected static final String BASIC = "Basic";
+    protected static final String UTF_8 = "UTF-8";
     protected static final String ACCEPT = "Accept";
     protected static final String CONTENT_TYPE = "Content-Type";
     protected static final String IF_NONE_MATCH = "If-None-Match";
     protected static final String APPLICATION_JSON = "application/json";
-    protected static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
     protected static final String AUTHORIZATION = "Authorization";
-    protected static final String BASIC = "Basic";
-    protected static final String SLASH = "/";
 
     private Map<String, Object> headers = new HashMap<>();
     private Map<String, Object> parameters = new HashMap<>();

@@ -112,8 +112,6 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
             StringEntity entity = new StringEntity(jsonObject.toString());
             entity.setContentEncoding(UTF_8);
             entity.setContentType(APPLICATION_JSON);
-            //entity.setContentType(APPLICATION_JSON_CHARSET_UTF_8);
-            //entity.setContentEncoding(new BasicHeader(CONTENT_TYPE, APPLICATION_JSON_CHARSET_UTF_8));
             return entity;
         }
         catch (JSONException exception) {
