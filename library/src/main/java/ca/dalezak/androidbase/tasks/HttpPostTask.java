@@ -88,6 +88,7 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
                 builder.addTextBody(key, string);
             }
         }
+        Log.i(this, "Post %s", builder.toString());
         return builder.build();
     }
 
@@ -107,7 +108,7 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
                     jsonObject.put(key, value);
                 }
             }
-            Log.i(this, "%s", jsonObject.toString());
+            Log.i(this, "Post %s", jsonObject.toString());
             StringEntity entity = new StringEntity(jsonObject.toString());
             entity.setContentType(APPLICATION_JSON_CHARSET_UTF_8);
             entity.setContentEncoding(new BasicHeader(CONTENT_TYPE, APPLICATION_JSON_CHARSET_UTF_8));

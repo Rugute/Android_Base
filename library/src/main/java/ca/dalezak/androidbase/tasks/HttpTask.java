@@ -224,20 +224,23 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                 }
             }
             Log.i(this, "URI %s", httpRequest.getRequestLine().getUri());
-            Log.i(this, "Method %s", httpRequest.getClass().getSimpleName());
+            Log.i(this, "Method %s", httpRequest.getRequestLine().getMethod());
             HttpResponse response = httpClient.execute(httpHost, httpRequest, httpContext);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
                 String reasonPhrase = response.getStatusLine().getReasonPhrase();
                 Log.i(this, "Status %d %s", statusCode, reasonPhrase);
-                if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_ACCEPTED) {
+                if (statusCode == HttpStatus.SC_OK ||
+                    statusCode == HttpStatus.SC_CREATED ||
+                    statusCode == HttpStatus.SC_ACCEPTED) {
                     String responseString = getResponseString(response);
-                    Log.i(this, "Response %s", responseString);
                     if (Strings.isNullOrEmpty(responseString)) {
+                        Log.i(this, "Response EMPTY");
                         M model = onHandleResponse(new JSONObject());
                         publishProgress(new Update(model, 1, 1));
                     }
                     else {
+                        Log.i(this, "Response %s", responseString);
                         Object json = new JSONTokener(responseString).nextValue();
                         if (json == null) {
                             return new NullPointerException("JSON is NULL");
