@@ -31,6 +31,12 @@ public class AlertDialog extends android.app.AlertDialog.Builder {
         setMessage(message);
     }
 
+    public AlertDialog(Context context, String title, String message) {
+        super(context);
+        setTitle(title);
+        setMessage(message);
+    }
+
     public AlertDialog(Context context, int title, boolean cancelable) {
         super(context);
         setTitle(title);
