@@ -37,7 +37,7 @@ public class AlertDialog extends android.app.AlertDialog.Builder {
             setMessage(exception.getCause().getMessage());
         }
         else {
-            setMessage(R.string.unhandled_exception_description);
+            setMessage(R.string.unknown_exception_description);
         }
     }
 

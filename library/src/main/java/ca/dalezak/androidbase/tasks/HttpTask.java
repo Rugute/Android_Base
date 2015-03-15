@@ -233,27 +233,33 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                 if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_ACCEPTED) {
                     String responseString = getResponseString(response);
                     Log.i(this, "Response %s", responseString);
-                    Object json = new JSONTokener(responseString).nextValue();
-                    if (json == null) {
-                        return new NullPointerException("JSON is NULL");
-                    }
-                    else if (json instanceof JSONObject) {
-                        JSONObject jsonObject = (JSONObject)json;
-                        M model = onHandleResponse(jsonObject);
+                    if (Strings.isNullOrEmpty(responseString)) {
+                        M model = onHandleResponse(new JSONObject());
                         publishProgress(new Update(model, 1, 1));
                     }
-                    else if (json instanceof JSONArray) {
-                        JSONArray jsonArray = (JSONArray)json;
-                        Log.i(this, "JSONArray %s", jsonArray);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            try {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                M model = onHandleResponse(jsonObject);
-                                publishProgress(new Update(model, jsonArray.length(), i + 1));
-                            }
-                            catch (JSONException e) {
-                                Log.w(this, "URISyntaxException", e);
-                                return e;
+                    else {
+                        Object json = new JSONTokener(responseString).nextValue();
+                        if (json == null) {
+                            return new NullPointerException("JSON is NULL");
+                        }
+                        else if (json instanceof JSONObject) {
+                            JSONObject jsonObject = (JSONObject)json;
+                            M model = onHandleResponse(jsonObject);
+                            publishProgress(new Update(model, 1, 1));
+                        }
+                        else if (json instanceof JSONArray) {
+                            JSONArray jsonArray = (JSONArray)json;
+                            Log.i(this, "JSONArray %s", jsonArray);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                try {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    M model = onHandleResponse(jsonObject);
+                                    publishProgress(new Update(model, jsonArray.length(), i + 1));
+                                }
+                                catch (JSONException e) {
+                                    Log.w(this, "URISyntaxException", e);
+                                    return e;
+                                }
                             }
                         }
                     }
