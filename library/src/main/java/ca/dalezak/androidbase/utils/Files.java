@@ -1,6 +1,7 @@
 package ca.dalezak.androidbase.utils;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
@@ -9,12 +10,41 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Files {
 
-    private File getImageFile(Context context, String filename) {
+    public static String copyUriToFile(Context context, Uri uri, File file) {
+        try {
+            byte[] buffer = new byte[8 * 1024];
+            InputStream input = context.getContentResolver().openInputStream(uri);
+            try {
+                OutputStream output = new FileOutputStream(file);
+                try {
+                    int bytesRead;
+                    while ((bytesRead = input.read(buffer)) != -1) {
+                        output.write(buffer, 0, bytesRead);
+                    }
+                }
+                finally {
+                    output.close();
+                }
+            }
+            finally {
+                input.close();
+            }
+            return file.getPath();
+        }
+        catch (IOException e) {
+            Log.e(Files.class, "IOException", e);
+        }
+        return null;
+    }
+
+    public static File getImageFile(Context context, String filename) {
         File imagesDirectory = getImagesDirectory(context);
         return new File(imagesDirectory, filename);
     }
