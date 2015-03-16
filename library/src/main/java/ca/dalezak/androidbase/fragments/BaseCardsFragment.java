@@ -33,6 +33,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
 
     private int empty;
     protected A listAdapter;
+
     private LinearLayoutManager layoutManager;
 
     @Control("swipe_loading")
@@ -98,8 +99,17 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 boolean enable = false;
+                int totalItemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
+                    BaseCardsFragment.this.onScrolled(recyclerView, firstVisibleItem, visibleItemCount, totalItemCount, true);
+                }
+                else {
+                    BaseCardsFragment.this.onScrolled(recyclerView, firstVisibleItem, visibleItemCount, totalItemCount, false);
+                }
                 if (recyclerView.getChildCount() > 0) {
-                    boolean firstItemVisible = layoutManager.findFirstVisibleItemPosition() == 0;
+                    boolean firstItemVisible = firstVisibleItem == 0;
                     boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
                     enable = firstItemVisible && topOfFirstItemVisible;
                 }
@@ -110,6 +120,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             labelEmpty.setText(this.empty);
         }
         return view;
+    }
+
+    public void onScrolled(RecyclerView recyclerView, int topPosition, int visibleCount, int totalCount, boolean isLast) {
+        Log.i(this, "onScrolled Top %d Visible %d Total %d Last %d", topPosition, visibleCount, totalCount, isLast);
     }
 
     @Override
@@ -124,6 +138,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             listAdapter.refresh();
             listAdapter.filter(getSearchText());
         }
+    }
+
+    protected LinearLayoutManager getLayoutManager() {
+        return layoutManager;
     }
 
     public boolean hasSearchText() {
