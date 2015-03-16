@@ -95,24 +95,23 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
-            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
-            if (tabsAdapter.getCount() > selected) {
-                onTabSelected(selected, false);
-            }
-            else {
-                onTabSelected(0, false);
-            }
-        }
-        else {
-            onTabSelected(0, false);
-        }
+//        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
+//            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
+//            if (tabsAdapter.getCount() > selected) {
+//                onTabSelected(selected, false);
+//            }
+//            else {
+//                onTabSelected(0, false);
+//            }
+//        }
+//        else {
+//            onTabSelected(0, false);
+//        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.i(this, "onBackPressed");
         Prefs.remove(getActivity(), SELECTED_TAB);
     }
 
@@ -126,12 +125,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected String getTabTitle(int position) {
-        Integer title = tabTitles.get(position);
-        return getString(title);
+        if (tabTitles.size() > position) {
+            Integer title = tabTitles.get(position);
+            return getString(title);
+        }
+        return null;
     }
 
     protected Class<? extends F> getTabClass(int position) {
-        return tabClasses.get(position);
+        return tabClasses.size() > position ? tabClasses.get(position) : null;
     }
 
     protected void onTabSelected(int position, boolean animated) {
@@ -162,12 +164,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentCreated(BaseFragment fragment) {
-        Log.i(this, "onFragmentCreated %s", fragment);
+        Log.i(this, "onFragmentCreated %s Current %d", fragment, current);
         if (current == -1) {
             F currentFragment = tabsAdapter.getItem(0);
             onTabSelected(0, currentFragment);
             currentFragment.onSelected();
             current = 0;
+        }
+        else {
+
         }
     }
 
@@ -203,8 +208,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public F getItem(int position) {
             F fragment = tabs.get(position);
             if (fragment == null) {
-                Class<? extends F> clazz = getTabClass(position);
-                fragment = (F) Fragment.instantiate(getActivity(), clazz.getName());
+                Class<? extends F> tabClass = getTabClass(position);
+                fragment = (F) Fragment.instantiate(getActivity(), tabClass.getName());
                 fragment.setCallback(BaseTabFragment.this);
                 tabs.put(position, fragment);
             }
