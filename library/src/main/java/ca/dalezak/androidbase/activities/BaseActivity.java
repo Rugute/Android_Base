@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import ca.dalezak.androidbase.BaseApplication;
 import ca.dalezak.androidbase.R;
@@ -20,7 +19,6 @@ import ca.dalezak.androidbase.utils.Log;
 public abstract class BaseActivity<F extends BaseFragment>
         extends android.support.v7.app.ActionBarActivity {
 
-    private BaseApplication App;
     private Class<F> fragmentClass;
     private boolean showHome;
     private int menuId;
@@ -50,8 +48,8 @@ public abstract class BaseActivity<F extends BaseFragment>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(this, "onCreate");
-        App = (BaseApplication)getApplication();
-        App.setActivity(this);
+        BaseApplication baseApplication = (BaseApplication)getApplication();
+        baseApplication.setActivity(this);
         setContentView(R.layout.activity_main);
         try {
             FragmentManager fragmentManager = getFragmentManager();

@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import ca.dalezak.androidbase.BaseApplication;
 import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Controls;
 import ca.dalezak.androidbase.utils.Log;
@@ -33,7 +32,6 @@ public abstract class BaseFragment extends android.app.Fragment {
         public void onFragmentCreated(BaseFragment fragment);
     }
 
-    private BaseApplication App;
     private ProgressDialog dialog;
     private int layout;
     private int menu;
@@ -99,7 +97,6 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.App = (BaseApplication)getActivity().getApplication();
         Log.i(this, "onActivityCreated");
     }
 
@@ -269,10 +266,6 @@ public abstract class BaseFragment extends android.app.Fragment {
 
     protected void setTitle(String title) {
         getActivity().setTitle(title);
-    }
-
-    protected BaseApplication getApp() {
-        return App;
     }
 
     protected LinearLayout.LayoutParams getLayoutParams(int left, int top, int right, int bottom) {
