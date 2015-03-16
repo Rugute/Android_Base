@@ -103,10 +103,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 int visibleItemCount = layoutManager.getChildCount();
                 int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
                 if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
-                    BaseCardsFragment.this.onScrolled(recyclerView, firstVisibleItem, visibleItemCount, totalItemCount, true);
+                    BaseCardsFragment.this.onScrolled(firstVisibleItem, visibleItemCount, totalItemCount, true);
                 }
                 else {
-                    BaseCardsFragment.this.onScrolled(recyclerView, firstVisibleItem, visibleItemCount, totalItemCount, false);
+                    BaseCardsFragment.this.onScrolled(firstVisibleItem, visibleItemCount, totalItemCount, false);
                 }
                 if (recyclerView.getChildCount() > 0) {
                     boolean firstItemVisible = firstVisibleItem == 0;
@@ -122,8 +122,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         return view;
     }
 
-    public void onScrolled(RecyclerView recyclerView, int topPosition, int visibleCount, int totalCount, boolean isLast) {
-        Log.i(this, "onScrolled Top %d Visible %d Total %d Last %d", topPosition, visibleCount, totalCount, isLast);
+    public void onScrolled(int topPosition, int visibleCount, int totalCount, boolean isLast) {
     }
 
     @Override
