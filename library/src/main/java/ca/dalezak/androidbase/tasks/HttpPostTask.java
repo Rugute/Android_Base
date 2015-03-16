@@ -5,14 +5,15 @@ import android.content.Context;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.models.BaseModel;
+import ca.dalezak.androidbase.utils.Files;
 import ca.dalezak.androidbase.utils.Log;
 import ca.dalezak.androidbase.utils.UUID;
 
@@ -79,8 +80,10 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
             Object value = getParameter(key);
             if (value instanceof File) {
                 File file = (File) value;
-                Log.i(this, "%s=%s", key, file.getPath());
-                builder.addBinaryBody(key, file);
+                String mimeType = Files.getMimeType(file);
+                ContentType contentType = ContentType.create(mimeType);
+                Log.i(this, "%s=%s %s", key, file.getName(), mimeType);
+                builder.addBinaryBody(key, file, contentType, file.getName());
             }
             else if (value != null) {
                 Log.i(this, "%s=%s", key, value);
@@ -88,7 +91,6 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
                 builder.addTextBody(key, string);
             }
         }
-        Log.i(this, "Post %s", builder.toString());
         return builder.build();
     }
 
