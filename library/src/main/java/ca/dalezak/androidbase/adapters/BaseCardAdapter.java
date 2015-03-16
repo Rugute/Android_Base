@@ -16,23 +16,23 @@ import java.util.List;
 
 public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> extends RecyclerView.Adapter<C> {
 
-    private OnAdapterListener<M, C> adapterListener;
-
     public interface OnAdapterListener<M, C> {
         public void onCardRefreshed(int unfiltered, int filtered);
         public void onCardSelected(C card, M model);
         public void onCardPressed(C card, M model);
     }
 
-    protected final List<M> filtered = new ArrayList<M>();
-    protected final List<M> unfiltered = new ArrayList<M>();
+    private OnAdapterListener<M, C> adapterListener;
+
+    private final List<M> filtered = new ArrayList<M>();
+    private final List<M> unfiltered = new ArrayList<M>();
 
     private Class<M> modelClass;
     private Class<C> cardClass;
     private int layout;
 
-    protected final Context context;
-    protected final LayoutInflater inflater;
+    private final Context context;
+    private final LayoutInflater inflater;
 
     public BaseCardAdapter(Context context, Class<M> modelClass, Class<C> cardClass, int layout) {
         this.context = context;
@@ -40,6 +40,22 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
         this.modelClass = modelClass;
         this.cardClass = cardClass;
         this.layout = layout;
+    }
+
+    public LayoutInflater getInflater() {
+        return inflater;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public List<M> getFiltered() {
+        return filtered;
+    }
+
+    public List<M> getUnfiltered() {
+        return unfiltered;
     }
 
     public void setAdapterListener(OnAdapterListener<M, C> adapterListener) {
@@ -95,7 +111,7 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
 
     public void refresh() {
         unfiltered.clear();
-        unfiltered.addAll(models());
+        unfiltered.addAll(getItems());
         filtered.clear();
         filtered.addAll(unfiltered);
         Log.i(this, "Unfiltered %d", unfiltered.size());
@@ -119,6 +135,6 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
         }
     }
 
-    public abstract List<M> models();
+    public abstract List<M> getItems();
 
 }

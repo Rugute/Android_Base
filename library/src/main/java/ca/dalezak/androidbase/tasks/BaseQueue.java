@@ -32,6 +32,10 @@ public abstract class BaseQueue<T extends BaseTask, M extends BaseModel> impleme
         tasks.clear();
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
     public BaseQueue<T, M> add(T task) {
         total += 1;
         task.register(this);

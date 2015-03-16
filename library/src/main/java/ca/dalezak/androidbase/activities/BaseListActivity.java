@@ -33,15 +33,15 @@ public abstract class BaseListActivity<F extends BaseListFragment>
         super.onNewIntent(intent);
         setIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            fragment.setSearchText(intent.getStringExtra(SearchManager.QUERY));
+            getFragment().setSearchText(intent.getStringExtra(SearchManager.QUERY));
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getRepeatCount() == 0) {
-            if (fragment.searchView != null) {
-                fragment.searchView.setFocusable(true);
+            if (getFragment().hasSearchView()) {
+                getFragment().getSearchView().setFocusable(true);
             }
         }
         return super.onKeyDown(keyCode, event);

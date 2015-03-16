@@ -26,12 +26,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     private List<Integer> tabTitles = new ArrayList<>();
     private List<Class<? extends F>> tabClasses = new ArrayList<>();
-
     private final String SELECTED_TAB = "Selected Tab";
-
-    protected TabsAdapter tabsAdapter;
-
-    protected int current = -1;
+    private TabsAdapter tabsAdapter;
+    private int current = -1;
 
     @Control("view_pager")
     protected ViewPager viewPager;
@@ -49,6 +46,22 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     public BaseTabFragment(int layout, int menu) {
         super(layout, menu);
+    }
+
+    protected TabsAdapter getTabsAdapter() {
+        return tabsAdapter;
+    }
+
+    protected int getCurrent() {
+        return current;
+    }
+
+    protected ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    protected PagerTabStrip getTabStrip() {
+        return tabStrip;
     }
 
     @Override

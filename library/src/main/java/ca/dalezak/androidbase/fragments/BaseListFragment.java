@@ -34,8 +34,6 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
         AdapterView.OnItemSelectedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-    protected A listAdapter;
-
     @Control(id=android.R.id.empty)
     public TextView labelEmpty;
 
@@ -48,7 +46,8 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
     @Control(id=android.R.id.list)
     public ListView listView;
 
-    public SearchView searchView;
+    private A listAdapter;
+    private SearchView searchView;
     private Class<A> listAdapterClass;
 
     public BaseListFragment(Class<A> listAdapterClass) {
@@ -153,6 +152,34 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
         }
     }
 
+    public boolean hasSearchView() {
+        return searchView != null;
+    }
+
+    public SearchView getSearchView() {
+        return searchView;
+    }
+
+    protected A getListAdapter() {
+        return listAdapter;
+    }
+
+    protected SwipeRefreshLayout getSwipeLayout() {
+        return swipeLayout;
+    }
+
+    protected TextView getLabelLoading() {
+        return labelLoading;
+    }
+
+    protected TextView getLabelEmpty() {
+        return labelEmpty;
+    }
+
+    protected ListView getListView() {
+        return listView;
+    }
+
     protected void onLoading() {
         if (labelEmpty != null) {
             labelEmpty.setText(R.string.loading_);
@@ -246,7 +273,7 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
 
     public boolean hasSearchText() {
         return getIntent().hasExtra(SearchManager.QUERY) &&
-                getIntent().getStringExtra(SearchManager.QUERY).length() > 0;
+               getIntent().getStringExtra(SearchManager.QUERY).length() > 0;
     }
 
     public String getSearchText() {
@@ -265,11 +292,6 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
             searchView.setQuery(text, false);
         }
         onSearched();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <F> F getItem(int position) {
-        return (F) Objects.cast(listView.getItemAtPosition(position));
     }
 
     @Override

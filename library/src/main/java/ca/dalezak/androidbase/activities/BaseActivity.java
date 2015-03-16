@@ -20,16 +20,13 @@ import ca.dalezak.androidbase.utils.Log;
 public abstract class BaseActivity<F extends BaseFragment>
         extends android.support.v7.app.ActionBarActivity {
 
+    private BaseApplication App;
     private Class<F> fragmentClass;
-    private LinearLayout layout;
     private boolean showHome;
     private int menuId;
-
-    protected BaseApplication App;
-    protected F fragment;
-    protected Menu menu;
-    protected ProgressDialog dialog;
-    protected Toolbar toolbar;
+    private F fragment;
+    private ProgressDialog dialog;
+    private Toolbar toolbar;
 
     protected BaseActivity(Class<F> fragmentClass) {
         this(fragmentClass, 0, false);
@@ -56,7 +53,6 @@ public abstract class BaseActivity<F extends BaseFragment>
         App = (BaseApplication)getApplication();
         App.setActivity(this);
         setContentView(R.layout.activity_main);
-        layout = (LinearLayout)findViewById(R.id.layout_content);
         try {
             FragmentManager fragmentManager = getFragmentManager();
             if (savedInstanceState != null) {
@@ -76,7 +72,7 @@ public abstract class BaseActivity<F extends BaseFragment>
         catch (IllegalAccessException e) {
             Log.w(this, "IllegalAccessException", e);
         }
-        Toolbar toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
+        toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
@@ -133,7 +129,6 @@ public abstract class BaseActivity<F extends BaseFragment>
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(this, "onCreateOptionsMenu %s", menu);
-        this.menu = menu;
         if (this.menuId != 0) {
             getMenuInflater().inflate(this.menuId, menu);
             return true;
@@ -209,5 +204,13 @@ public abstract class BaseActivity<F extends BaseFragment>
             dialog.dismiss();
             dialog = null;
         }
+    }
+
+    protected Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    protected F getFragment() {
+        return fragment;
     }
 }

@@ -30,12 +30,12 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
         public final int total;
     }
 
-    protected BaseTask.Callback<T, M> callback;
-    protected final int message;
-    protected final Context context;
-    protected boolean executing = false;
-    protected boolean pending = true;
-    protected boolean loading = false;
+    private final Context context;
+    private BaseTask.Callback<T, M> callback;
+    private final int message;
+    private boolean executing = false;
+    private boolean pending = true;
+    private boolean loading = false;
 
     protected BaseTask(Context context) {
         this(context, R.string.loading_, false);
@@ -53,6 +53,10 @@ public abstract class BaseTask<T extends BaseTask, M extends BaseModel>
         this.context = context;
         this.message = message;
         this.loading = loading;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public boolean isExecuting() {

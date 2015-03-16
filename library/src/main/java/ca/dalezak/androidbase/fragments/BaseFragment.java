@@ -33,10 +33,10 @@ public abstract class BaseFragment extends android.app.Fragment {
         public void onFragmentCreated(BaseFragment fragment);
     }
 
-    protected BaseApplication App;
-    protected ProgressDialog dialog;
-    protected int layout;
-    protected int menu;
+    private BaseApplication App;
+    private ProgressDialog dialog;
+    private int layout;
+    private int menu;
     private Callback callback;
 
     public BaseFragment() {
@@ -78,10 +78,10 @@ public abstract class BaseFragment extends android.app.Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.i(this, "onCreateView");
         View view = inflater.inflate(layout, container, false);
-        Class clazz = getClass();
-        while (clazz != null && clazz != BaseFragment.class) {
-            Controls.load(getActivity(), this, view, clazz);
-            clazz = clazz.getSuperclass();
+        Class fragmentClass = getClass();
+        while (fragmentClass != null && fragmentClass != BaseFragment.class) {
+            Controls.load(getActivity(), this, view, fragmentClass);
+            fragmentClass = fragmentClass.getSuperclass();
         }
         setHasOptionsMenu(menu != 0);
         return view;
@@ -269,6 +269,10 @@ public abstract class BaseFragment extends android.app.Fragment {
 
     protected void setTitle(String title) {
         getActivity().setTitle(title);
+    }
+
+    protected BaseApplication getApp() {
+        return App;
     }
 
     protected LinearLayout.LayoutParams getLayoutParams(int left, int top, int right, int bottom) {

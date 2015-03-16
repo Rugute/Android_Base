@@ -21,30 +21,30 @@ public abstract class BaseArrayAdapter<M extends BaseModel> extends ArrayAdapter
         this.empty = empty;
     }
 
-    public abstract List<M> models();
+    public abstract List<M> getItems();
 
     @Override
     public int getCount() {
-        List<M> models = models();
+        List<M> items = getItems();
         if (empty != null) {
-            return models.size() + 1;
+            return items.size() + 1;
         }
-        return models.size();
+        return items.size();
     }
 
     @Override
     public M getItem(int position) {
-        List<M> models = models();
+        List<M> items = getItems();
         if (empty != null) {
             if (position == 0) {
                 return empty;
             }
-            else if (models != null && models.size() > position-1) {
-                return models.get(position-1);
+            else if (items != null && items.size() > position-1) {
+                return items.get(position-1);
             }
         }
-        else if (models != null && models.size() > position) {
-            return models.get(position);
+        else if (items != null && items.size() > position) {
+            return items.get(position);
         }
         return null;
     }
@@ -55,10 +55,10 @@ public abstract class BaseArrayAdapter<M extends BaseModel> extends ArrayAdapter
             if (item == empty) {
                 return 0;
             }
-            int index = models().indexOf(item);
+            int index = getItems().indexOf(item);
             return index > -1 ? index+1 : -1;
         }
-        return models().indexOf(item);
+        return getItems().indexOf(item);
     }
 
 }

@@ -16,11 +16,10 @@ import java.util.List;
 
 public abstract class BaseListAdapter<M extends BaseModel, V extends BaseView> extends BaseAdapter {
 
-    protected final Activity activity;
-    protected final LayoutInflater inflater;
-    protected final List<M> filtered = new ArrayList<M>();
-    protected final List<M> unfiltered = new ArrayList<M>();
-
+    private final Activity activity;
+    private final LayoutInflater inflater;
+    private final List<M> filtered = new ArrayList<M>();
+    private final List<M> unfiltered = new ArrayList<M>();
     private Class<M> modelClass;
     private Class<V> viewClass;
 
@@ -29,6 +28,22 @@ public abstract class BaseListAdapter<M extends BaseModel, V extends BaseView> e
         this.inflater = LayoutInflater.from(activity);
         this.modelClass = modelClass;
         this.viewClass = viewClass;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public LayoutInflater getInflater() {
+        return inflater;
+    }
+
+    public List<M> getFiltered() {
+        return filtered;
+    }
+
+    public List<M> getUnfiltered() {
+        return unfiltered;
     }
 
     public V getView(Activity activity, View view) {
@@ -54,7 +69,7 @@ public abstract class BaseListAdapter<M extends BaseModel, V extends BaseView> e
 
     public void refresh() {
         unfiltered.clear();
-        unfiltered.addAll(models());
+        unfiltered.addAll(getItems());
         filtered.clear();
         filtered.addAll(unfiltered);
         Log.i(this, "Unfiltered %d", unfiltered.size());
@@ -72,5 +87,5 @@ public abstract class BaseListAdapter<M extends BaseModel, V extends BaseView> e
         notifyDataSetChanged();
     }
 
-    public abstract List<M> models();
+    public abstract List<M> getItems();
 }

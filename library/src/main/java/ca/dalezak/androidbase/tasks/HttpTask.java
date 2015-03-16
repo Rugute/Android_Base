@@ -111,12 +111,16 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
         }
     }
 
-    protected Context getContext() {
-        return context;
-    }
-
     protected URI getURI() {
         return uri;
+    }
+
+    protected Map<String, Object> getHeaders() {
+        return headers;
+    }
+
+    protected Map<String, Object> getParameters() {
+        return parameters;
     }
 
     protected void addHeader(String key, Object object) {
@@ -268,19 +272,19 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                     if (!Strings.isNullOrEmpty(reasonPhrase)) {
                         return new InvalidCredentialsException(reasonPhrase);
                     }
-                    return new InvalidCredentialsException(context.getString(R.string.invalid_credentials));
+                    return new InvalidCredentialsException(getContext().getString(R.string.invalid_credentials));
                 }
                 else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                     if (!Strings.isNullOrEmpty(reasonPhrase)) {
                         return new InvalidCredentialsException(reasonPhrase);
                     }
-                    return new InvalidCredentialsException(context.getString(R.string.invalid_credentials));
+                    return new InvalidCredentialsException(getContext().getString(R.string.invalid_credentials));
                 }
                 else if (statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
                     if (!Strings.isNullOrEmpty(reasonPhrase)) {
                         return new HttpResponseException(statusCode, reasonPhrase);
                     }
-                    return new HttpResponseException(statusCode, context.getString(R.string.server_maintenance_mode));
+                    return new HttpResponseException(statusCode, getContext().getString(R.string.server_maintenance_mode));
                 }
                 else if (!Strings.isNullOrEmpty(reasonPhrase)) {
                     return new HttpResponseException(statusCode, reasonPhrase);
@@ -292,7 +296,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
                         return new HttpResponseException(statusCode, json.optString("error", reasonPhrase));
                     }
                     else {
-                        return new HttpResponseException(statusCode, context.getString(R.string.unknown_exception));
+                        return new HttpResponseException(statusCode, getContext().getString(R.string.unknown_exception));
                     }
                 }
             }
@@ -306,15 +310,15 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
         }
         catch(UnknownHostException ex) {
             Log.w(this, "UnknownHostException %s", ex.getMessage());
-            return new UnknownHostException(context.getString(R.string.unknown_host_exception));
+            return new UnknownHostException(getContext().getString(R.string.unknown_host_exception));
         }
         catch (HttpHostConnectException ex) {
             Log.w(this, "HttpHostConnectException %s", ex.getMessage());
-            return new InvalidCredentialsException(context.getString(R.string.host_connect_exception));
+            return new InvalidCredentialsException(getContext().getString(R.string.host_connect_exception));
         }
         catch(ConnectTimeoutException ex) {
             Log.w(this, "ConnectTimeoutException %s", ex.getMessage());
-            return new ConnectTimeoutException(context.getString(R.string.connection_timeout_exception));
+            return new ConnectTimeoutException(getContext().getString(R.string.connection_timeout_exception));
         }
         catch(IOException ex) {
             Log.w(this, "IOException %s", ex.getMessage());
@@ -336,15 +340,15 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
     }
 
     protected boolean hasETag(URI uri) {
-        return prefs(context).getAll().size() > 0 && prefs(context).contains(uri.toString());
+        return prefs(getContext()).getAll().size() > 0 && prefs(getContext()).contains(uri.toString());
     }
 
     protected String getETag(URI uri) {
-        return prefs(context).getString(uri.toString(), null);
+        return prefs(getContext()).getString(uri.toString(), null);
     }
 
     protected void setETag(URI uri, String etag) {
-        editor(context).putString(uri.toString(), etag).commit();
+        editor(getContext()).putString(uri.toString(), etag).commit();
     }
 
     public static void clearETags(Context context) {

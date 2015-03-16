@@ -13,8 +13,7 @@ import ca.dalezak.androidbase.utils.Controls;
 
 public abstract class BaseCard<M extends BaseModel> extends RecyclerView.ViewHolder {
 
-    protected Context context;
-
+    private Context context;
     private int selectedColor;
 
     @Control("card_view")
@@ -43,5 +42,17 @@ public abstract class BaseCard<M extends BaseModel> extends RecyclerView.ViewHol
     }
 
     public abstract void setSelected(boolean selected);
+
+    public Context getContext() {
+        return context;
+    }
+
+    public CardView getCardView() {
+        return cardView;
+    }
+
+    public LinearLayout getCardLayout() {
+        return cardLayout;
+    }
 
 }

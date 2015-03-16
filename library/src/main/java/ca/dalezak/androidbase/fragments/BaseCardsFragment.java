@@ -31,11 +31,6 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener, BaseCardAdapter.OnAdapterListener<M, C> {
 
-    private int empty;
-    protected A listAdapter;
-
-    private LinearLayoutManager layoutManager;
-
     @Control("swipe_loading")
     public TextView labelLoading;
 
@@ -48,7 +43,11 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Control("recycler_view")
     public RecyclerView recyclerView;
 
-    public SearchView searchView;
+    private int empty;
+    private A listAdapter;
+    private LinearLayoutManager layoutManager;
+    private BaseScrollListener baseScrollListener;
+    private SearchView searchView;
     private Class<A> listAdapterClass;
 
     public BaseCardsFragment(Class<A> listAdapterClass) {
@@ -90,45 +89,23 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 R.color.swipe_second,
                 R.color.swipe_third,
                 R.color.swipe_fourth);
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                boolean enable = false;
-                int totalItemCount = layoutManager.getItemCount();
-                int visibleItemCount = layoutManager.getChildCount();
-                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-                if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
-                    BaseCardsFragment.this.onScrolled(firstVisibleItem, visibleItemCount, totalItemCount, true);
-                }
-                else {
-                    BaseCardsFragment.this.onScrolled(firstVisibleItem, visibleItemCount, totalItemCount, false);
-                }
-                if (recyclerView.getChildCount() > 0) {
-                    boolean firstItemVisible = firstVisibleItem == 0;
-                    boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
-                    enable = firstItemVisible && topOfFirstItemVisible;
-                }
-                swipeLayout.setEnabled(enable);
-            }
-        });
+        baseScrollListener = new BaseScrollListener(layoutManager);
+        recyclerView.setOnScrollListener(baseScrollListener);
         if (labelEmpty != null) {
             labelEmpty.setText(this.empty);
         }
         return view;
     }
 
-    public void onScrolled(int topPosition, int visibleCount, int totalCount, boolean isLast) {
+    public void onLoadMore(int total, M last) {
+        Log.i(this, "onLoadMore %d %s", total, last);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         listAdapter.refresh();
+        baseScrollListener.reset(0, true);
     }
 
     public void onRefreshed() {
@@ -139,8 +116,36 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         }
     }
 
+    public boolean hasSearchView() {
+        return searchView != null;
+    }
+
+    public SearchView getSearchView() {
+        return searchView;
+    }
+
+    protected TextView getLabelLoading() {
+        return labelLoading;
+    }
+
+    protected TextView getLabelEmpty() {
+        return labelEmpty;
+    }
+
+    protected SwipeRefreshLayout getSwipeLayout() {
+        return swipeLayout;
+    }
+
+    protected RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     protected LinearLayoutManager getLayoutManager() {
         return layoutManager;
+    }
+
+    protected A getListAdapter() {
+        return listAdapter;
     }
 
     public boolean hasSearchText() {
@@ -278,6 +283,56 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                     }
                 }
             }
+        }
+    }
+
+    private class BaseScrollListener extends RecyclerView.OnScrollListener {
+
+        private LinearLayoutManager linearLayoutManager;
+
+        private boolean loading = true;
+        private int totalItemCount;
+        private int previousItemCount;
+        private int visibleItemCount;
+        private int firstVisibleItem;
+
+        public BaseScrollListener(LinearLayoutManager linearLayoutManager) {
+            this.linearLayoutManager = linearLayoutManager;
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            visibleItemCount = recyclerView.getChildCount();
+            totalItemCount = linearLayoutManager.getItemCount();
+            firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+            if (loading && (totalItemCount > previousItemCount)) {
+                loading = false;
+                previousItemCount = totalItemCount;
+            }
+            if (!loading && ((visibleItemCount + firstVisibleItem) >= totalItemCount)) {
+                M model = listAdapter.getItem(totalItemCount - 1);
+                if (model != null) {
+                    onLoadMore(totalItemCount, model);
+                    loading = true;
+                }
+            }
+            boolean enable = false;
+            if (visibleItemCount > 0) {
+                boolean firstItemVisible = firstVisibleItem == 0;
+                boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
+                enable = firstItemVisible && topOfFirstItemVisible;
+            }
+            swipeLayout.setEnabled(enable);
+        }
+
+        public void reset(int previousItemCount, boolean loading) {
+            this.previousItemCount = previousItemCount;
+            this.loading = loading;
+        }
+
+        public boolean isLoading() {
+            return loading;
         }
     }
 }
