@@ -145,7 +145,8 @@ public abstract class BaseActivity<F extends BaseFragment>
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(this, "onOptionsItemSelected %s", item.getTitle());
         if (item.getItemId() == android.R.id.home) {
-            this.finish();
+            onBackPressed();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
