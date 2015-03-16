@@ -96,18 +96,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             tabStrip.setVisibility(View.GONE);
         }
         if (Prefs.contains(getActivity(), SELECTED_TAB)) {
-            int selectedTab = Prefs.getInt(getActivity(), SELECTED_TAB);
-            if (tabsAdapter.getCount() > selectedTab) {
-                current = selectedTab;
-                viewPager.setCurrentItem(selectedTab, false);
-                onTabSelected(selectedTab, false);
+            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
+            if (tabsAdapter.getCount() > selected) {
+                onTabSelected(selected, false);
             }
-            else if (viewPager.getCurrentItem() == -1) {
-                viewPager.setCurrentItem(0, false);
+            else {
+                onTabSelected(0, false);
             }
         }
-        else if (viewPager.getCurrentItem() == -1) {
-            viewPager.setCurrentItem(0, false);
+        else {
+            onTabSelected(0, false);
         }
     }
 
