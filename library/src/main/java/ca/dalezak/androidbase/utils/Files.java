@@ -1,5 +1,6 @@
 package ca.dalezak.androidbase.utils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
@@ -13,18 +14,42 @@ import java.io.InputStream;
 
 public class Files {
 
-    public static File getVideosDirectory() {
-        File rootDirectory = isExternalStorageWritable()
-                ? Environment.getExternalStorageDirectory()
-                : Environment.getDataDirectory();
-        return new File(rootDirectory, "videos");
+    private File getImageFile(Context context, String filename) {
+        File imagesDirectory = getImagesDirectory(context);
+        return new File(imagesDirectory, filename);
     }
 
-    public static File getImagesDirectory() {
-        File rootDirectory = isExternalStorageWritable()
+    public static File getRootDirectory() {
+        return isExternalStorageWritable()
                 ? Environment.getExternalStorageDirectory()
                 : Environment.getDataDirectory();
-        return new File(rootDirectory, "images");
+    }
+
+    public static File getAppDirectory(Context context) {
+        File rootDirectory = getRootDirectory();
+        File appDirectory = new File(rootDirectory, context.getPackageName());
+        if (!appDirectory.exists() && appDirectory.mkdirs()){
+            Log.i(Files.class, "Created Directory %s", appDirectory);
+        }
+        return appDirectory;
+    }
+
+    public static File getVideosDirectory(Context context) {
+        File appDirectory = getAppDirectory(context);
+        File videosDirectory = new File(appDirectory, "videos");
+        if (!videosDirectory.exists() && videosDirectory.mkdirs()){
+            Log.i(Files.class, "Created Directory %s", videosDirectory);
+        }
+        return videosDirectory;
+    }
+
+    public static File getImagesDirectory(Context context) {
+        File appDirectory = getAppDirectory(context);
+        File imagesDirectory = new File(appDirectory, "images");
+        if (!imagesDirectory.exists() && imagesDirectory.mkdirs()){
+            Log.i(Files.class, "Created Directory %s", imagesDirectory);
+        }
+        return imagesDirectory;
     }
 
     public static boolean isExternalStorageWritable() {

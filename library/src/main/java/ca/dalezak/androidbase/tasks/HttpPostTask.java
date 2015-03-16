@@ -82,7 +82,7 @@ public abstract class HttpPostTask<M extends BaseModel> extends HttpTask<M> {
                 File file = (File) value;
                 String mimeType = Files.getMimeType(file);
                 ContentType contentType = ContentType.create(mimeType);
-                Log.i(this, "%s=%s %s", key, file.getName(), mimeType);
+                Log.i(this, "%s=%s (%s)", key, file.getName(), mimeType);
                 builder.addBinaryBody(key, file, contentType, file.getName());
             }
             else if (value != null) {
