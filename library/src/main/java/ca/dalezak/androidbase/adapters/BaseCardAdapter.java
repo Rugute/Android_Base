@@ -86,6 +86,13 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
         return filtered.size();
     }
 
+    public M getItem(int position) {
+        if (filtered.size() > position) {
+            return filtered.get(position);
+        }
+        return null;
+    }
+
     public void refresh() {
         unfiltered.clear();
         unfiltered.addAll(models());
@@ -113,4 +120,5 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
     }
 
     public abstract List<M> models();
+
 }
