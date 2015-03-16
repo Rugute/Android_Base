@@ -46,7 +46,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     private int empty;
     private A listAdapter;
     private LinearLayoutManager layoutManager;
-    private BaseScrollListener baseScrollListener;
+    private BaseScrollListener scrollListener;
     private SearchView searchView;
     private Class<A> listAdapterClass;
 
@@ -89,8 +89,8 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 R.color.swipe_second,
                 R.color.swipe_third,
                 R.color.swipe_fourth);
-        baseScrollListener = new BaseScrollListener(layoutManager);
-        recyclerView.setOnScrollListener(baseScrollListener);
+        scrollListener = new BaseScrollListener();
+        recyclerView.setOnScrollListener(scrollListener);
         if (labelEmpty != null) {
             labelEmpty.setText(this.empty);
         }
@@ -105,7 +105,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     public void onResume() {
         super.onResume();
         listAdapter.refresh();
-        baseScrollListener.reset(0, true);
+        scrollListener.reset(0, true);
     }
 
     public void onRefreshed() {
@@ -288,24 +288,21 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
 
     private class BaseScrollListener extends RecyclerView.OnScrollListener {
 
-        private LinearLayoutManager linearLayoutManager;
-
         private boolean loading = true;
         private int totalItemCount;
         private int previousItemCount;
         private int visibleItemCount;
         private int firstVisibleItem;
 
-        public BaseScrollListener(LinearLayoutManager linearLayoutManager) {
-            this.linearLayoutManager = linearLayoutManager;
+        public BaseScrollListener() {
         }
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             visibleItemCount = recyclerView.getChildCount();
-            totalItemCount = linearLayoutManager.getItemCount();
-            firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+            totalItemCount = getLayoutManager().getItemCount();
+            firstVisibleItem = getLayoutManager().findFirstVisibleItemPosition();
             if (loading && (totalItemCount > previousItemCount)) {
                 loading = false;
                 previousItemCount = totalItemCount;
