@@ -125,7 +125,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected String getTabTitle(int position) {
-        if (tabTitles.size() > position) {
+        if (position > -1 && tabTitles.size() > position) {
             Integer title = tabTitles.get(position);
             return getString(title);
         }
@@ -133,7 +133,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected Class<? extends F> getTabClass(int position) {
-        return tabClasses.size() > position ? tabClasses.get(position) : null;
+        if (position > -1 && tabClasses.size() > position) {
+            return tabClasses.get(position);
+        }
+        return null;
     }
 
     protected void onTabSelected(int position, boolean animated) {
@@ -142,8 +145,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         if (previousFragment != null) {
             if (onTabUnselected(current, previousFragment)) {
                 previousFragment.onUnselected();
-                viewPager.setCurrentItem(position, animated);
                 F currentFragment = tabsAdapter.getItem(position);
+                viewPager.setCurrentItem(position, animated);
                 if (currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
                     currentFragment.onSelected();
@@ -156,8 +159,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
         }
         else {
-            viewPager.setCurrentItem(position, animated);
             F currentFragment = tabsAdapter.getItem(position);
+            viewPager.setCurrentItem(position, animated);
             if (currentFragment.isAdded()) {
                 onTabSelected(position, currentFragment);
                 currentFragment.onSelected();
@@ -213,14 +216,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public F getItem(int position) {
-            F fragment = tabs.get(position);
-            if (fragment == null) {
-                Class<? extends F> tabClass = getTabClass(position);
-                fragment = (F) Fragment.instantiate(getActivity(), tabClass.getName());
-                fragment.setCallback(BaseTabFragment.this);
-                tabs.put(position, fragment);
+            if (position > -1) {
+                F fragment = tabs.get(position);
+                if (fragment == null) {
+                    Class<? extends F> tabClass = getTabClass(position);
+                    fragment = (F) Fragment.instantiate(getActivity(), tabClass.getName());
+                    fragment.setCallback(BaseTabFragment.this);
+                    tabs.put(position, fragment);
+                }
+                return fragment;
             }
-            return fragment;
+            return null;
         }
 
         @Override
