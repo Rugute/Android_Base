@@ -97,15 +97,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         }
         if (Prefs.contains(getActivity(), SELECTED_TAB)) {
             int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
-            if (tabsAdapter.getCount() > selected) {
+            if (selected > 0 && selected < tabsAdapter.getCount()) {
                 setTabSelected(selected, false);
             }
-            else {
-                setTabSelected(0, false);
-            }
-        }
-        else {
-            setTabSelected(0, false);
         }
     }
 
@@ -140,6 +134,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void setTabSelected(int position, boolean animated) {
+        viewPager.setCurrentItem(position, animated);
         if (viewPager.getCurrentItem() == position) {
             F currentFragment = tabsAdapter.getItem(position);
             if (currentFragment.isAdded()) {
