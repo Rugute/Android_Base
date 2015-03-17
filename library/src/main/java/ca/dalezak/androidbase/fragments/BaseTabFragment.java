@@ -78,20 +78,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        if (menuResource != 0) {
-            inflater.inflate(this.menuResource, menu);
-        }
-        int position = viewPager.getCurrentItem();
-        F currentFragment = tabsAdapter.getItem(position);
-        if (currentFragment != null && currentFragment.menuResource != 0) {
-            inflater.inflate(currentFragment.menuResource, menu);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         if (viewPager != null) {
