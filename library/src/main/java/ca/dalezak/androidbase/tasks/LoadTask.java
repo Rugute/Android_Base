@@ -36,14 +36,14 @@ public abstract class LoadTask<M extends BaseModel> extends BaseTask<LoadTask, M
     }
 
     @Override
-    protected void onProgressUpdate(Update... updates) {
+    protected void onProgressUpdate(BaseTask.Update... updates) {
         super.onProgressUpdate(updates);
         if (updates != null && updates.length > 0) {
-            for (Update update : updates) {
-                if (dialog != null && dialog.isIndeterminate()) {
-                    dialog.dismiss();
-                    dialog = new ProgressDialog(getContext());
-                }
+            if (dialog != null && dialog.isIndeterminate()) {
+                dialog.dismiss();
+                dialog = new ProgressDialog(getContext());
+            }
+            for (BaseTask.Update update : updates) {
                 if (dialog != null) {
                     dialog.setMax(update.total);
                     dialog.setProgress(update.progress);
