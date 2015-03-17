@@ -116,6 +116,17 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         }
     }
 
+    @Override
+    public void onSelected() {
+        super.onSelected();
+        onRefreshed();
+    }
+
+    @Override
+    public void onUnselected() {
+        super.onUnselected();
+    }
+
     public boolean hasSearchView() {
         return searchView != null;
     }
