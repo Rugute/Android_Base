@@ -224,43 +224,49 @@ public abstract class BaseFragment extends android.app.Fragment {
     }
 
     protected void showLoading(final CharSequence message) {
-        if (dialog != null && !Strings.areEqual(dialog.getMessage(), message)) {
-            dialog.dismiss();
-            dialog = null;
-        }
-        if (dialog == null && getActivity() != null) {
-            dialog = new ProgressDialog(getActivity());
-        }
-        if (dialog != null) {
-            dialog.setMessage(message);
-            dialog.setIndeterminate(true);
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.show();
+        if (isAdded()) {
+            if (dialog != null && !Strings.areEqual(dialog.getMessage(), message)) {
+                dialog.dismiss();
+                dialog = null;
+            }
+            if (dialog == null && getActivity() != null) {
+                dialog = new ProgressDialog(getActivity());
+            }
+            if (dialog != null) {
+                dialog.setMessage(message);
+                dialog.setIndeterminate(true);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.show();
+            }
         }
     }
 
     protected void showLoading(final CharSequence message, final int total, final int progress) {
-        if (dialog != null && dialog.isIndeterminate()) {
-            dialog.dismiss();
-            dialog = null;
-        }
-        if (dialog == null && getActivity() != null) {
-            dialog = new ProgressDialog(getActivity());
-        }
-        if (dialog != null) {
-            dialog.setMessage(message);
-            dialog.setMax(total);
-            dialog.setProgress(progress);
-            dialog.setIndeterminate(false);
-            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            dialog.show();
+        if (isAdded()) {
+            if (dialog != null && dialog.isIndeterminate()) {
+                dialog.dismiss();
+                dialog = null;
+            }
+            if (dialog == null && getActivity() != null) {
+                dialog = new ProgressDialog(getActivity());
+            }
+            if (dialog != null) {
+                dialog.setMessage(message);
+                dialog.setMax(total);
+                dialog.setProgress(progress);
+                dialog.setIndeterminate(false);
+                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                dialog.show();
+            }
         }
     }
 
     protected void hideLoading() {
-        if (dialog != null) {
-            dialog.dismiss();
-            dialog = null;
+        if (isAdded()) {
+            if (dialog != null) {
+                dialog.dismiss();
+                dialog = null;
+            }
         }
     }
 
