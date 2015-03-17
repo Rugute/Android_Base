@@ -95,18 +95,18 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-//        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
-//            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
-//            if (tabsAdapter.getCount() > selected) {
-//                onTabSelected(selected, false);
-//            }
-//            else {
-//                onTabSelected(0, false);
-//            }
-//        }
-//        else {
-//            onTabSelected(0, false);
-//        }
+        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
+            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
+            if (tabsAdapter.getCount() > selected) {
+                setTabSelected(selected, false);
+            }
+            else {
+                setTabSelected(0, false);
+            }
+        }
+        else {
+            setTabSelected(0, false);
+        }
     }
 
     @Override
@@ -139,47 +139,14 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         return null;
     }
 
-    protected void onTabSelected(int position, boolean animated) {
-        Log.i(this, "onTabSelected %d %b", position, animated);
-        F previousFragment = tabsAdapter.getItem(current);
-        if (previousFragment != null) {
-            if (onTabUnselected(current, previousFragment)) {
-                previousFragment.onUnselected();
-                F currentFragment = tabsAdapter.getItem(position);
-                viewPager.setCurrentItem(position, animated);
-                if (currentFragment != null && currentFragment.isAdded()) {
-                    onTabSelected(position, currentFragment);
-                    currentFragment.onSelected();
-                }
-            }
-            else if (previousFragment.isAdded()) {
-                viewPager.setCurrentItem(current, animated);
-                onTabSelected(current, previousFragment);
-            }
-        }
-        else {
-            F currentFragment = tabsAdapter.getItem(position);
-            viewPager.setCurrentItem(position, animated);
-            if (currentFragment != null && currentFragment.isAdded()) {
-                onTabSelected(position, currentFragment);
-                currentFragment.onSelected();
-            }
-        }
+    protected void setTabSelected(int position, boolean animated) {
+        viewPager.setCurrentItem(position, animated);
     }
 
     @Override
     public void onFragmentCreated(BaseFragment fragment) {
-        int position = tabsAdapter.getItemPosition(fragment);
-        Log.i(this, "onFragmentCreated %s Position %d Current %d", fragment, position, current);
-        if (current == -1) {
-            F currentFragment = tabsAdapter.getItem(0);
-            if (currentFragment.isAdded()) {
-                onTabSelected(0, currentFragment);
-                currentFragment.onSelected();
-            }
-            current = 0;
-        }
-        else if (current == position) {
+        Log.i(this, "onFragmentCreated %s", fragment);
+        if (current == tabsAdapter.getItemPosition(fragment)) {
             onTabSelected(current, (F)fragment);
             fragment.onSelected();
         }
