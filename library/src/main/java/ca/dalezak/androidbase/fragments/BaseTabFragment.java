@@ -7,8 +7,6 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -151,9 +149,33 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         }
     }
 
+    protected abstract boolean onTabSelected(int position, F fragment);
+
+    protected abstract boolean onTabUnselected(int position, F fragment);
+
     @Override
-    public void onFragmentCreated(BaseFragment fragment) {
-        Log.i(this, "onFragmentCreated %s", fragment);
+    public void onFragmentInflate(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentAttach(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentCreate(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentViewCreated(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentActivityCreated(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentConfigurationChanged(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentStart(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentResume(BaseFragment fragment) {
         if (current == -1) {
             F currentFragment = tabsAdapter.getItem(0);
             if (currentFragment.isAdded()) {
@@ -168,9 +190,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         }
     }
 
-    protected abstract boolean onTabSelected(int position, F fragment);
+    @Override
+    public void onFragmentPause(BaseFragment fragment) {}
 
-    protected abstract boolean onTabUnselected(int position, F fragment);
+    @Override
+    public void onFragmentStop(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentDestroy(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentDetach(BaseFragment fragment) {}
 
     protected class TabsAdapter
             extends FragmentStatePagerAdapter

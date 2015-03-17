@@ -29,7 +29,18 @@ import ca.dalezak.androidbase.utils.Strings;
 public abstract class BaseFragment extends android.app.Fragment {
 
     public interface Callback {
-        public void onFragmentCreated(BaseFragment fragment);
+        public void onFragmentInflate(BaseFragment fragment);
+        public void onFragmentAttach(BaseFragment fragment);
+        public void onFragmentCreate(BaseFragment fragment);
+        public void onFragmentViewCreated(BaseFragment fragment);
+        public void onFragmentActivityCreated(BaseFragment fragment);
+        public void onFragmentConfigurationChanged(BaseFragment fragment);
+        public void onFragmentStart(BaseFragment fragment);
+        public void onFragmentResume(BaseFragment fragment);
+        public void onFragmentPause(BaseFragment fragment);
+        public void onFragmentStop(BaseFragment fragment);
+        public void onFragmentDestroy(BaseFragment fragment);
+        public void onFragmentDetach(BaseFragment fragment);
     }
 
     protected ProgressDialog dialog;
@@ -57,18 +68,27 @@ public abstract class BaseFragment extends android.app.Fragment {
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(activity, attrs, savedInstanceState);
         Log.i(this, "onInflate");
+        if (callback != null) {
+            callback.onFragmentInflate(this);
+        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.i(this, "onAttach");
+        if (callback != null) {
+            callback.onFragmentAttach(this);
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(this, "onCreate");
+        if (callback != null) {
+            callback.onFragmentCreate(this);
+        }
     }
 
     @Override
@@ -90,7 +110,7 @@ public abstract class BaseFragment extends android.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(this, "onViewCreated");
         if (callback != null) {
-            callback.onFragmentCreated(this);
+            callback.onFragmentViewCreated(this);
         }
     }
 
@@ -98,6 +118,9 @@ public abstract class BaseFragment extends android.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(this, "onActivityCreated");
+        if (callback != null) {
+            callback.onFragmentActivityCreated(this);
+        }
     }
 
     public void onSelected() {
@@ -108,16 +131,30 @@ public abstract class BaseFragment extends android.app.Fragment {
         Log.i(this, "onUnselected");
     }
 
+    public void onVisible() {
+        Log.i(this, "onVisible");
+    }
+
+    public void onHidden() {
+        Log.i(this, "onHidden");
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         Log.i(this, "onStart");
+        if (callback != null) {
+            callback.onFragmentStart(this);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.i(this, "onResume");
+        if (callback != null) {
+            callback.onFragmentResume(this);
+        }
     }
 
     @Override
@@ -125,12 +162,18 @@ public abstract class BaseFragment extends android.app.Fragment {
         super.onPause();
         Log.i(this, "onPause");
         hideKeyboard();
+        if (callback != null) {
+            callback.onFragmentPause(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log.i(this, "onStop");
+        if (callback != null) {
+            callback.onFragmentStop(this);
+        }
     }
 
     @Override
@@ -143,6 +186,9 @@ public abstract class BaseFragment extends android.app.Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.i(this, "onConfigurationChanged");
+        if (callback != null) {
+            callback.onFragmentConfigurationChanged(this);
+        }
     }
 
     @Override
@@ -153,12 +199,30 @@ public abstract class BaseFragment extends android.app.Fragment {
             this.dialog.dismiss();
             this.dialog = null;
         }
+        if (callback != null) {
+            callback.onFragmentDestroy(this);
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         Log.i(this, "onDetach");
+        if (callback != null) {
+            callback.onFragmentDetach(this);
+        }
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        Log.i(this, "setMenuVisibility %b", visible);
+        if (visible) {
+            onVisible();
+        }
+        else {
+            onHidden();
+        }
     }
 
     @Override
