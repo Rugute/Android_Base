@@ -32,10 +32,10 @@ public abstract class BaseFragment extends android.app.Fragment {
         public void onFragmentCreated(BaseFragment fragment);
     }
 
-    private ProgressDialog dialog;
-    private int layout;
-    private int menu;
-    private Callback callback;
+    protected ProgressDialog dialog;
+    protected int layout;
+    protected int menuResource;
+    protected Callback callback;
 
     public BaseFragment() {
     }
@@ -46,7 +46,7 @@ public abstract class BaseFragment extends android.app.Fragment {
 
     public BaseFragment(int layout, int menu) {
         this.layout = layout;
-        this.menu = menu;
+        this.menuResource = menu;
     }
 
     public void setCallback(Callback callback) {
@@ -81,7 +81,7 @@ public abstract class BaseFragment extends android.app.Fragment {
             Controls.load(getActivity(), this, view, fragmentClass);
             fragmentClass = fragmentClass.getSuperclass();
         }
-        setHasOptionsMenu(menu != 0);
+        setHasOptionsMenu(menuResource != 0);
         return view;
     }
 
@@ -164,8 +164,8 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (this.menu != 0) {
-            inflater.inflate(this.menu, menu);
+        if (this.menuResource != 0) {
+            inflater.inflate(this.menuResource, menu);
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem menuItem = menu.getItem(i);
                 if (menuItem.getIcon() != null) {

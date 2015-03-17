@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ca.dalezak.androidbase.utils.Log;
+import ca.dalezak.androidbase.utils.Strings;
 
 public class LocationManager implements LocationListener {
 
@@ -90,20 +91,40 @@ public class LocationManager implements LocationListener {
         }
     }
 
+    public static boolean hasLatitude() {
+        return location != null && location.getLatitude() != 0.0;
+    }
+
     public static double getLatitude() {
         return location != null ? location.getLatitude() : 0.0;
+    }
+
+    public static boolean hasLongitude() {
+        return location != null && location.getLongitude() != 0.0;
     }
 
     public static double getLongitude() {
         return location != null ? location.getLongitude() : 0.0;
     }
 
+    public static boolean hasCity() {
+        return address != null && !Strings.isNullOrEmpty(address.getLocality());
+    }
+
     public static String getCity() {
         return address != null ? address.getLocality() : null;
     }
 
+    public static boolean hasState() {
+        return address != null && !Strings.isNullOrEmpty(address.getAdminArea());
+    }
+
     public static String getState() {
         return address != null ? address.getAdminArea() : null;
+    }
+
+    public static boolean hasCountry() {
+        return address != null && !Strings.isNullOrEmpty(address.getCountryName());
     }
 
     public static String getCountry() {

@@ -7,6 +7,8 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -73,6 +75,20 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Prefs.save(getActivity(), getSelectedKey(), viewPager.getCurrentItem());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        if (menuResource != 0) {
+            inflater.inflate(this.menuResource, menu);
+        }
+        int position = viewPager.getCurrentItem();
+        F currentFragment = tabsAdapter.getItem(position);
+        if (currentFragment != null && currentFragment.menuResource != 0) {
+            inflater.inflate(currentFragment.menuResource, menu);
+        }
     }
 
     @Override
