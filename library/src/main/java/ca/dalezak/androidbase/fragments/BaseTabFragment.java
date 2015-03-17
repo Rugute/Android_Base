@@ -140,20 +140,19 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void onTabSelected(int position, boolean animated) {
-        Log.i(this, "onTabSelected %d", position);
+        Log.i(this, "onTabSelected %d %b", position, animated);
         F previousFragment = tabsAdapter.getItem(current);
         if (previousFragment != null) {
             if (onTabUnselected(current, previousFragment)) {
                 previousFragment.onUnselected();
                 F currentFragment = tabsAdapter.getItem(position);
                 viewPager.setCurrentItem(position, animated);
-                if (currentFragment.isAdded()) {
+                if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
                     currentFragment.onSelected();
                 }
-                current = position;
             }
-            else {
+            else if (previousFragment.isAdded()) {
                 viewPager.setCurrentItem(current, animated);
                 onTabSelected(current, previousFragment);
             }
@@ -161,17 +160,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else {
             F currentFragment = tabsAdapter.getItem(position);
             viewPager.setCurrentItem(position, animated);
-            if (currentFragment.isAdded()) {
+            if (currentFragment != null && currentFragment.isAdded()) {
                 onTabSelected(position, currentFragment);
                 currentFragment.onSelected();
             }
-            current = position;
         }
     }
 
     @Override
     public void onFragmentCreated(BaseFragment fragment) {
-        Log.i(this, "onFragmentCreated %s Current %d", fragment, current);
+        int position = tabsAdapter.getItemPosition(fragment);
+        Log.i(this, "onFragmentCreated %s Position %d Current %d", fragment, position, current);
         if (current == -1) {
             F currentFragment = tabsAdapter.getItem(0);
             if (currentFragment.isAdded()) {
@@ -180,7 +179,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
             current = 0;
         }
-        else if (current == tabsAdapter.getItemPosition(fragment)){
+        else if (current == position) {
             onTabSelected(current, (F)fragment);
             fragment.onSelected();
         }
@@ -252,7 +251,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 if (onTabUnselected(current, previousFragment)) {
                     previousFragment.onUnselected();
                     F currentFragment = tabsAdapter.getItem(position);
-                    if (currentFragment.isAdded()) {
+                    if (currentFragment != null && currentFragment.isAdded()) {
                         onTabSelected(position, currentFragment);
                         currentFragment.onSelected();
                     }
@@ -265,7 +264,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
             else {
                 F currentFragment = tabsAdapter.getItem(position);
-                if (currentFragment.isAdded()) {
+                if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
                     currentFragment.onSelected();
                 }
