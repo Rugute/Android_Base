@@ -230,8 +230,12 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public int getItemPosition(Object object) {
-            if (object != null && tabs.containsValue((F)object)) {
-                return super.getItemPosition(object);
+            if (object != null) {
+                for (Map.Entry<Integer, F> entry : tabs.entrySet()) {
+                    if (entry.getValue().equals(object)) {
+                        return entry.getKey();
+                    }
+                }
             }
             return POSITION_NONE;
         }
