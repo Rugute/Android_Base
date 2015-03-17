@@ -26,7 +26,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     private List<Integer> tabTitles = new ArrayList<>();
     private List<Class<? extends F>> tabClasses = new ArrayList<>();
-    private final String SELECTED_TAB = "Selected Tab";
     private TabsAdapter tabsAdapter;
     private int current = -1;
 
@@ -73,7 +72,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Prefs.save(getActivity(), SELECTED_TAB, viewPager.getCurrentItem());
+        Prefs.save(getActivity(), getSelectedKey(), viewPager.getCurrentItem());
     }
 
     @Override
@@ -95,8 +94,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-        if (Prefs.contains(getActivity(), SELECTED_TAB)) {
-            int selected = Prefs.getInt(getActivity(), SELECTED_TAB);
+        if (Prefs.contains(getActivity(), getSelectedKey())) {
+            int selected = Prefs.getInt(getActivity(), getSelectedKey());
             if (selected > 0 && selected < tabsAdapter.getCount()) {
                 setTabSelected(selected, false);
             }
@@ -106,7 +105,11 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Prefs.remove(getActivity(), SELECTED_TAB);
+        Prefs.remove(getActivity(), getClass().getName());
+    }
+
+    private String getSelectedKey() {
+        return String.format("%s Selected Tab", getClass().getName());
     }
 
     public void addTab(int title, Class<? extends F> clazz) {
@@ -134,11 +137,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void setTabSelected(int position, boolean animated) {
-        viewPager.setCurrentItem(position, animated);
         if (viewPager.getCurrentItem() == position) {
             F currentFragment = tabsAdapter.getItem(position);
             if (currentFragment.isAdded()) {
-                onTabSelected(0, currentFragment);
+                onTabSelected(position, currentFragment);
                 currentFragment.onSelected();
             }
         }
