@@ -140,7 +140,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void setTabSelected(int position, boolean animated) {
-        viewPager.setCurrentItem(position, animated);
+        if (viewPager.getCurrentItem() == position) {
+            F currentFragment = tabsAdapter.getItem(position);
+            if (currentFragment.isAdded()) {
+                onTabSelected(0, currentFragment);
+                currentFragment.onSelected();
+            }
+        }
+        else {
+            viewPager.setCurrentItem(position, animated);
+        }
     }
 
     @Override
@@ -218,8 +227,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             Log.i(this, "destroyItem %d %s", position, object);
-            tabs.remove(position);
-            super.destroyItem(container, position, object);
+            try {
+                tabs.remove(position);
+                super.destroyItem(container, position, object);
+            }
+            catch (Exception exception) {
+                Log.w(this, "Exception", exception);
+            }
         }
 
         @Override
