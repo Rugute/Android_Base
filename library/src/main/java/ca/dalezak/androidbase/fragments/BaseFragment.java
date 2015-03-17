@@ -37,16 +37,20 @@ public abstract class BaseFragment extends android.app.Fragment {
         public void onFragmentConfigurationChanged(BaseFragment fragment);
         public void onFragmentStart(BaseFragment fragment);
         public void onFragmentResume(BaseFragment fragment);
+        public void onFragmentVisible(BaseFragment fragment);
         public void onFragmentPause(BaseFragment fragment);
         public void onFragmentStop(BaseFragment fragment);
         public void onFragmentDestroy(BaseFragment fragment);
         public void onFragmentDetach(BaseFragment fragment);
+        public void onFragmentHidden(BaseFragment fragment);
     }
 
     protected ProgressDialog dialog;
     protected int layout;
     protected int menuResource;
     protected Callback callback;
+
+    private boolean visible;
 
     public BaseFragment() {
     }
@@ -123,14 +127,6 @@ public abstract class BaseFragment extends android.app.Fragment {
         }
     }
 
-    public void onSelected() {
-        Log.i(this, "onSelected");
-    }
-
-    public void onUnselected() {
-        Log.i(this, "onUnselected");
-    }
-
     public void onVisible() {
         Log.i(this, "onVisible");
     }
@@ -154,6 +150,12 @@ public abstract class BaseFragment extends android.app.Fragment {
         Log.i(this, "onResume");
         if (callback != null) {
             callback.onFragmentResume(this);
+        }
+        if (this.visible) {
+            onVisible();
+            if (callback != null) {
+                callback.onFragmentVisible(this);
+            }
         }
     }
 
@@ -214,14 +216,17 @@ public abstract class BaseFragment extends android.app.Fragment {
     }
 
     @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        Log.i(this, "setMenuVisibility %b", visible);
+    public void setUserVisibleHint(boolean visible) {
+        super.setUserVisibleHint(visible);
         if (visible) {
-            onVisible();
+            this.visible = true;
         }
         else {
+            this.visible = false;
             onHidden();
+            if (callback != null) {
+                callback.onFragmentHidden(this);
+            }
         }
     }
 

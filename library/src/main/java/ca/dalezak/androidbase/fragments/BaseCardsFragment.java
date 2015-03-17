@@ -104,8 +104,6 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Override
     public void onResume() {
         super.onResume();
-        listAdapter.refresh();
-        scrollListener.reset(0, true);
     }
 
     public void onRefreshed() {
@@ -117,14 +115,18 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     }
 
     @Override
-    public void onSelected() {
-        super.onSelected();
-        onRefreshed();
+    public void onVisible() {
+        super.onVisible();
+        if (listAdapter != null) {
+            listAdapter.refresh();
+            listAdapter.filter(getSearchText());
+        }
+        scrollListener.reset(0, true);
     }
 
     @Override
-    public void onUnselected() {
-        super.onUnselected();
+    public void onHidden() {
+        super.onHidden();
     }
 
     public boolean hasSearchView() {

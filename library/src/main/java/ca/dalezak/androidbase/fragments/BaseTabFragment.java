@@ -105,7 +105,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Prefs.remove(getActivity(), getClass().getName());
+        Prefs.remove(getActivity(), getSelectedKey());
     }
 
     private String getSelectedKey() {
@@ -141,7 +141,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             F currentFragment = tabsAdapter.getItem(position);
             if (currentFragment.isAdded()) {
                 onTabSelected(position, currentFragment);
-                currentFragment.onSelected();
             }
         }
         else {
@@ -180,15 +179,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             F currentFragment = tabsAdapter.getItem(0);
             if (currentFragment.isAdded()) {
                 onTabSelected(0, currentFragment);
-                currentFragment.onSelected();
             }
             current = 0;
         }
-        else if (current == tabsAdapter.getItemPosition(fragment)) {
-            onTabSelected(current, (F)fragment);
-            fragment.onSelected();
+        if (current == tabsAdapter.getItemPosition(fragment)) {
+            F currentFragment = tabsAdapter.getItem(current);
+            onTabSelected(current, currentFragment);
         }
     }
+
+    @Override
+    public void onFragmentVisible(BaseFragment fragment) {}
 
     @Override
     public void onFragmentPause(BaseFragment fragment) {}
@@ -201,6 +202,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentDetach(BaseFragment fragment) {}
+
+    @Override
+    public void onFragmentHidden(BaseFragment fragment) {}
 
     protected class TabsAdapter
             extends FragmentStatePagerAdapter
@@ -271,11 +275,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             if (current > -1) {
                 F previousFragment = tabsAdapter.getItem(current);
                 if (onTabUnselected(current, previousFragment)) {
-                    previousFragment.onUnselected();
                     F currentFragment = tabsAdapter.getItem(position);
                     if (currentFragment != null && currentFragment.isAdded()) {
                         onTabSelected(position, currentFragment);
-                        currentFragment.onSelected();
                     }
                     current = position;
                 }
@@ -288,7 +290,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 F currentFragment = tabsAdapter.getItem(position);
                 if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
-                    currentFragment.onSelected();
                 }
                 current = position;
             }
