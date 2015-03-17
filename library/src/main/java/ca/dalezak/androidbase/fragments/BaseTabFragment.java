@@ -146,7 +146,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onFragmentCreated(BaseFragment fragment) {
         Log.i(this, "onFragmentCreated %s", fragment);
-        if (current == tabsAdapter.getItemPosition(fragment)) {
+        if (current == -1) {
+            F currentFragment = tabsAdapter.getItem(0);
+            if (currentFragment.isAdded()) {
+                onTabSelected(0, currentFragment);
+                currentFragment.onSelected();
+            }
+            current = 0;
+        }
+        else if (current == tabsAdapter.getItemPosition(fragment)) {
             onTabSelected(current, (F)fragment);
             fragment.onSelected();
         }
