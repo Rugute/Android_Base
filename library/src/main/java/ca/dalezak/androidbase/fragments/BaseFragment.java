@@ -220,6 +220,12 @@ public abstract class BaseFragment extends android.app.Fragment {
         super.setUserVisibleHint(visible);
         if (visible) {
             this.visible = true;
+            if (isAdded()) {
+                onVisible();
+                if (callback != null) {
+                    callback.onFragmentVisible(this);
+                }
+            }
         }
         else {
             this.visible = false;
