@@ -216,7 +216,9 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     }
 
     public void showRefreshing(int message) {
-        showRefreshing(getString(message));
+        if (isAdded()) {
+            showRefreshing(getString(message));
+        }
     }
 
     public void showRefreshing(String message) {
