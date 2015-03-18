@@ -70,12 +70,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Prefs.save(getActivity(), getSelectedKey(), viewPager.getCurrentItem());
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         if (viewPager != null) {
@@ -94,22 +88,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-        if (Prefs.contains(getActivity(), getSelectedKey())) {
-            int selected = Prefs.getInt(getActivity(), getSelectedKey());
-            if (selected > 0 && selected < tabsAdapter.getCount()) {
-                setTabSelected(selected, false);
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Prefs.remove(getActivity(), getSelectedKey());
-    }
-
-    private String getSelectedKey() {
-        return String.format("%s Selected Tab", getClass().getName());
     }
 
     public void addTab(int title, Class<? extends F> clazz) {
