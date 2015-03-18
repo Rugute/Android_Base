@@ -291,11 +291,15 @@ public abstract class BaseFragment extends android.app.Fragment {
     }
 
     protected void showLoading(int message) {
-        showLoading(getString(message));
+        if (isAdded()) {
+            showLoading(getString(message));
+        }
     }
 
     protected void showLoading(int message, int total, int progress) {
-        showLoading(getString(message), total, progress);
+        if (isAdded()) {
+            showLoading(getString(message), total, progress);
+        }
     }
 
     protected void showLoading(final CharSequence message) {
