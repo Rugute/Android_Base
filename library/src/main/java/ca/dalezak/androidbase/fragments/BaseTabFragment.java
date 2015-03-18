@@ -168,7 +168,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentVisible(BaseFragment fragment) {
-        setHasOptionsMenu(fragment.menuResource != 0);
+        fragment.setHasOptionsMenu(fragment.menuResource != 0);
         getActivity().invalidateOptionsMenu();
     }
 
