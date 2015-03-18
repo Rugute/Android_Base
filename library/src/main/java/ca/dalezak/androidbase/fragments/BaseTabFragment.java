@@ -189,7 +189,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     @Override
-    public void onFragmentVisible(BaseFragment fragment) {}
+    public void onFragmentVisible(BaseFragment fragment) {
+        setHasOptionsMenu(fragment.menuResource != 0);
+        getActivity().invalidateOptionsMenu();
+    }
 
     @Override
     public void onFragmentPause(BaseFragment fragment) {}
@@ -204,7 +207,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onFragmentDetach(BaseFragment fragment) {}
 
     @Override
-    public void onFragmentHidden(BaseFragment fragment) {}
+    public void onFragmentHidden(BaseFragment fragment) {
+        fragment.setHasOptionsMenu(false);
+        getActivity().invalidateOptionsMenu();
+    }
 
     protected class TabsAdapter
             extends FragmentStatePagerAdapter

@@ -104,10 +104,6 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    public void onRefreshed() {
-        Log.i(this, "onRefreshed %s", listAdapter);
         if (listAdapter != null) {
             listAdapter.refresh();
             listAdapter.filter(getSearchText());
@@ -117,16 +113,20 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Override
     public void onVisible() {
         super.onVisible();
-        if (listAdapter != null) {
-            listAdapter.refresh();
-            listAdapter.filter(getSearchText());
-        }
         scrollListener.reset(0, true);
     }
 
     @Override
     public void onHidden() {
         super.onHidden();
+    }
+
+    public void onRefreshed() {
+        Log.i(this, "onRefreshed %s", listAdapter);
+        if (listAdapter != null) {
+            listAdapter.refresh();
+            listAdapter.filter(getSearchText());
+        }
     }
 
     public boolean hasSearchView() {
@@ -321,7 +321,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 previousItemCount = totalItemCount;
             }
             if (!loading && ((visibleItemCount + firstVisibleItem) >= totalItemCount)) {
-                M model = listAdapter.getItem(totalItemCount - 1);
+                int lastIndex = totalItemCount - 1;
+                int bottom = recyclerView.getChildAt(lastIndex).getBottom();
+                Log.i(this, "Bottom %d", bottom);
+                M model = listAdapter.getItem(lastIndex);
                 if (model != null) {
                     onLoadMore(totalItemCount, model);
                     loading = true;
