@@ -225,15 +225,32 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         }
     }
 
-    public void showRefreshing(String message) {
-        if (swipeLayout != null) {
-            swipeLayout.setRefreshing(true);
+    public void showRefreshing(int message, int total, int progress) {
+        if (isAdded()) {
+            showRefreshing(getString(message), total, progress);
         }
-        if (labelLoading != null) {
-            labelLoading.setText(message);
-            if (labelLoading.getVisibility() == View.GONE) {
-                labelLoading.setVisibility(View.INVISIBLE);
-                labelLoading.startAnimation(new FadeIn(labelLoading));
+    }
+
+    public void showRefreshing(String message) {
+        showRefreshing(message, 0, 0);
+    }
+
+    public void showRefreshing(String message, int total, int progress) {
+        if (isAdded()) {
+            if (swipeLayout != null) {
+                swipeLayout.setRefreshing(true);
+            }
+            if (labelLoading != null) {
+                if (progress > 0 || total > 0) {
+                    labelLoading.setText(String.format("%d %s %d %s", progress, getString(R.string.of), total, message));
+                }
+                else {
+                    labelLoading.setText(message);
+                }
+                if (labelLoading.getVisibility() == View.GONE) {
+                    labelLoading.setVisibility(View.INVISIBLE);
+                    labelLoading.startAnimation(new FadeIn(labelLoading));
+                }
             }
         }
     }

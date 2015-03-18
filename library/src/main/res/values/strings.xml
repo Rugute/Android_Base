@@ -60,5 +60,6 @@
     <string name="posting_">Posting...</string>
     <string name="exiting_">Exiting...</string>
     <string name="shutting_down_">Shutting down...</string>
+    <string name="of">of</string>
 
 </resources>
