@@ -113,6 +113,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Override
     public void onVisible() {
         super.onVisible();
+        if (listAdapter != null) {
+            listAdapter.refresh();
+            listAdapter.filter(getSearchText());
+        }
         scrollListener.reset(0, true);
     }
 
@@ -323,23 +327,14 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 loading = false;
                 previousItemCount = totalItemCount;
             }
-            if (!loading && ((visibleItemCount + firstVisibleItem) >= totalItemCount)) {
-                int lastIndex = totalItemCount - 1;
-                if (lastVisibleItem == lastIndex) {
-                    M model = listAdapter.getItem(lastIndex);
-                    if (model != null) {
-                        onLoadMore(totalItemCount, model);
-                        loading = true;
-                    }
+            if (!loading && (lastVisibleItem == totalItemCount - 1)) {
+                M model = listAdapter.getItem(totalItemCount - 1);
+                if (model != null) {
+                    onLoadMore(totalItemCount, model);
+                    loading = true;
                 }
             }
-            boolean enable = false;
-            if (visibleItemCount > 0) {
-                boolean firstItemVisible = firstVisibleItem == 0;
-                boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
-                enable = firstItemVisible && topOfFirstItemVisible;
-            }
-            swipeLayout.setEnabled(enable);
+            swipeLayout.setEnabled(visibleItemCount > 0 && firstVisibleItem == 0);
         }
 
         public void reset(int previousItemCount, boolean loading) {
