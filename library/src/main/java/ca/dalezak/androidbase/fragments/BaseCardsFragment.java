@@ -302,32 +302,33 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     private class BaseScrollListener extends RecyclerView.OnScrollListener {
 
         private boolean loading = true;
-        private int totalItemCount;
-        private int previousItemCount;
-        private int visibleItemCount;
-        private int firstVisibleItem;
+        private int totalItemCount = 0;
+        private int previousItemCount = 0;
+        private int visibleItemCount = 0;
+        private int firstVisibleItem = 0;
+        private int lastVisibleItem = 0;
 
-        public BaseScrollListener() {
-        }
+        public BaseScrollListener() {}
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             visibleItemCount = recyclerView.getChildCount();
             totalItemCount = getLayoutManager().getItemCount();
-            firstVisibleItem = getLayoutManager().findFirstVisibleItemPosition();
+            firstVisibleItem = getLayoutManager().findFirstCompletelyVisibleItemPosition();
+            lastVisibleItem = getLayoutManager().findLastCompletelyVisibleItemPosition();
             if (loading && (totalItemCount > previousItemCount)) {
                 loading = false;
                 previousItemCount = totalItemCount;
             }
             if (!loading && ((visibleItemCount + firstVisibleItem) >= totalItemCount)) {
                 int lastIndex = totalItemCount - 1;
-                int bottom = recyclerView.getChildAt(lastIndex).getBottom();
-                Log.i(this, "Bottom %d", bottom);
-                M model = listAdapter.getItem(lastIndex);
-                if (model != null) {
-                    onLoadMore(totalItemCount, model);
-                    loading = true;
+                if (lastVisibleItem == lastIndex) {
+                    M model = listAdapter.getItem(lastIndex);
+                    if (model != null) {
+                        onLoadMore(totalItemCount, model);
+                        loading = true;
+                    }
                 }
             }
             boolean enable = false;
