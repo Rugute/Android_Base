@@ -11,8 +11,16 @@
             android:id="@+id/swipe_empty"
             android:text="@string/no_results"
             style="@style/TextView.Empty" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            style="@style/RecyclerView"/>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                style="@style/RecyclerView"/>
+            <ImageButton
+                android:id="@+id/button_add"
+                android:visibility="gone"
+                style="@style/ImageButton.Fab"/>
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

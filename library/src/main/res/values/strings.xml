@@ -61,5 +61,6 @@
     <string name="exiting_">Exiting...</string>
     <string name="shutting_down_">Shutting down...</string>
     <string name="of">of</string>
+    <string name="add">Add</string>
 
 </resources>

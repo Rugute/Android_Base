@@ -62,7 +62,10 @@ public abstract class BaseQueue<T extends BaseTask, M extends BaseModel> impleme
     }
 
     public void start() {
-        if (!running) {
+        if (tasks.size() == 0) {
+            Log.i(this, "Queue Empty");
+        }
+        else if (!running) {
             Log.i(this, "Started");
             total = tasks.size();
             running = true;

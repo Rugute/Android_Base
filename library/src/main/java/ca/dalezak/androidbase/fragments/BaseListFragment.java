@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -43,9 +44,13 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
     @Control("swipe_refresh")
     public SwipeRefreshLayout swipeLayout;
 
+    @Control("button_add")
+    public ImageButton buttonAdd;
+
     @Control(id=android.R.id.list)
     public ListView listView;
 
+    private int fab;
     private A listAdapter;
     private SearchView searchView;
     private Class<A> listAdapterClass;
@@ -58,6 +63,12 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
     public BaseListFragment(Class<A> listAdapterClass, int menu) {
         super(R.layout.fragment_list, menu);
         this.listAdapterClass = listAdapterClass;
+    }
+
+    public BaseListFragment(Class<A> listAdapterClass, int menu, int fab) {
+        super(R.layout.fragment_list, menu);
+        this.listAdapterClass = listAdapterClass;
+        this.fab = fab;
     }
 
     @Override
@@ -97,7 +108,33 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
                 swipeLayout.setEnabled(enable);
             }
         });
+        if (fab != 0 && buttonAdd != null) {
+            buttonAdd.setImageResource(fab);
+            buttonAdd.setVisibility(View.VISIBLE);
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlphaAnimation animation = new AlphaAnimation(1F, 0.5F);
+                    animation.setDuration(400);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            onAddNew();
+                        }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    view.startAnimation(animation);
+                }
+            });
+        }
         return view;
+    }
+
+    public void onAddNew() {
+        Log.i(this, "onAddNew");
     }
 
     @Override
@@ -150,6 +187,10 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
                 }
             }
         }
+    }
+
+    protected ImageButton getButtonAdd() {
+        return buttonAdd;
     }
 
     public boolean hasSearchView() {

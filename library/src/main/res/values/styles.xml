@@ -357,6 +357,17 @@
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+    <style name="ImageButton.Fab">
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:background">@drawable/ic_fab</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:contentDescription">@string/add</item>
+    </style>
 
     <style name="CheckBox">
         <item name="android:layout_width">match_parent</item>
@@ -437,7 +448,7 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:progressDrawable">@drawable/progress_bar</item>
+        <item name="android:progressDrawable">@drawable/ic_progress_bar</item>
     </style>
 
     <style name="ProgressBar.Large" parent="@android:style/Widget.ProgressBar.Large">

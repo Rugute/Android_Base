@@ -7,12 +7,20 @@
         <TextView
             android:id="@+id/swipe_label"
             style="@style/TextView.Loading" />
-        <ListView
-            android:id="@id/android:list"
-            style="@style/ListView"/>
-        <TextView
-            android:id="@id/android:empty"
-            android:text="@string/no_results"
-            style="@style/TextView.Empty" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <ListView
+                android:id="@id/android:list"
+                style="@style/ListView"/>
+            <TextView
+                android:id="@id/android:empty"
+                android:text="@string/no_results"
+                style="@style/TextView.Empty" />
+            <ImageButton
+                android:id="@+id/button_add"
+                android:visibility="gone"
+                style="@style/ImageButton.Fab" />
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

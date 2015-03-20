@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -43,6 +46,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Control("recycler_view")
     public RecyclerView recyclerView;
 
+    @Control("button_add")
+    public ImageButton buttonAdd;
+
+    private int fab;
     private int empty;
     private A listAdapter;
     private LinearLayoutManager layoutManager;
@@ -66,6 +73,13 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         super(R.layout.fragment_cards, menu);
         this.listAdapterClass = listAdapterClass;
         this.empty = empty;
+    }
+
+    public BaseCardsFragment(Class<A> listAdapterClass, int empty, int menu, int fab) {
+        super(R.layout.fragment_cards, menu);
+        this.listAdapterClass = listAdapterClass;
+        this.empty = empty;
+        this.fab = fab;
     }
 
     @Override
@@ -94,11 +108,37 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         if (labelEmpty != null) {
             labelEmpty.setText(this.empty);
         }
+        if (fab != 0 && buttonAdd != null) {
+            buttonAdd.setImageResource(fab);
+            buttonAdd.setVisibility(View.VISIBLE);
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlphaAnimation animation = new AlphaAnimation(1F, 0.5F);
+                    animation.setDuration(400);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            onAddNew();
+                        }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    view.startAnimation(animation);
+                }
+            });
+        }
         return view;
     }
 
     public void onLoadMore(int total, M last) {
         Log.i(this, "onLoadMore %d %s", total, last);
+    }
+
+    public void onAddNew() {
+        Log.i(this, "onAddNew");
     }
 
     @Override
@@ -131,6 +171,10 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             listAdapter.refresh();
             listAdapter.filter(getSearchText());
         }
+    }
+
+    protected ImageButton getButtonAdd() {
+        return buttonAdd;
     }
 
     public boolean hasSearchView() {
