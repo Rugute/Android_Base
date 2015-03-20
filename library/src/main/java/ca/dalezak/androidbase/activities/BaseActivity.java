@@ -150,6 +150,7 @@ public abstract class BaseActivity<F extends BaseFragment>
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Log.i(this, "KeyEvent.KEYCODE_BACK");
             onBackPressed();
+            return true;
         }
         return true;
     }

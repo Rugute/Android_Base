@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.annotations.Control;
 import ca.dalezak.androidbase.utils.Log;
-import ca.dalezak.androidbase.utils.Prefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 
 import ca.dalezak.androidbase.fragments.BaseListFragment;
 
@@ -38,10 +39,21 @@ public abstract class BaseListActivity<F extends BaseListFragment>
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getRepeatCount() == 0) {
             if (getFragment().hasSearchView()) {
                 getFragment().getSearchView().setFocusable(true);
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);

@@ -114,8 +114,8 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlphaAnimation animation = new AlphaAnimation(1F, 0.5F);
-                    animation.setDuration(400);
+                    AlphaAnimation animation = new AlphaAnimation(1F, 0.6F);
+                    animation.setDuration(200);
                     animation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {}
