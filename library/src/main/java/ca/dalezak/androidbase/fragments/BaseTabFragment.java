@@ -274,22 +274,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 }
                 else {
                     Log.i(this, "Return %d %s", current, previousFragment);
-                    viewPager.setCurrentItem(current);
+                    viewPager.setCurrentItem(current, true);
                     if (previousFragment != null && previousFragment.isAdded()) {
-                        Log.i(this, "Added %d %s", current, previousFragment);
                         onTabSelected(current, previousFragment);
-                        previousFragment.onVisible();
-                    }
-                    else {
-                        Log.i(this, "Not Added %d %s", current, previousFragment);
                     }
                 }
             }
             else {
-                F currentFragment = tabsAdapter.getItem(position);
-                Log.i(this, "Next %d %s", position, currentFragment);
-                if (currentFragment != null && currentFragment.isAdded()) {
-                    onTabSelected(position, currentFragment);
+                F nextFragment = tabsAdapter.getItem(position);
+                Log.i(this, "Next %d %s", position, nextFragment);
+                if (nextFragment != null && nextFragment.isAdded()) {
+                    onTabSelected(position, nextFragment);
                 }
                 current = position;
             }
