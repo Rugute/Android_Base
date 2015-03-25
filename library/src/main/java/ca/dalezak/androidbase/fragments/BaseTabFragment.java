@@ -260,7 +260,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public void onPageSelected(int position) {
-            Log.i(this, "onPageSelected %d", position);
+            Log.i(this, "onPageSelected %d > %d", current, position);
             if (current > -1) {
                 F previousFragment = tabsAdapter.getItem(current);
                 Log.i(this, "Previous %d %s", current, previousFragment);
@@ -273,8 +273,14 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                     current = position;
                 }
                 else {
-                    Log.i(this, "Return %d %s", current, previousFragment);
-                    viewPager.setCurrentItem(current);
+                    Log.i(this, "Return %d > %d %s", viewPager.getCurrentItem(), current, previousFragment);
+                    if (viewPager.getCurrentItem() != current) {
+                        viewPager.setCurrentItem(current, true);
+                    }
+                    else {
+                        viewPager.setCurrentItem(current);
+                        viewPager.invalidate();
+                    }
                     if (previousFragment != null && previousFragment.isAdded()) {
                         onTabSelected(current, previousFragment);
                     }
