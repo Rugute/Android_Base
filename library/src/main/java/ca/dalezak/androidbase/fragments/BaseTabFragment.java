@@ -160,7 +160,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
             current = 0;
         }
-        else if (current == tabsAdapter.getItemPosition(fragment)) {
+        else if (current == viewPager.getCurrentItem()) {
             Log.i(this, "onFragmentResume %d %s", current, fragment);
             F currentFragment = tabsAdapter.getItem(current);
             if (currentFragment.isAdded()) {
@@ -171,7 +171,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentVisible(BaseFragment fragment) {
-        Log.i(this, "onFragmentVisible %d %s", current, fragment);
         fragment.setHasOptionsMenu(fragment.menuResource != 0);
         getActivity().invalidateOptionsMenu();
     }
@@ -190,7 +189,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentHidden(BaseFragment fragment) {
-        Log.i(this, "onFragmentHidden %d %s", current, fragment);
         fragment.setHasOptionsMenu(false);
         getActivity().invalidateOptionsMenu();
     }
@@ -272,23 +270,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                     }
                     current = position;
                 }
-                else {
-                    Log.i(this, "Return %d > %d %s", viewPager.getCurrentItem(), current, previousFragment);
-                    if (viewPager.getCurrentItem() != current) {
-                        viewPager.setCurrentItem(current, true);
-                    }
-                    else {
-                        viewPager.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                viewPager.setCurrentItem(current, false);
-                                viewPager.invalidate();
-                            }
-                        });
-                    }
+                else if (viewPager.getCurrentItem() != current) {
+                    Log.i(this, "Return %d != %d %s", viewPager.getCurrentItem(), current, previousFragment);
+                    viewPager.setCurrentItem(current, true);
                     if (previousFragment != null && previousFragment.isAdded()) {
                         onTabSelected(current, previousFragment);
                     }
+                }
+                else {
+                    Log.i(this, "Return %d == %d %s", viewPager.getCurrentItem(), current, previousFragment);
+                    viewPager.setCurrentItem(current, false);
                 }
             }
             else {
