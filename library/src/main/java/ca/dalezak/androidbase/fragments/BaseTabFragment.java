@@ -266,7 +266,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 }
                 else {
                     viewPager.setCurrentItem(current);
-                    onTabSelected(current, previousFragment);
+                    if (previousFragment != null && previousFragment.isAdded()) {
+                        onTabSelected(current, previousFragment);
+                        previousFragment.onVisible();
+                    }
                 }
             }
             else {
