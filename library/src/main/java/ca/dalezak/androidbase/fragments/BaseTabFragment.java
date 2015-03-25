@@ -258,8 +258,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public void onPageSelected(int position) {
-            Log.i(this, "onPageSelected %d > %d", current, position);
-            if (current > -1) {
+            if (current == position) {
+                Log.i(this, "onPageSelected %d == %d", current, position);
+                F currentFragment = tabsAdapter.getItem(position);
+                Log.i(this, "Next %d %s", position, currentFragment);
+                if (currentFragment != null && currentFragment.isAdded()) {
+                    onTabSelected(position, currentFragment);
+                }
+            }
+            else if (current > -1) {
+                Log.i(this, "onPageSelected %d > %d", current, position);
                 F previousFragment = tabsAdapter.getItem(current);
                 Log.i(this, "Previous %d %s", current, previousFragment);
                 if (onTabUnselected(current, previousFragment)) {
@@ -272,17 +280,18 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 }
                 else if (viewPager.getCurrentItem() != current) {
                     Log.i(this, "Return %d != %d %s", viewPager.getCurrentItem(), current, previousFragment);
-                    viewPager.setCurrentItem(current, true);
+                    viewPager.setCurrentItem(current, false);
                     if (previousFragment != null && previousFragment.isAdded()) {
                         onTabSelected(current, previousFragment);
                     }
                 }
                 else {
                     Log.i(this, "Return %d == %d %s", viewPager.getCurrentItem(), current, previousFragment);
-                    viewPager.setCurrentItem(current, false);
+                    tabsAdapter.notifyDataSetChanged();
                 }
             }
             else {
+                Log.i(this, "onPageSelected %d", position);
                 F nextFragment = tabsAdapter.getItem(position);
                 Log.i(this, "Next %d %s", position, nextFragment);
                 if (nextFragment != null && nextFragment.isAdded()) {
