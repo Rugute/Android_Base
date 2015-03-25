@@ -274,7 +274,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 }
                 else {
                     Log.i(this, "Return %d %s", current, previousFragment);
-                    viewPager.setCurrentItem(current, true);
+                    viewPager.setCurrentItem(current);
                     if (previousFragment != null && previousFragment.isAdded()) {
                         onTabSelected(current, previousFragment);
                     }
