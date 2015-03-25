@@ -153,20 +153,25 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onFragmentResume(BaseFragment fragment) {
         if (current == -1) {
+            Log.i(this, "onFragmentResume -1 > 0 %s", fragment);
             F currentFragment = tabsAdapter.getItem(0);
             if (currentFragment.isAdded()) {
                 onTabSelected(0, currentFragment);
             }
             current = 0;
         }
-        if (current == tabsAdapter.getItemPosition(fragment)) {
+        else if (current == tabsAdapter.getItemPosition(fragment)) {
+            Log.i(this, "onFragmentResume %d %s", current, fragment);
             F currentFragment = tabsAdapter.getItem(current);
-            onTabSelected(current, currentFragment);
+            if (currentFragment.isAdded()) {
+                onTabSelected(current, currentFragment);
+            }
         }
     }
 
     @Override
     public void onFragmentVisible(BaseFragment fragment) {
+        Log.i(this, "onFragmentVisible %d %s", current, fragment);
         fragment.setHasOptionsMenu(fragment.menuResource != 0);
         getActivity().invalidateOptionsMenu();
     }
@@ -185,6 +190,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentHidden(BaseFragment fragment) {
+        Log.i(this, "onFragmentHidden %d %s", current, fragment);
         fragment.setHasOptionsMenu(false);
         getActivity().invalidateOptionsMenu();
     }
@@ -257,23 +263,31 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             Log.i(this, "onPageSelected %d", position);
             if (current > -1) {
                 F previousFragment = tabsAdapter.getItem(current);
+                Log.i(this, "Previous %d %s", current, previousFragment);
                 if (onTabUnselected(current, previousFragment)) {
-                    F currentFragment = tabsAdapter.getItem(position);
-                    if (currentFragment != null && currentFragment.isAdded()) {
-                        onTabSelected(position, currentFragment);
+                    F nextFragment = tabsAdapter.getItem(position);
+                    Log.i(this, "Next %d %s", position, nextFragment);
+                    if (nextFragment != null && nextFragment.isAdded()) {
+                        onTabSelected(position, nextFragment);
                     }
                     current = position;
                 }
                 else {
+                    Log.i(this, "Return %d %s", current, previousFragment);
                     viewPager.setCurrentItem(current);
                     if (previousFragment != null && previousFragment.isAdded()) {
+                        Log.i(this, "Added %d %s", current, previousFragment);
                         onTabSelected(current, previousFragment);
                         previousFragment.onVisible();
+                    }
+                    else {
+                        Log.i(this, "Not Added %d %s", current, previousFragment);
                     }
                 }
             }
             else {
                 F currentFragment = tabsAdapter.getItem(position);
+                Log.i(this, "Next %d %s", position, currentFragment);
                 if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
                 }
