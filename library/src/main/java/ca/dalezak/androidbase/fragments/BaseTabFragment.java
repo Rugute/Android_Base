@@ -3,6 +3,7 @@ package ca.dalezak.androidbase.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -223,8 +224,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 F fragment = tabs.get(position);
                 if (fragment == null) {
                     Class<? extends F> tabClass = getTabClass(position);
-                    fragment = (F) Fragment.instantiate(getActivity(), tabClass.getName());
+                    fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
+                    fragment.setRetainInstance(true);
                     tabs.put(position, fragment);
                 }
                 return fragment;
@@ -242,6 +244,18 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 }
             }
             return POSITION_NONE;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Log.i(this, "instantiateItem %d", position);
+            return super.instantiateItem(container, position);
+        }
+
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+            super.restoreState(state, loader);
+            Log.i(this, "restoreState");
         }
 
         @Override

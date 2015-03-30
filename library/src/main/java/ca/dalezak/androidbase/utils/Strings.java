@@ -36,7 +36,10 @@ public class Strings {
     }
 
     public static String stripHtml(String html) {
-        return Html.fromHtml(html).toString();
+        if (!isNullOrEmpty(html)) {
+            return Html.fromHtml(html).toString();
+        }
+        return null;
     }
 
     public static String join(String delimiter, Object...words) {
