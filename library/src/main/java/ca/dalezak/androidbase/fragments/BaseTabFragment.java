@@ -235,10 +235,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public int getItemPosition(Object object) {
-            F fragment = (F)object;
-            if (object != null && fragment.isAdded()) {
+            if (object != null) {
                 for (Map.Entry<Integer, F> entry : tabs.entrySet()) {
-                    if (entry.getValue().equals(fragment)) {
+                    if (entry.getValue().equals(object)) {
                         return entry.getKey();
                     }
                 }
@@ -256,6 +255,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public void restoreState(Parcelable state, ClassLoader loader) {
             super.restoreState(state, loader);
             Log.i(this, "restoreState");
+            tabs.clear();
         }
 
         @Override
