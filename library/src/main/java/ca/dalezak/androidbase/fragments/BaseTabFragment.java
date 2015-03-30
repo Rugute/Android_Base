@@ -199,7 +199,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             implements ViewPager.OnPageChangeListener {
 
         protected Map<Integer, F> tabs = new HashMap<>();
-
         public TabsAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
@@ -220,13 +219,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public F getItem(int position) {
+            Log.i(this, "getItem %d", position);
             if (position > -1) {
                 F fragment = tabs.get(position);
                 if (fragment == null) {
                     Class<? extends F> tabClass = getTabClass(position);
                     fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
-                    fragment.setRetainInstance(true);
                     tabs.put(position, fragment);
                 }
                 return fragment;
@@ -236,9 +235,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public int getItemPosition(Object object) {
-            if (object != null) {
+            F fragment = (F)object;
+            if (object != null && fragment.isAdded()) {
                 for (Map.Entry<Integer, F> entry : tabs.entrySet()) {
-                    if (entry.getValue().equals(object)) {
+                    if (entry.getValue().equals(fragment)) {
                         return entry.getKey();
                     }
                 }
