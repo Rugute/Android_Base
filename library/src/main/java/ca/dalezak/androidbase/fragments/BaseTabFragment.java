@@ -226,30 +226,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                     fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
                     tabs.put(position, fragment);
-                    Log.i(this, "getItem %d isNew %s", position, fragment);
+                    Log.i(this, "getItem %d New %s", position, fragment);
                 }
                 else {
-                    if (fragment.isAdded()) {
-                        Log.i(this, "getItem %d isAdded %s", position, fragment);
-                    }
-                    if (fragment.isVisible()) {
-                        Log.i(this, "getItem %d isVisible %s", position, fragment);
-                    }
-                    if (fragment.isResumed()) {
-                        Log.i(this, "getItem %d isResumed %s", position, fragment);
-                    }
-                    if (fragment.isRemoving()) {
-                        Log.i(this, "getItem %d isRemoving %s", position, fragment);
-                    }
-                    if (fragment.isInLayout()) {
-                        Log.i(this, "getItem %d isInLayout %s", position, fragment);
-                    }
-                    if (fragment.isLandscape()) {
-                        Log.i(this, "getItem %d isLandscape %s", position, fragment);
-                    }
-                    if (fragment.isPortrait()) {
-                        Log.i(this, "getItem %d isPortrait %s", position, fragment);
-                    }
+                    Log.i(this, "getItem %d Exists %s", position, fragment);
                 }
                 return fragment;
             }
@@ -260,37 +240,14 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public int getItemPosition(Object object) {
             F fragment = (F)object;
             if (fragment != null) {
-                if (fragment.isAdded()) {
-                    Log.i(this, "getItemPosition Fragment isAdded %s", fragment);
-                }
-                if (fragment.isVisible()) {
-                    Log.i(this, "getItemPosition Fragment isVisible %s", fragment);
-                }
-                if (fragment.isResumed()) {
-                    Log.i(this, "getItemPosition Fragment isResumed %s", fragment);
-                }
-                if (fragment.isRemoving()) {
-                    Log.i(this, "getItemPosition Fragment isRemoving %s", fragment);
-                }
-                if (fragment.isInLayout()) {
-                    Log.i(this, "getItemPosition Fragment isInLayout %s", fragment);
-                }
-                if (fragment.isLandscape()) {
-                    Log.i(this, "getItemPosition Fragment isLandscape %s", fragment);
-                }
-                if (fragment.isPortrait()) {
-                    Log.i(this, "getItemPosition Fragment isPortrait %s", fragment);
-                }
                 for (Map.Entry<Integer, F> entry : tabs.entrySet()) {
                     if (entry.getValue().equals(fragment)) {
-                        Log.i(this, "getItemPosition Fragment %d %s", entry.getKey(), fragment);
+                        Log.i(this, "getItemPosition %d %s", entry.getKey(), fragment);
                         return entry.getKey();
                     }
                 }
             }
-            else {
-                Log.i(this, "getItemPosition Fragment NULL");
-            }
+            Log.i(this, "getItemPosition POSITION_NONE %s", fragment);
             return POSITION_NONE;
         }
 
