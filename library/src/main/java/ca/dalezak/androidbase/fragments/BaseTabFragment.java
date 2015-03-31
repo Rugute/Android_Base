@@ -220,24 +220,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public F getItem(int position) {
             Log.i(this, "getItem %d", position);
-            Class<? extends F> tabClass = getTabClass(position);
-            F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
-            fragment.setCallback(BaseTabFragment.this);
-            tabs.put(position, fragment);
-            return fragment;
-        }
-
-        public F getFragment(int position) {
             if (position > -1) {
-                F fragment = tabs.get(position);
-                if (fragment == null) {
-                    fragment = getItem(position);
-                    Log.i(this, "getFragment %d New %s", position, fragment);
+                Class<? extends F> tabClass = getTabClass(position);
+                if (tabClass != null) {
+                    F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
+                    fragment.setCallback(BaseTabFragment.this);
+                    return fragment;
                 }
-                else {
-                    Log.i(this, "getFragment %d Exists %s", position, fragment);
-                }
-                return fragment;
             }
             return null;
         }
@@ -279,9 +268,30 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
             Log.i(this, "destroyItem %d %s", position, object);
             tabs.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            Log.i(this, "setPrimaryItem %d %s", position, object);
+        }
+
+        public F getFragment(int position) {
+            if (position > -1) {
+                F fragment = tabs.get(position);
+                if (fragment == null) {
+                    fragment = getItem(position);
+                    Log.i(this, "getFragment %d New %s", position, fragment);
+                }
+                else {
+                    Log.i(this, "getFragment %d Exists %s", position, fragment);
+                }
+                return fragment;
+            }
+            return null;
         }
 
         @Override
