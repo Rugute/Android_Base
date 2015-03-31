@@ -114,6 +114,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void setTabSelected(int position, boolean animated) {
+        Log.i(this, "setTabSelected %d %b", position, animated);
         if (viewPager.getCurrentItem() == position) {
             F currentFragment = tabsAdapter.getFragment(position);
             if (currentFragment.isAdded()) {
@@ -257,7 +258,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public Parcelable saveState() {
             Log.i(this, "saveState");
-            tabs.clear();
             return super.saveState();
         }
 
@@ -286,6 +286,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 if (fragment == null) {
                     fragment = getItem(position);
                     Log.i(this, "getFragment %d New %s", position, fragment);
+                }
+                else if (fragment.isDetached()) {
+                    fragment = getItem(position);
+                    Log.i(this, "getFragment %d Detached %s", position, fragment);
+                }
+                else if (fragment.isAdded()) {
+                    Log.i(this, "getFragment %d Added %s", position, fragment);
                 }
                 else {
                     Log.i(this, "getFragment %d Exists %s", position, fragment);
