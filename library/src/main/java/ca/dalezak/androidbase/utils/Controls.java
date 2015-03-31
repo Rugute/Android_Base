@@ -35,13 +35,13 @@ public class Controls {
                     }
                     if (control.id() != 0) {
                         int id = control.id();
-                        Log.i(instance, " %s > %s", clazz.getSimpleName(), field.getName());
+                        //Log.i(instance, " %s > %s", clazz.getSimpleName(), field.getName());
                         field.set(instance, view.findViewById(id));
                     }
                     else if (control.value() != null) {
                         String value = control.value();
                         int id = findIdByName(context, value);
-                        Log.i(instance, "%s > %s", clazz.getSimpleName(), field.getName());
+                        //Log.i(instance, "%s > %s", clazz.getSimpleName(), field.getName());
                         field.set(instance, view.findViewById(id));
                     }
                 }

@@ -71,7 +71,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(activity, attrs, savedInstanceState);
-        Log.i(this, "onInflate");
+        Log.i(this, "onInflate %s", this);
         if (callback != null) {
             callback.onFragmentInflate(this);
         }
@@ -80,7 +80,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(this, "onAttach");
+        Log.i(this, "onAttach %s", this);
         if (callback != null) {
             callback.onFragmentAttach(this);
         }
@@ -89,7 +89,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(this, "onCreate");
+        Log.i(this, "onCreate %s", this);
         if (callback != null) {
             callback.onFragmentCreate(this);
         }
@@ -98,7 +98,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log.i(this, "onCreateView");
+        Log.i(this, "onCreateView %s", this);
         View view = inflater.inflate(layout, container, false);
         Class fragmentClass = getClass();
         while (fragmentClass != null && fragmentClass != BaseFragment.class) {
@@ -112,7 +112,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i(this, "onViewCreated");
+        Log.i(this, "onViewCreated %s", this);
         if (callback != null) {
             callback.onFragmentViewCreated(this);
         }
@@ -121,24 +121,24 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(this, "onActivityCreated");
+        Log.i(this, "onActivityCreated %s", this);
         if (callback != null) {
             callback.onFragmentActivityCreated(this);
         }
     }
 
     public void onVisible() {
-        Log.i(this, "onVisible");
+        Log.i(this, "onVisible %s", this);
     }
 
     public void onHidden() {
-        Log.i(this, "onHidden");
+        Log.i(this, "onHidden %s", this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(this, "onStart");
+        Log.i(this, "onStart %s", this);
         if (callback != null) {
             callback.onFragmentStart(this);
         }
@@ -147,7 +147,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(this, "onResume");
+        Log.i(this, "onResume %s", this);
         if (callback != null) {
             callback.onFragmentResume(this);
         }
@@ -162,7 +162,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i(this, "onPause");
+        Log.i(this, "onPause %s", this);
         hideKeyboard();
         if (callback != null) {
             callback.onFragmentPause(this);
@@ -172,7 +172,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.i(this, "onStop");
+        Log.i(this, "onStop %s", this);
         if (callback != null) {
             callback.onFragmentStop(this);
         }
@@ -181,13 +181,13 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.i(this, "onDestroyView");
+        Log.i(this, "onDestroyView %s", this);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.i(this, "onConfigurationChanged");
+        Log.i(this, "onConfigurationChanged %s", this);
         if (callback != null) {
             callback.onFragmentConfigurationChanged(this);
         }
@@ -196,7 +196,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(this, "onDestroy");
+        Log.i(this, "onDestroy %s", this);
         if (this.dialog != null) {
             this.dialog.dismiss();
             this.dialog = null;
@@ -209,7 +209,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.i(this, "onDetach");
+        Log.i(this, "onDetach %s", this);
         if (callback != null) {
             callback.onFragmentDetach(this);
         }
@@ -261,7 +261,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     }
 
     public void onBackPressed() {
-        Log.i(this, "onBackPressed");
+        Log.i(this, "onBackPressed %s", this);
     }
 
     protected boolean showKeyboard(View view) {

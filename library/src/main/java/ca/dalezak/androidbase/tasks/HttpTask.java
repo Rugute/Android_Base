@@ -38,6 +38,7 @@ import ca.dalezak.androidbase.utils.Log;
 import ca.dalezak.androidbase.utils.Strings;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -314,7 +315,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
         }
         catch (HttpHostConnectException ex) {
             Log.w(this, "HttpHostConnectException %s", ex.getMessage());
-            return new InvalidCredentialsException(getContext().getString(R.string.host_connect_exception));
+            return new ConnectException(getContext().getString(R.string.host_connect_exception));
         }
         catch(ConnectTimeoutException ex) {
             Log.w(this, "ConnectTimeoutException %s", ex.getMessage());

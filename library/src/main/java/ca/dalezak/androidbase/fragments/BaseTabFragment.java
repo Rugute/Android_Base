@@ -153,6 +153,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentResume(BaseFragment fragment) {
+        Log.i(this, "onFragmentResume %s", fragment);
         if (current == -1) {
             Log.i(this, "onFragmentResume -1 > 0 %s", fragment);
             F currentFragment = tabsAdapter.getFragment(0);
@@ -172,6 +173,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentVisible(BaseFragment fragment) {
+        Log.i(this, "onFragmentVisible %s", fragment);
         fragment.setHasOptionsMenu(fragment.menuResource != 0);
         getActivity().invalidateOptionsMenu();
     }
@@ -190,6 +192,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     @Override
     public void onFragmentHidden(BaseFragment fragment) {
+        Log.i(this, "onFragmentHidden %s", fragment);
         fragment.setHasOptionsMenu(false);
         getActivity().invalidateOptionsMenu();
     }
