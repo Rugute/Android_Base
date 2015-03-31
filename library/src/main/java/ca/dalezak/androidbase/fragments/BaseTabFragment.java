@@ -261,6 +261,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public Parcelable saveState() {
             Log.i(this, "saveState");
+            tabs.clear();
             return super.saveState();
         }
 
@@ -268,13 +269,19 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public void restoreState(Parcelable state, ClassLoader loader) {
             super.restoreState(state, loader);
             Log.i(this, "restoreState");
+            tabs.clear();
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             Log.i(this, "destroyItem %d %s", position, object);
-            tabs.remove(position);
-            super.destroyItem(container, position, object);
+            try {
+                tabs.remove(position);
+                super.destroyItem(container, position, object);
+            }
+            catch (Exception exception) {
+                Log.w(this, "destroyItem %s", exception);
+            }
         }
 
         @Override
