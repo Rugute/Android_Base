@@ -225,6 +225,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 if (tabClass != null) {
                     F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
+                    tabs.put(position, fragment);
                     return fragment;
                 }
             }
@@ -257,6 +258,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public Parcelable saveState() {
             Log.i(this, "saveState");
+            tabs.clear();
             return super.saveState();
         }
 
