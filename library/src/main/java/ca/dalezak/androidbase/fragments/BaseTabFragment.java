@@ -116,7 +116,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     protected void setTabSelected(int position, boolean animated) {
         if (viewPager.getCurrentItem() == position) {
-            F currentFragment = tabsAdapter.getItem(position);
+            F currentFragment = tabsAdapter.getFragment(position);
             if (currentFragment.isAdded()) {
                 onTabSelected(position, currentFragment);
             }
@@ -155,7 +155,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onFragmentResume(BaseFragment fragment) {
         if (current == -1) {
             Log.i(this, "onFragmentResume -1 > 0 %s", fragment);
-            F currentFragment = tabsAdapter.getItem(0);
+            F currentFragment = tabsAdapter.getFragment(0);
             if (currentFragment.isAdded()) {
                 onTabSelected(0, currentFragment);
             }
@@ -163,7 +163,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         }
         else if (current == viewPager.getCurrentItem()) {
             Log.i(this, "onFragmentResume %d %s", current, fragment);
-            F currentFragment = tabsAdapter.getItem(current);
+            F currentFragment = tabsAdapter.getFragment(current);
             if (currentFragment.isAdded()) {
                 onTabSelected(current, currentFragment);
             }
@@ -219,17 +219,23 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public F getItem(int position) {
+            Log.i(this, "getItem %d", position);
+            Class<? extends F> tabClass = getTabClass(position);
+            F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
+            fragment.setCallback(BaseTabFragment.this);
+            tabs.put(position, fragment);
+            return fragment;
+        }
+
+        public F getFragment(int position) {
             if (position > -1) {
                 F fragment = tabs.get(position);
                 if (fragment == null) {
-                    Class<? extends F> tabClass = getTabClass(position);
-                    fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
-                    fragment.setCallback(BaseTabFragment.this);
-                    tabs.put(position, fragment);
-                    Log.i(this, "getItem %d New %s", position, fragment);
+                    fragment = getItem(position);
+                    Log.i(this, "getFragment %d New %s", position, fragment);
                 }
                 else {
-                    Log.i(this, "getItem %d Exists %s", position, fragment);
+                    Log.i(this, "getFragment %d Exists %s", position, fragment);
                 }
                 return fragment;
             }
@@ -254,14 +260,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Log.i(this, "instantiateItem %d", position);
-            return super.instantiateItem(container, position);
+            F fragment = (F)super.instantiateItem(container, position);
+            tabs.put(position, fragment);
+            return fragment;
         }
 
         @Override
         public Parcelable saveState() {
             Log.i(this, "saveState");
-            tabs.clear();
-            return null;
+            return super.saveState();
         }
 
         @Override
@@ -272,21 +279,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
             Log.i(this, "destroyItem %d %s", position, object);
-            try {
-                tabs.remove(position);
-                super.destroyItem(container, position, object);
-            }
-            catch (Exception exception) {
-                Log.w(this, "Exception", exception);
-            }
+            tabs.remove(position);
         }
 
         @Override
         public void onPageSelected(int position) {
             if (current == position) {
                 Log.i(this, "onPageSelected %d == %d", current, position);
-                F currentFragment = tabsAdapter.getItem(position);
+                F currentFragment = tabsAdapter.getFragment(position);
                 Log.i(this, "Next %d %s", position, currentFragment);
                 if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
@@ -294,10 +296,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
             else if (current > -1) {
                 Log.i(this, "onPageSelected %d > %d", current, position);
-                F previousFragment = tabsAdapter.getItem(current);
+                F previousFragment = tabsAdapter.getFragment(current);
                 Log.i(this, "Previous %d %s", current, previousFragment);
                 if (onTabUnselected(current, previousFragment)) {
-                    F nextFragment = tabsAdapter.getItem(position);
+                    F nextFragment = tabsAdapter.getFragment(position);
                     Log.i(this, "Next %d %s", position, nextFragment);
                     if (nextFragment != null && nextFragment.isAdded()) {
                         onTabSelected(position, nextFragment);
@@ -318,7 +320,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             }
             else {
                 Log.i(this, "onPageSelected %d", position);
-                F nextFragment = tabsAdapter.getItem(position);
+                F nextFragment = tabsAdapter.getFragment(position);
                 Log.i(this, "Next %d %s", position, nextFragment);
                 if (nextFragment != null && nextFragment.isAdded()) {
                     onTabSelected(position, nextFragment);
