@@ -304,7 +304,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public Parcelable saveState() {
             Log.i(this, "saveState");
             tabs.clear();
-            return super.saveState();
+            return null;
         }
 
         @Override
