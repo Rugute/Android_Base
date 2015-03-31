@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,7 @@ import ca.dalezak.androidbase.annotations.Control;
 import ca.dalezak.androidbase.utils.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class BaseTabFragment<F extends BaseFragment>
         extends BaseFragment
@@ -198,7 +197,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             extends FragmentStatePagerAdapter
             implements ViewPager.OnPageChangeListener {
 
-        protected Map<Integer, F> tabs = new HashMap<>();
+        protected SparseArray<F> tabs = new SparseArray<F>();
+
         public TabsAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
@@ -236,11 +236,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public int getItemPosition(Object object) {
             F fragment = (F)object;
             if (fragment != null) {
-                for (Map.Entry<Integer, F> entry : tabs.entrySet()) {
-                    if (entry.getValue().equals(fragment)) {
-                        Log.i(this, "getItemPosition %d %s", entry.getKey(), fragment);
-                        return entry.getKey();
-                    }
+                int index = tabs.indexOfValue(fragment);
+                if (index > -1) {
+                    Log.i(this, "getItemPosition %d %s", index, fragment);
+                    return index;
                 }
             }
             Log.i(this, "getItemPosition POSITION_NONE %s", fragment);
@@ -301,7 +300,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             if (current == position) {
                 Log.i(this, "onPageSelected %d == %d", current, position);
                 F currentFragment = tabsAdapter.getFragment(position);
-                Log.i(this, "Next %d %s", position, currentFragment);
+                Log.i(this, "onPageSelected Next %d %s", position, currentFragment);
                 if (currentFragment != null && currentFragment.isAdded()) {
                     onTabSelected(position, currentFragment);
                 }
@@ -309,31 +308,31 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             else if (current > -1) {
                 Log.i(this, "onPageSelected %d > %d", current, position);
                 F previousFragment = tabsAdapter.getFragment(current);
-                Log.i(this, "Previous %d %s", current, previousFragment);
+                Log.i(this, "onPageSelected Previous %d %s", current, previousFragment);
                 if (onTabUnselected(current, previousFragment)) {
                     F nextFragment = tabsAdapter.getFragment(position);
-                    Log.i(this, "Next %d %s", position, nextFragment);
+                    Log.i(this, "onPageSelected Next %d %s", position, nextFragment);
                     if (nextFragment != null && nextFragment.isAdded()) {
                         onTabSelected(position, nextFragment);
                     }
                     current = position;
                 }
                 else if (viewPager.getCurrentItem() != current) {
-                    Log.i(this, "Return %d != %d %s", viewPager.getCurrentItem(), current, previousFragment);
+                    Log.i(this, "onPageSelected Return %d != %d %s", viewPager.getCurrentItem(), current, previousFragment);
                     viewPager.setCurrentItem(current, false);
                     if (previousFragment != null && previousFragment.isAdded()) {
                         onTabSelected(current, previousFragment);
                     }
                 }
                 else {
-                    Log.i(this, "Return %d == %d %s", viewPager.getCurrentItem(), current, previousFragment);
+                    Log.i(this, "onPageSelected Return %d == %d %s", viewPager.getCurrentItem(), current, previousFragment);
                     tabsAdapter.notifyDataSetChanged();
                 }
             }
             else {
                 Log.i(this, "onPageSelected %d", position);
                 F nextFragment = tabsAdapter.getFragment(position);
-                Log.i(this, "Next %d %s", position, nextFragment);
+                Log.i(this, "onPageSelected Next %d %s", position, nextFragment);
                 if (nextFragment != null && nextFragment.isAdded()) {
                     onTabSelected(position, nextFragment);
                 }
