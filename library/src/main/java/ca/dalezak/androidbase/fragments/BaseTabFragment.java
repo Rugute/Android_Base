@@ -253,7 +253,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             F fragment = (F)super.instantiateItem(container, position);
-            Log.i(this, "instantiateItem %d %s", position, fragment);
+            if (fragment.isDetached()) {
+                Log.i(this, "instantiateItem %d isDetached %s", position, fragment);
+            }
+            else if (fragment.isAdded()) {
+                Log.i(this, "instantiateItem %d isAdded %s", position, fragment);
+            }
+            else {
+                Log.i(this, "instantiateItem %d %s", position, fragment);
+            }
             tabs.put(position, fragment);
             return fragment;
         }
