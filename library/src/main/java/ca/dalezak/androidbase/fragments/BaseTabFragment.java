@@ -28,7 +28,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     private List<Class<? extends F>> tabClasses = new ArrayList<>();
     private TabsAdapter tabsAdapter;
     private int current = -1;
-    private boolean isPortrait;
 
     @Control("view_pager")
     protected ViewPager viewPager;
@@ -89,18 +88,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
-        isPortrait = isPortrait();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i(this, "onSaveInstanceState");
-        if (isPortrait() != isPortrait && viewPager != null) {
+    public void onRotate() {
+        super.onRotate();
+        if (viewPager != null) {
             // before screen rotation it's better to detach pagerAdapter from the ViewPager, so
             // pagerAdapter can remove all old fragments, so they're not reused after rotation.
             viewPager.setAdapter(null);
         }
-        super.onSaveInstanceState(savedInstanceState);
     }
 
     public void addTab(int title, Class<? extends F> clazz) {

@@ -51,6 +51,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     protected Callback callback;
 
     private boolean visible;
+    private boolean isPortrait;
 
     public BaseFragment() {
     }
@@ -157,6 +158,7 @@ public abstract class BaseFragment extends android.app.Fragment {
                 callback.onFragmentVisible(this);
             }
         }
+        isPortrait = isPortrait();
     }
 
     @Override
@@ -182,6 +184,15 @@ public abstract class BaseFragment extends android.app.Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.i(this, "onDestroyView");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(this, "onSaveInstanceState");
+        if (isPortrait() != isPortrait) {
+            onRotate();
+        }
     }
 
     @Override
@@ -213,6 +224,10 @@ public abstract class BaseFragment extends android.app.Fragment {
         if (callback != null) {
             callback.onFragmentDetach(this);
         }
+    }
+
+    public void onRotate() {
+        Log.i(this, "onRotate");
     }
 
     @Override
