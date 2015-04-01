@@ -16,6 +16,7 @@ import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.annotations.Control;
 import ca.dalezak.androidbase.utils.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +88,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         else if (tabStrip != null) {
             tabStrip.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(this, "onSaveInstanceState");
+        if (viewPager != null) {
+            // before screen rotation it's better to detach pagerAdapter from the ViewPager, so
+            // pagerAdapter can remove all old fragments, so they're not reused after rotation.
+            viewPager.setAdapter(null);
+        }
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     public void addTab(int title, Class<? extends F> clazz) {
@@ -201,7 +213,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             extends FragmentStatePagerAdapter
             implements ViewPager.OnPageChangeListener {
 
-        protected SparseArray<F> tabs = new SparseArray<F>();
+        protected SparseArray<WeakReference<F>> tabs = new SparseArray<>();
 
         public TabsAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -228,7 +240,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 if (tabClass != null) {
                     F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
-                    tabs.put(position, fragment);
+                    WeakReference<F> weakReference = new WeakReference<>(fragment);
+                    tabs.put(position, weakReference);
                     Log.i(this, "getItem %d %s", position, fragment);
                     return fragment;
                 }
@@ -240,10 +253,12 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public int getItemPosition(Object object) {
             F fragment = (F)object;
             if (fragment != null) {
-                int index = tabs.indexOfValue(fragment);
-                if (index > -1) {
-                    Log.i(this, "getItemPosition %d %s", index, fragment);
-                    return index;
+                for (int position = 0, size = tabs.size(); position < size; position++) {
+                    WeakReference<F> weakReference = tabs.valueAt(position);
+                    if (weakReference != null && weakReference.get() != null) {
+                        Log.i(this, "getItemPosition %d %s", position, fragment);
+                        return position;
+                    }
                 }
             }
             Log.i(this, "getItemPosition POSITION_NONE %s", fragment);
@@ -262,14 +277,14 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             else {
                 Log.i(this, "instantiateItem %d %s", position, fragment);
             }
-            tabs.put(position, fragment);
+            WeakReference<F> weakReference = new WeakReference<>(fragment);
+            tabs.put(position, weakReference);
             return fragment;
         }
 
         @Override
         public Parcelable saveState() {
             Log.i(this, "saveState");
-            tabs.clear();
             return super.saveState();
         }
 
@@ -277,7 +292,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         public void restoreState(Parcelable state, ClassLoader loader) {
             super.restoreState(state, loader);
             Log.i(this, "restoreState");
-            tabs.clear();
         }
 
         @Override
@@ -300,22 +314,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         public F getFragment(int position) {
             if (position > -1) {
-                F fragment = tabs.get(position);
-                if (fragment == null) {
-                    fragment = getItem(position);
-                    Log.i(this, "getFragment %d New %s", position, fragment);
-                }
-                else if (fragment.isDetached()) {
-                    fragment = getItem(position);
-                    Log.i(this, "getFragment %d Detached %s", position, fragment);
-                }
-                else if (fragment.isAdded()) {
-                    Log.i(this, "getFragment %d Added %s", position, fragment);
+                WeakReference<F> weakReference = tabs.get(position);
+                if (weakReference != null && weakReference.get() != null) {
+                    F fragment =  weakReference.get();
+                    Log.i(this, "getFragment %d Exists %s", position, fragment);
+                    return fragment;
                 }
                 else {
-                    Log.i(this, "getFragment %d Exists %s", position, fragment);
+                    F fragment = getItem(position);
+                    Log.i(this, "getFragment %d New %s", position, fragment);
+                    return fragment;
                 }
-                return fragment;
             }
             return null;
         }
