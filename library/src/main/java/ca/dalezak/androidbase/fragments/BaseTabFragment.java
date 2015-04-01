@@ -223,13 +223,13 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public F getItem(int position) {
-            Log.i(this, "getItem %d", position);
             if (position > -1) {
                 Class<? extends F> tabClass = getTabClass(position);
                 if (tabClass != null) {
                     F fragment = (F)Fragment.instantiate(getActivity(), tabClass.getName());
                     fragment.setCallback(BaseTabFragment.this);
                     tabs.put(position, fragment);
+                    Log.i(this, "getItem %d %s", position, fragment);
                     return fragment;
                 }
             }
@@ -252,8 +252,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            Log.i(this, "instantiateItem %d", position);
             F fragment = (F)super.instantiateItem(container, position);
+            Log.i(this, "instantiateItem %d %s", position, fragment);
             tabs.put(position, fragment);
             return fragment;
         }
