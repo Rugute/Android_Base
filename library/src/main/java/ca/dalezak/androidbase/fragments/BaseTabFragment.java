@@ -11,6 +11,9 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageButton;
 
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.annotations.Control;
@@ -28,12 +31,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     private List<Class<? extends F>> tabClasses = new ArrayList<>();
     private TabsAdapter tabsAdapter;
     private int current = -1;
+    private int fab;
 
     @Control("view_pager")
     protected ViewPager viewPager;
 
     @Control("tab_strip")
     protected PagerTabStrip tabStrip;
+
+    @Control("button_add")
+    public ImageButton buttonAdd;
 
     public BaseTabFragment() {
         super(R.layout.fragment_tabs);
@@ -45,6 +52,11 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     public BaseTabFragment(int layout, int menu) {
         super(layout, menu);
+    }
+
+    public BaseTabFragment(int layout, int menu, int fab) {
+        super(layout, menu);
+        this.fab = fab;
     }
 
     protected TabsAdapter getTabsAdapter() {
@@ -76,6 +88,28 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             viewPager.setAdapter(tabsAdapter);
             viewPager.setOnPageChangeListener(tabsAdapter);
         }
+        if (fab != 0 && buttonAdd != null) {
+            buttonAdd.setImageResource(fab);
+            buttonAdd.setVisibility(View.VISIBLE);
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlphaAnimation animation = new AlphaAnimation(1F, 0.6F);
+                    animation.setDuration(200);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            onAddNew();
+                        }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    view.startAnimation(animation);
+                }
+            });
+        }
         return view;
     }
 
@@ -98,6 +132,10 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             // pagerAdapter can remove all old fragments, so they're not reused after rotation.
             viewPager.setAdapter(null);
         }
+    }
+
+    public void onAddNew() {
+        Log.i(this, "onAddNew");
     }
 
     public void addTab(int title, Class<? extends F> clazz) {
