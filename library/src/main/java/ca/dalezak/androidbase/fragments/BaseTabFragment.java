@@ -127,7 +127,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onRotate() {
         super.onRotate();
-        if (viewPager != null) {
+        if (isAdded() && viewPager != null) {
             // before screen rotation it's better to detach pagerAdapter from the ViewPager, so
             // pagerAdapter can remove all old fragments, so they're not reused after rotation.
             viewPager.setAdapter(null);
