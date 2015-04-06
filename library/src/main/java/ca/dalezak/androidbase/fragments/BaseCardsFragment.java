@@ -305,7 +305,9 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         }
         if (labelLoading != null) {
             if (labelLoading.getVisibility() == View.VISIBLE) {
-                labelLoading.clearAnimation();
+                labelLoading.startAnimation(new FadeOut(labelLoading));
+            }
+            else if (labelLoading.getVisibility() == View.INVISIBLE) {
                 labelLoading.startAnimation(new FadeOut(labelLoading));
             }
             else {
