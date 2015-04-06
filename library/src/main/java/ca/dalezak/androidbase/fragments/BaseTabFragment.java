@@ -116,6 +116,9 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     @Override
     public void onResume() {
         super.onResume();
+        if (viewPager != null && viewPager.getAdapter() == null) {
+            viewPager.setAdapter(tabsAdapter);
+        }
         if (tabsAdapter.getCount() > 1 && tabStrip != null) {
             tabStrip.setVisibility(View.VISIBLE);
         }
@@ -346,7 +349,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            Log.i(this, "setPrimaryItem %d %s", position, object);
         }
 
         public F getFragment(int position) {
