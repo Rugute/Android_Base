@@ -304,7 +304,13 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             swipeLayout.setRefreshing(false);
         }
         if (labelLoading != null) {
-            labelLoading.startAnimation(new FadeOut(labelLoading));
+            if (labelLoading.getVisibility() == View.VISIBLE) {
+                labelLoading.clearAnimation();
+                labelLoading.startAnimation(new FadeOut(labelLoading));
+            }
+            else {
+                labelLoading.setVisibility(View.GONE);
+            }
         }
     }
 
