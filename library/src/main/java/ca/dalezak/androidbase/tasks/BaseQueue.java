@@ -94,6 +94,18 @@ public abstract class BaseQueue<T extends BaseTask, M extends BaseModel> impleme
         }
     }
 
+    public void cancel() {
+        Log.i(this, "Cancel");
+        running = false;
+        BaseTask task = tasks.peek();
+        task.cancel(true);
+        new UIRunnable(){ public void uiRun() {
+            for (Callback callback : callbacks) {
+                callback.onQueueCancelled();
+            }
+        }}.run();
+    }
+
     public void pause() {
         Log.i(this, "Pause");
         running = false;
