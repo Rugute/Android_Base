@@ -37,7 +37,7 @@ public class Strings {
 
     public static String stripHtml(String html) {
         if (!isNullOrEmpty(html)) {
-            return Html.fromHtml(html).toString();
+            return Html.fromHtml(html).toString().trim();
         }
         return null;
     }
