@@ -240,7 +240,14 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     public void onFragmentDestroy(BaseFragment fragment) {}
 
     @Override
-    public void onFragmentDetach(BaseFragment fragment) {}
+    public void onFragmentDetach(BaseFragment fragment) {
+        if (tabsAdapter.remove(fragment)) {
+            Log.i(this, "onFragmentDetach %s Removed", fragment);
+        }
+        else {
+            Log.i(this, "onFragmentDetach %s Already Removed", fragment);
+        }
+    }
 
     @Override
     public void onFragmentHidden(BaseFragment fragment) {
@@ -271,6 +278,19 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         public void refresh() {
             notifyDataSetChanged();
+        }
+
+        public boolean remove(Fragment fragment) {
+            for (int position = 0, size = tabs.size(); position < size; position++) {
+                WeakReference<F> weakReference = tabs.valueAt(position);
+                if (weakReference != null && weakReference.get() != null) {
+                    if (weakReference.get() == fragment) {
+                        tabs.remove(position);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
@@ -344,19 +364,8 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 WeakReference<F> weakReference = tabs.get(position);
                 if (weakReference != null && weakReference.get() != null) {
                     F fragment =  weakReference.get();
-                    if (fragment.isAdded()) {
-                        Log.i(this, "getFragment %d Added %s", position, fragment);
-                        return fragment;
-                    }
-                    else if (fragment.isDetached()) {
-                        fragment = getItem(position);
-                        Log.i(this, "getFragment %d Detached %s", position, fragment);
-                        return fragment;
-                    }
-                    else {
-                        Log.i(this, "getFragment %d Exists %s", position, fragment);
-                        return fragment;
-                    }
+                    Log.i(this, "getFragment %d Exists %s", position, fragment);
+                    return fragment;
                 }
                 else {
                     F fragment = getItem(position);
