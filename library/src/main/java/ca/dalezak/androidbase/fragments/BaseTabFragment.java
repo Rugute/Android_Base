@@ -167,10 +167,17 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
     protected void setTabSelected(int position, boolean animated) {
         if (viewPager.getCurrentItem() == position) {
-            Log.i(this, "setTabSelected CurrentItem %d %b", position, animated);
             F currentFragment = tabsAdapter.getFragment(position);
             if (currentFragment.isAdded()) {
+                Log.i(this, "setTabSelected %d %b Added %s", position, animated, currentFragment);
                 onTabSelected(position, currentFragment);
+            }
+            else if (currentFragment.isDetached()) {
+                Log.i(this, "setTabSelected %d %b Detached %s", position, animated, currentFragment);
+                tabsAdapter.notifyDataSetChanged();
+            }
+            else {
+                Log.i(this, "setTabSelected %d %b ??? %s", position, animated, currentFragment);
             }
         }
         else {
@@ -312,17 +319,16 @@ public abstract class BaseTabFragment<F extends BaseFragment>
 
         @Override
         public int getItemPosition(Object object) {
-            F fragment = (F)object;
-            if (fragment != null) {
-                for (int position = 0, size = tabs.size(); position < size; position++) {
-                    WeakReference<F> weakReference = tabs.valueAt(position);
-                    if (weakReference != null && weakReference.get() != null) {
-                        Log.i(this, "getItemPosition %d %s", position, fragment);
+            for (int position = 0, size = tabs.size(); position < size; position++) {
+                WeakReference<F> weakReference = tabs.valueAt(position);
+                if (weakReference != null && weakReference.get() != null) {
+                    if (weakReference.get() == object) {
+                        Log.i(this, "getItemPosition %d %s", position, object);
                         return position;
                     }
                 }
             }
-            Log.i(this, "getItemPosition POSITION_NONE %s", fragment);
+            Log.i(this, "getItemPosition POSITION_NONE %s", object);
             return POSITION_NONE;
         }
 
