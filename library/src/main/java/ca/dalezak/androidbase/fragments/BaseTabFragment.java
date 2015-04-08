@@ -166,14 +166,15 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     protected void setTabSelected(int position, boolean animated) {
-        Log.i(this, "setTabSelected %d %b", position, animated);
         if (viewPager.getCurrentItem() == position) {
+            Log.i(this, "setTabSelected CurrentItem %d %b", position, animated);
             F currentFragment = tabsAdapter.getFragment(position);
             if (currentFragment.isAdded()) {
                 onTabSelected(position, currentFragment);
             }
         }
         else {
+            Log.i(this, "setTabSelected %d %b", position, animated);
             viewPager.setCurrentItem(position, animated);
         }
     }
@@ -364,7 +365,18 @@ public abstract class BaseTabFragment<F extends BaseFragment>
                 WeakReference<F> weakReference = tabs.get(position);
                 if (weakReference != null && weakReference.get() != null) {
                     F fragment =  weakReference.get();
-                    Log.i(this, "getFragment %d Exists %s", position, fragment);
+                    if (fragment.isDetached()) {
+                        Log.i(this, "getFragment %d Detached %s", position, fragment);
+                    }
+                    else if (fragment.isAdded()) {
+                        Log.i(this, "getFragment %d Added %s", position, fragment);
+                    }
+                    else if (fragment.isResumed()) {
+                        Log.i(this, "getFragment %d Resumed %s", position, fragment);
+                    }
+                    else {
+                        Log.i(this, "getFragment %d Exists %s", position, fragment);
+                    }
                     return fragment;
                 }
                 else {
