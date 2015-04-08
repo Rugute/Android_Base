@@ -341,23 +341,39 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
     }
 
     protected boolean hasETag(URI uri) {
-        return prefs(getContext()).getAll().size() > 0 && prefs(getContext()).contains(uri.toString());
+        if (getContext() != null && uri != null) {
+            SharedPreferences prefs = prefs(getContext());
+            if (prefs != null) {
+                return prefs.getAll().size() > 0 && prefs.contains(uri.toString());
+            }
+        }
+        return false;
     }
 
     protected String getETag(URI uri) {
-        return prefs(getContext()).getString(uri.toString(), null);
+        if (getContext() != null && uri != null) {
+            SharedPreferences prefs = prefs(getContext());
+            if (prefs != null) {
+                return prefs.getString(uri.toString(), null);
+            }
+        }
+        return null;
     }
 
     protected void setETag(URI uri, String etag) {
-        editor(getContext()).putString(uri.toString(), etag).commit();
+        if (getContext() != null && uri != null) {
+            editor(getContext()).putString(uri.toString(), etag).commit();
+        }
     }
 
     public static void clearETags(Context context) {
-        Map<String,?> keys = prefs(context).getAll();
-        for (Map.Entry<String,?> entry : keys.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith("http")) {
-                editor(context).remove(key).commit();
+        if (context != null) {
+            Map<String,?> keys = prefs(context).getAll();
+            for (Map.Entry<String,?> entry : keys.entrySet()) {
+                String key = entry.getKey();
+                if (key.startsWith("http")) {
+                    editor(context).remove(key).commit();
+                }
             }
         }
     }

@@ -20,7 +20,12 @@ public class ProgressDialog extends android.app.ProgressDialog {
 
     @Override
     public void setMessage(CharSequence message) {
-        super.setMessage(message);
-        this.message = message;
+        try {
+            super.setMessage(message);
+            this.message = message;
+        }
+        catch(Exception ex) {
+            Log.w(this, "Exception %s", ex);
+        }
     }
 }

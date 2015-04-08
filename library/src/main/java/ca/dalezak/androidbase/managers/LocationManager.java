@@ -86,9 +86,6 @@ public class LocationManager implements LocationListener {
 
     public static void unsubscribe(Callback callback) {
         callbacks.remove(callback);
-        if (callbacks.size() == 0) {
-            locationManager.removeUpdates(instance);
-        }
     }
 
     public static boolean hasLatitude() {

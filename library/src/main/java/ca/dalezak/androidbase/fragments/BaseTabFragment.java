@@ -323,18 +323,6 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         }
 
         @Override
-        public Parcelable saveState() {
-            Log.i(this, "saveState");
-            return super.saveState();
-        }
-
-        @Override
-        public void restoreState(Parcelable state, ClassLoader loader) {
-            super.restoreState(state, loader);
-            Log.i(this, "restoreState");
-        }
-
-        @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             Log.i(this, "destroyItem %d %s", position, object);
             try {
