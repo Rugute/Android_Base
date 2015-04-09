@@ -90,7 +90,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(this, "onCreate");
+        Log.i(this, "onCreate %s", savedInstanceState);
         if (callback != null) {
             callback.onFragmentCreate(this);
         }
@@ -189,10 +189,7 @@ public abstract class BaseFragment extends android.app.Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.i(this, "onSaveInstanceState");
-        if (isPortrait() != portrait) {
-            onRotate();
-        }
+        Log.i(this, "onSaveInstanceState %s", savedInstanceState);
     }
 
     @Override
@@ -224,10 +221,6 @@ public abstract class BaseFragment extends android.app.Fragment {
         if (callback != null) {
             callback.onFragmentDetach(this);
         }
-    }
-
-    public void onRotate() {
-        Log.i(this, "onRotate");
     }
 
     @Override

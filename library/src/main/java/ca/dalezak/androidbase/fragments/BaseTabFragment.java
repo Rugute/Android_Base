@@ -3,7 +3,6 @@ package ca.dalezak.androidbase.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -128,12 +127,19 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     }
 
     @Override
-    public void onRotate() {
-        super.onRotate();
-        if (isAdded() && viewPager != null) {
-            // before screen rotation it's better to detach pagerAdapter from the ViewPager, so
-            // pagerAdapter can remove all old fragments, so they're not reused after rotation.
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (viewPager != null) {
             viewPager.setAdapter(null);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(this, "onActivityCreated %s", savedInstanceState);
+        if (viewPager != null && tabsAdapter != null) {
+            viewPager.setAdapter(tabsAdapter);
         }
     }
 
