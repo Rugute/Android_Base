@@ -51,7 +51,9 @@ public class Dates {
     public static Date fromISO8601(String string) {
         try {
             if (string != null) {
-                return new SimpleDateFormat(ISO_08601_FORMAT).parse(string);
+                DateFormat dateFormat = new SimpleDateFormat(ISO_08601_FORMAT, Locale.US);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                return dateFormat.parse(string);
             }
         }
         catch (ParseException e) {
