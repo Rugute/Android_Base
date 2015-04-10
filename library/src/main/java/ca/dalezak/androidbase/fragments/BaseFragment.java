@@ -405,6 +405,12 @@ public abstract class BaseFragment extends android.app.Fragment {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
+    public boolean isTablet() {
+        return (getActivity().getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
     protected boolean hasExtra(String name) {
         return getIntent().hasExtra(name);
     }

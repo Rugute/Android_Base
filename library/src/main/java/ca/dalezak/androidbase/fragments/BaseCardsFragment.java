@@ -57,8 +57,11 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     private BaseScrollListener scrollListener;
     private SearchView searchView;
     private Class<A> listAdapterClass;
-    private int columnsPortrait = 0;
-    private int columnsLandscape = 0;
+
+    private int phonePortrait = 1;
+    private int phoneLandscape = 1;
+    private int tabletPortrait = 1;
+    private int tabletLandscape = 1;
 
     public BaseCardsFragment(Class<A> listAdapterClass) {
         super(R.layout.fragment_cards);
@@ -92,11 +95,21 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         listAdapter.setAdapterListener(this);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setHasFixedSize(true);
-        if (isPortrait()) {
-            layoutManager = new GridLayoutManager(getActivity(), columnsPortrait);
+        if (isTablet()) {
+            if (isPortrait()) {
+                layoutManager = new GridLayoutManager(getActivity(), tabletPortrait);
+            }
+            else {
+                layoutManager = new GridLayoutManager(getActivity(), tabletLandscape);
+            }
         }
         else {
-            layoutManager = new GridLayoutManager(getActivity(), columnsLandscape);
+            if (isPortrait()) {
+                layoutManager = new GridLayoutManager(getActivity(), phonePortrait);
+            }
+            else {
+                layoutManager = new GridLayoutManager(getActivity(), phoneLandscape);
+            }
         }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(listAdapter);
@@ -181,9 +194,11 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         }
     }
 
-    protected void setColumns(int portrait, int landscape) {
-        this.columnsPortrait = portrait;
-        this.columnsLandscape = landscape;
+    protected void setColumns(int phonePortrait, int phoneLandscape, int tabletPortrait, int tabletLandscape) {
+        this.phonePortrait = phonePortrait;
+        this.phoneLandscape = phoneLandscape;
+        this.tabletPortrait = tabletPortrait;
+        this.tabletLandscape = tabletLandscape;
     }
 
     protected ImageButton getButtonAdd() {
