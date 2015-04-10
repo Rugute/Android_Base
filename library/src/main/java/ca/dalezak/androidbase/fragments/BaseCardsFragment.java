@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,10 +53,12 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     private int fab;
     private int empty;
     private A listAdapter;
-    private LinearLayoutManager layoutManager;
+    private GridLayoutManager layoutManager;
     private BaseScrollListener scrollListener;
     private SearchView searchView;
     private Class<A> listAdapterClass;
+    private int columnsPortrait = 0;
+    private int columnsLandscape = 0;
 
     public BaseCardsFragment(Class<A> listAdapterClass) {
         super(R.layout.fragment_cards);
@@ -85,11 +88,16 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        layoutManager = new LinearLayoutManager(getActivity());
         listAdapter = Objects.createInstance(listAdapterClass, Context.class, getActivity());
         listAdapter.setAdapterListener(this);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setHasFixedSize(true);
+        if (isPortrait()) {
+            layoutManager = new GridLayoutManager(getActivity(), columnsPortrait);
+        }
+        else {
+            layoutManager = new GridLayoutManager(getActivity(), columnsLandscape);
+        }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(listAdapter);
     }
@@ -171,6 +179,11 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             listAdapter.refresh();
             listAdapter.filter(getSearchText());
         }
+    }
+
+    protected void setColumns(int portrait, int landscape) {
+        this.columnsPortrait = portrait;
+        this.columnsLandscape = landscape;
     }
 
     protected ImageButton getButtonAdd() {
