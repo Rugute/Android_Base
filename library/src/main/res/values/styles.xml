@@ -4,7 +4,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/color_primary</item>
-        <item name="android:textColor">@color/white_dark</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="ViewPager">
@@ -16,14 +16,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/color_primary</item>
-        <item name="android:textColor">@color/white_dark</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_gravity">top</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="android:textColor">@color/white_dark</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="LinearLayout">
@@ -106,7 +106,7 @@
         <item name="android:visibility">gone</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@color/gray_dark</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
     <style name="TextView.Label">
@@ -123,7 +123,7 @@
     <style name="TextView.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:paddingBottom">16dp</item>
-        <item name="android:textColor">@color/black_dark</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
     <style name="TextView.SubTitle">
         <item name="android:textSize">15sp</item>
@@ -140,7 +140,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
-        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
     </style>
     <style name="TextView.Description.Truncate">
         <item name="android:ellipsize">end</item>
@@ -176,14 +176,14 @@
     <style name="TextView.Error">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/red_dark</item>
+        <item name="android:textColor">@color/color_error</item>
         <item name="android:visibility">gone</item>
     </style>
     <style name="TextView.Required">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/red_dark</item>
+        <item name="android:textColor">@color/color_required</item>
         <item name="android:visibility">gone</item>
     </style>
     <style name="TextView.Prefix">
@@ -316,7 +316,7 @@
     <style name="RadioButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/gray_dark</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">17sp</item>
     </style>
     <style name="RadioButton.Full">
@@ -422,7 +422,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="cardCornerRadius">4dp</item>
-        <item name="cardBackgroundColor">@color/white_dark</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
         <item name="cardElevation">5dp</item>
         <item name="contentPadding">0dp</item>
         <item name="cardPreventCornerOverlap">false</item>

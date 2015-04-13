@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ImageButton.Fab">
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:background">@drawable/ic_fab</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:contentDescription">@string/add</item>
+    </style>
+</resources>
