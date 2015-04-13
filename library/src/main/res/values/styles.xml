@@ -125,6 +125,10 @@
         <item name="android:paddingBottom">16dp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+    <style name="TextView.Title.Truncate">
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
     <style name="TextView.SubTitle">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:paddingTop">0dp</item>
@@ -357,6 +361,15 @@
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+    <style name="ImageButton.Wrap">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="ImageButton.Center">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical|center_horizontal</item>
+        <item name="android:scaleType">center</item>
+    </style>
     <style name="ImageButton.Fab">
         <item name="android:layout_width">@dimen/fab_size_width</item>
         <item name="android:layout_height">@dimen/fab_size_height</item>
@@ -532,5 +545,4 @@
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
-
 </resources>
