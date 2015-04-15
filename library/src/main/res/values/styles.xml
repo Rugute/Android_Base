@@ -106,7 +106,7 @@
         <item name="android:visibility">gone</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/text_light</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
     <style name="TextView.Label">
@@ -123,7 +123,7 @@
     <style name="TextView.Title">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:paddingBottom">16dp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@color/text_dark</item>
     </style>
     <style name="TextView.Title.Truncate">
         <item name="android:ellipsize">end</item>
@@ -144,7 +144,7 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
-        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
     <style name="TextView.Description.Truncate">
         <item name="android:ellipsize">end</item>
@@ -180,14 +180,14 @@
     <style name="TextView.Error">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/color_error</item>
+        <item name="android:textColor">@color/text_error</item>
         <item name="android:visibility">gone</item>
     </style>
     <style name="TextView.Required">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/color_required</item>
+        <item name="android:textColor">@color/text_required</item>
         <item name="android:visibility">gone</item>
     </style>
     <style name="TextView.Prefix">
@@ -320,7 +320,7 @@
     <style name="RadioButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textColor">@color/text_light</item>
         <item name="android:textSize">@dimen/text_size_large</item>
     </style>
     <style name="RadioButton.Full">
@@ -479,7 +479,7 @@
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">0.2</item>
@@ -490,7 +490,7 @@
     <style name="Button.Transparent">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@null</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginLeft">2dp</item>
@@ -499,7 +499,7 @@
     <style name="Button.Primary">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:layout_gravity">right</item>
@@ -508,7 +508,7 @@
     <style name="Button.Secondary">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@null</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:layout_gravity">left</item>

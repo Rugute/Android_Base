@@ -3,8 +3,10 @@
     <color name="color_primary">#212121</color>
     <color name="color_primary_dark">#000000</color>
     <color name="color_accent">#7caac2</color>
-    <color name="color_error">#9b0114</color>
-    <color name="color_required">#d0021b</color>
+    <color name="text_dark">#606060</color>
+    <color name="text_light">#787878</color>
+    <color name="text_error">#9b0114</color>
+    <color name="text_required">#d0021b</color>
     <color name="list_view">#e7e7e7</color>
     <color name="spinner">#dddddd</color>
     <color name="background">#eeeeee</color>

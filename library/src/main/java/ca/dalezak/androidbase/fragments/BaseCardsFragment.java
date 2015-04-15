@@ -169,6 +169,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             listAdapter.refresh();
             listAdapter.filter(getSearchText());
         }
+        scrollListener.reset(0, true);
     }
 
     @Override
