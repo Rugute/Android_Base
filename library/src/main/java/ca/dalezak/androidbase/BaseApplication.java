@@ -85,10 +85,14 @@ public abstract class BaseApplication extends android.app.Application {
     protected String getManifest(String key) {
         try {
             ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-            return applicationInfo.metaData.getString(key);
+            Object value = applicationInfo.metaData.get(key);
+            return value != null ? value.toString() : null;
         }
         catch (PackageManager.NameNotFoundException e) {
             Log.w(this, "PackageManager.NameNotFoundException", e);
+        }
+        catch(ClassCastException e) {
+            Log.w(this, "ClassCastException", e);
         }
         return null;
     }
