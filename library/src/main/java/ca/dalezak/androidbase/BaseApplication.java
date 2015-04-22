@@ -12,8 +12,7 @@ import android.os.Looper;
 
 import ca.dalezak.androidbase.activities.ShutdownActivity;
 import ca.dalezak.androidbase.managers.LocationManager;
-import ca.dalezak.androidbase.tasks.HttpTask;
-import ca.dalezak.androidbase.utils.AlertDialog;
+import ca.dalezak.androidbase.utils.Alert;
 import ca.dalezak.androidbase.utils.Log;
 import ca.dalezak.androidbase.utils.Prefs;
 
@@ -125,17 +124,17 @@ public abstract class BaseApplication extends android.app.Application {
 
     protected void showDatabaseException() {
         Log.i(this, "showDatabaseException");
-        new AlertDialog(getActivity(), R.string.database_changed, R.string.database_changed_description) {
+        new Alert(getActivity(), R.string.database_changed, R.string.database_changed_description) {
             @Override
             public void ok() {
                 restartApplication();
             }
-        }.showOk(ca.dalezak.androidbase.R.string.restart_application);
+        }.showOk(R.string.restart_application);
     }
 
     protected void showUnhandledException() {
         Log.i(this, "showUnhandledException");
-        new AlertDialog(getActivity(), R.string.unhandled_exception, R.string.unhandled_exception_description) {
+        new Alert(getActivity(), R.string.unhandled_exception, R.string.unhandled_exception_description) {
             @Override
             public void ok() {
                 closeApplication();
