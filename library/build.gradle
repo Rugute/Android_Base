@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-version = "1.39"
+version = "1.40"
 group = "ca.dalezak.androidbase"
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion "21.1.2"
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -22,9 +22,9 @@ android {
     }
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 139
-        versionName "1.39"
+        targetSdkVersion 22
+        versionCode 140
+        versionName "1.40"
     }
     buildTypes {
         release {
@@ -38,7 +38,7 @@ android {
 dependencies {
     compile 'org.jsoup:jsoup:1.8.1'
     compile 'com.android.support:support-v13:21.0.2'
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.1.0'
     compile 'com.android.support:recyclerview-v7:21.0.2'
     compile 'com.android.support:cardview-v7:21.0.2'
     compile files('libs/httpcore-4.3.3.jar')
