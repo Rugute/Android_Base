@@ -5,7 +5,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,14 +17,13 @@ import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Log;
 
 public abstract class BaseActivity<F extends BaseFragment>
-        extends android.support.v7.app.ActionBarActivity {
+        extends AppCompatActivity {
 
     private Class<F> fragmentClass;
     private boolean showHome;
     private int menuId;
     private F fragment;
     private ProgressDialog dialog;
-    private Toolbar toolbar;
 
     protected BaseActivity(Class<F> fragmentClass) {
         this(fragmentClass, 0, false);
@@ -70,11 +69,9 @@ public abstract class BaseActivity<F extends BaseFragment>
         catch (IllegalAccessException e) {
             Log.w(this, "IllegalAccessException", e);
         }
-        toolbar = (Toolbar)findViewById(R.id.layout_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getTitle());
             getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
-            toolbar.setTitle(getTitle());
         }
     }
 
@@ -203,10 +200,6 @@ public abstract class BaseActivity<F extends BaseFragment>
             dialog.dismiss();
             dialog = null;
         }
-    }
-
-    protected Toolbar getToolbar() {
-        return toolbar;
     }
 
     protected F getFragment() {

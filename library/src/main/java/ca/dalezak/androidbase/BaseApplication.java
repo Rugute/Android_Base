@@ -124,22 +124,32 @@ public abstract class BaseApplication extends android.app.Application {
 
     protected void showDatabaseException() {
         Log.i(this, "showDatabaseException");
-        new Alert(getActivity(), R.string.database_changed, R.string.database_changed_description) {
-            @Override
-            public void ok() {
-                restartApplication();
-            }
-        }.showOk(R.string.restart_application);
+        try {
+            new Alert(getActivity(), R.string.database_changed, R.string.database_changed_description) {
+                @Override
+                public void ok() {
+                    restartApplication();
+                }
+            }.showOk(R.string.restart_application);
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     protected void showUnhandledException() {
         Log.i(this, "showUnhandledException");
-        new Alert(getActivity(), R.string.unhandled_exception, R.string.unhandled_exception_description) {
-            @Override
-            public void ok() {
-                closeApplication();
-            }
-        }.showOk(R.string.exit_application);
+        try {
+            new Alert(getActivity(), R.string.unhandled_exception, R.string.unhandled_exception_description) {
+                @Override
+                public void ok() {
+                    closeApplication();
+                }
+            }.showOk(R.string.exit_application);
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     protected abstract void onUncaughtException(Throwable throwable);

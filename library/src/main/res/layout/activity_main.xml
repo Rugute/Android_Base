@@ -1,9 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/LinearLayout.Vertical.Full">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/layout_toolbar"
-        style="@style/Toolbar"/>
     <LinearLayout
         android:id="@+id/layout_content"
         android:background="@color/background"
