@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-version = "1.43"
+version = "1.44"
 group = "ca.dalezak.androidbase"
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '22.0.1'
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -23,8 +23,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 143
-        versionName "1.43"
+        versionCode 144
+        versionName "1.44"
     }
     buildTypes {
         release {
@@ -38,7 +38,7 @@ android {
 dependencies {
     compile 'org.jsoup:jsoup:1.8.1'
     compile 'com.android.support:support-v13:22.1.0'
-    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.0'
     compile 'com.android.support:recyclerview-v7:22.1.0'
     compile 'com.google.android.gms:play-services:7.0.0'
