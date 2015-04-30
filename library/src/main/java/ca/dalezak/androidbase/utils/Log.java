@@ -1,5 +1,7 @@
 package ca.dalezak.androidbase.utils;
 
+import java.util.IllegalFormatConversionException;
+
 public class Log {
 
     private static Callback callback;
@@ -8,7 +10,7 @@ public class Log {
         public void onLogInfo(String tag, String message);
         public void onLogDebug(String tag, String message);
         public void onLogWarning(String tag, String message);
-        public void onLogException(Throwable throwable);
+        public void onLogException(String tag, Throwable throwable);
     }
 
     public static Callback getCallback() {
@@ -34,9 +36,14 @@ public class Log {
     }
 
     public static void i(Object caller, String format, Object...args) {
-        android.util.Log.i(getName(caller), String.format(format, args));
-        if (callback != null) {
-            callback.onLogInfo(getName(caller), String.format(format, args));
+        try {
+            android.util.Log.i(getName(caller), String.format(format, args));
+            if (callback != null) {
+                callback.onLogInfo(getName(caller), String.format(format, args));
+            }
+        }
+        catch (IllegalFormatConversionException exception) {
+           exception.printStackTrace();
         }
     }
 
@@ -55,9 +62,14 @@ public class Log {
     }
 
     public static void d(Object caller, String format, Object...args) {
-        android.util.Log.d(getName(caller), String.format(format, args));
-        if (callback != null) {
-            callback.onLogDebug(getName(caller), String.format(format, args));
+        try {
+            android.util.Log.d(getName(caller), String.format(format, args));
+            if (callback != null) {
+                callback.onLogDebug(getName(caller), String.format(format, args));
+            }
+        }
+        catch (IllegalFormatConversionException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -76,9 +88,14 @@ public class Log {
     }
 
     public static void w(Object caller, String format, Object...args) {
-        android.util.Log.w(getName(caller), String.format(format, args));
-        if (callback != null) {
-            callback.onLogWarning(getName(caller), String.format(format, args));
+        try {
+            android.util.Log.w(getName(caller), String.format(format, args));
+            if (callback != null) {
+                callback.onLogWarning(getName(caller), String.format(format, args));
+            }
+        }
+        catch (IllegalFormatConversionException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -87,7 +104,7 @@ public class Log {
         if (callback != null) {
             String description = String.format("%s %s", getName(caller), message);
             Exception exception = new Exception(description);
-            callback.onLogException(exception);
+            callback.onLogException(getName(caller), exception);
         }
     }
 
@@ -96,16 +113,21 @@ public class Log {
         if (callback != null) {
             String description = String.format("%s %s", getName(caller), message);
             Exception exception = new Exception(description, throwable);
-            callback.onLogException(exception);
+            callback.onLogException(getName(caller), exception);
         }
     }
 
     public static void e(Object caller, String format, Object...args) {
-        android.util.Log.e(getName(caller), String.format(format, args));
-        if (callback != null) {
-            String description = String.format("%s %s", getName(caller), String.format(format, args));
-            Exception exception = new Exception(description);
-            callback.onLogException(exception);
+        try {
+            android.util.Log.e(getName(caller), String.format(format, args));
+            if (callback != null) {
+                String description = String.format("%s %s", getName(caller), String.format(format, args));
+                Exception exception = new Exception(description);
+                callback.onLogException(getName(caller), exception);
+            }
+        }
+        catch (IllegalFormatConversionException exception) {
+            exception.printStackTrace();
         }
     }
 
