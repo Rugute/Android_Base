@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import ca.dalezak.androidbase.activities.BaseActivity;
 import ca.dalezak.androidbase.models.BaseModel;
 import ca.dalezak.androidbase.utils.Controls;
 import ca.dalezak.androidbase.utils.Log;
@@ -359,6 +360,12 @@ public abstract class BaseFragment extends android.app.Fragment {
 
     protected void setTitle(String title) {
         getActivity().setTitle(title);
+        if (getActivity() instanceof BaseActivity) {
+            BaseActivity baseActivity = (BaseActivity)getActivity();
+            if (baseActivity.getSupportActionBar() != null) {
+                baseActivity.getSupportActionBar().setTitle(title);
+            }
+        }
     }
 
     protected LinearLayout.LayoutParams getLayoutParams(int left, int top, int right, int bottom) {
