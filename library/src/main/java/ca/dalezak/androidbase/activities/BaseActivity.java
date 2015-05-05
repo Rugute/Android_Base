@@ -119,6 +119,7 @@ public abstract class BaseActivity<F extends BaseFragment>
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(this, "onActivityResult");
+        getFragment().onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -149,7 +150,7 @@ public abstract class BaseActivity<F extends BaseFragment>
             onBackPressed();
             return true;
         }
-        return true;
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -159,10 +160,10 @@ public abstract class BaseActivity<F extends BaseFragment>
     }
 
     @Override
-    public void onBackPressed(){
-        super.onBackPressed();
+    public void onBackPressed() {
         Log.i(this, "onBackPressed");
         fragment.onBackPressed();
+        super.onBackPressed();
     }
 
     protected String getStringExtra(String name) {

@@ -52,7 +52,6 @@ public abstract class BaseFragment extends android.app.Fragment {
     protected Callback callback;
 
     private boolean visible;
-    private boolean portrait;
 
     public BaseFragment() {
     }
@@ -159,7 +158,6 @@ public abstract class BaseFragment extends android.app.Fragment {
                 callback.onFragmentVisible(this);
             }
         }
-        portrait = isPortrait();
     }
 
     @Override

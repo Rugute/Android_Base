@@ -376,7 +376,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             if (position > -1) {
                 WeakReference<F> weakReference = tabs.get(position);
                 if (weakReference != null && weakReference.get() != null) {
-                    F fragment =  weakReference.get();
+                    F fragment = weakReference.get();
                     if (fragment.isDetached()) {
                         Log.i(this, "getFragment %d Detached %s", position, fragment);
                     }

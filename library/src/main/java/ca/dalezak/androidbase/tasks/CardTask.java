@@ -1,6 +1,6 @@
 package ca.dalezak.androidbase.tasks;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 
@@ -12,23 +12,24 @@ import ca.dalezak.androidbase.views.BaseCard;
 public abstract class CardTask<M extends BaseModel, C extends BaseCard<M>> extends AsyncTask<Void, Void, Intent> {
 
     private ProgressDialog dialog;
-    private Context context;
+    private Activity activity;
+    private int requestCode = -1;
     private M model;
     private C card;
 
-    public CardTask(Context context, C card, M model) {
-        this.context = context;
+    public CardTask(Activity activity, C card, M model) {
+        this.activity = activity;
         this.card = card;
         this.model = model;
     }
 
-    public CardTask(Context context, C card, M model, int message) {
-        this.context = context;
+    public CardTask(Activity activity, C card, M model, int message) {
+        this.activity = activity;
         this.card = card;
         this.model = model;
         try {
-            dialog = new ProgressDialog(context);
-            dialog.setMessage(context.getString(message));
+            dialog = new ProgressDialog(activity);
+            dialog.setMessage(activity.getString(message));
             dialog.setIndeterminate(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         }
@@ -55,12 +56,17 @@ public abstract class CardTask<M extends BaseModel, C extends BaseCard<M>> exten
             dialog = null;
         }
         if (intent != null) {
-            context.startActivity(intent);
+            if (requestCode == -1) {
+                activity.startActivity(intent);
+            }
+            else {
+                activity.startActivityForResult(intent, requestCode);
+            }
         }
     }
 
-    protected Context getContext() {
-        return context;
+    protected Activity getActivity() {
+        return activity;
     }
 
     protected M getModel() {
@@ -77,5 +83,13 @@ public abstract class CardTask<M extends BaseModel, C extends BaseCard<M>> exten
 
     protected ProgressDialog getDialog() {
         return dialog;
+    }
+
+    protected int getRequestCode() {
+        return requestCode;
+    }
+
+    protected void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
     }
 }
