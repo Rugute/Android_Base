@@ -14,12 +14,12 @@ import ca.dalezak.androidbase.views.BaseCard;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> extends RecyclerView.Adapter<C> {
+public abstract class BaseCardsAdapter<M extends BaseModel, C extends BaseCard> extends RecyclerView.Adapter<C> {
 
     public interface OnAdapterListener<M, C> {
-        public void onCardRefreshed(int unfiltered, int filtered);
-        public void onCardSelected(C card, M model);
         public void onCardPressed(C card, M model);
+        public void onCardSelected(C card, M model);
+        public void onCardRefreshed(int unfiltered, int filtered);
     }
 
     private OnAdapterListener<M, C> adapterListener;
@@ -34,7 +34,7 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
     private final Context context;
     private final LayoutInflater inflater;
 
-    public BaseCardAdapter(Context context, Class<M> modelClass, Class<C> cardClass, int layout) {
+    public BaseCardsAdapter(Context context, Class<M> modelClass, Class<C> cardClass, int layout) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.modelClass = modelClass;
@@ -114,7 +114,7 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
         unfiltered.addAll(getItems());
         filtered.clear();
         filtered.addAll(unfiltered);
-        Log.i(this, "Unfiltered %d", unfiltered.size());
+        Log.i(this, "%s Unfiltered %d", modelClass.getSimpleName(), unfiltered.size());
         notifyDataSetChanged();
         if (adapterListener != null) {
             adapterListener.onCardRefreshed(unfiltered.size(), filtered.size());
@@ -128,7 +128,7 @@ public abstract class BaseCardAdapter<M extends BaseModel, C extends BaseCard> e
                 filtered.add(model);
             }
         }
-        Log.i(this, "Filtered %d", filtered.size());
+        Log.i(this, "%s Filtered %d", modelClass.getSimpleName(), filtered.size());
         notifyDataSetChanged();
         if (adapterListener != null) {
             adapterListener.onCardRefreshed(unfiltered.size(), filtered.size());

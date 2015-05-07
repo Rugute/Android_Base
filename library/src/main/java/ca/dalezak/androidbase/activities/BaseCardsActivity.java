@@ -9,14 +9,14 @@ import android.view.MenuItem;
 import ca.dalezak.androidbase.fragments.BaseCardsFragment;
 import ca.dalezak.androidbase.utils.Log;
 
-public abstract class BaseCardActivity<F extends BaseCardsFragment>
+public abstract class BaseCardsActivity<F extends BaseCardsFragment>
         extends BaseActivity<F> {
 
-    protected BaseCardActivity(Class<F> fragment) {
+    protected BaseCardsActivity(Class<F> fragment) {
         super(fragment);
     }
 
-    protected BaseCardActivity(Class<F> fragment, boolean showHome) {
+    protected BaseCardsActivity(Class<F> fragment, boolean showHome) {
         super(fragment, showHome);
     }
 

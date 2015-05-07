@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import ca.dalezak.androidbase.R;
-import ca.dalezak.androidbase.adapters.BaseCardAdapter;
+import ca.dalezak.androidbase.adapters.BaseCardsAdapter;
 import ca.dalezak.androidbase.animations.FadeIn;
 import ca.dalezak.androidbase.animations.FadeOut;
 import ca.dalezak.androidbase.models.BaseModel;
@@ -31,9 +31,9 @@ import ca.dalezak.androidbase.utils.Strings;
 import ca.dalezak.androidbase.views.BaseCard;
 import ca.dalezak.androidbase.annotations.Control;
 
-public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard, A extends BaseCardAdapter<M, C>>
+public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard, A extends BaseCardsAdapter<M, C>>
         extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, BaseCardAdapter.OnAdapterListener<M, C> {
+        implements SwipeRefreshLayout.OnRefreshListener, BaseCardsAdapter.OnAdapterListener<M, C> {
 
     @Control("swipe_loading")
     public TextView labelLoading;
@@ -180,6 +180,16 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             listAdapter.filter(getSearchText());
         }
         scrollListener.reset(0, true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (swipeLayout != null) {
+            swipeLayout.setRefreshing(false);
+            swipeLayout.destroyDrawingCache();
+            swipeLayout.clearAnimation();
+        }
     }
 
     @Override
@@ -346,6 +356,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     }
 
     public void onCardRefreshed(int unfiltered, int filtered) {
+        Log.i(this, "onCardRefreshed %d / %d", filtered, unfiltered);
         if (labelEmpty != null) {
             if (filtered == 0) {
                 labelEmpty.setText(this.empty);
