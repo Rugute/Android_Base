@@ -1,5 +1,6 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh"
     style="@style/SwipeRefreshLayout">
     <LinearLayout
@@ -17,10 +18,13 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 style="@style/RecyclerView"/>
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/button_add"
                 android:visibility="gone"
-                style="@style/ImageButton.Fab"/>
+                app:elevation="6dp"
+                app:borderWidth="0dp"
+                app:backgroundTint="@color/color_accent"
+                style="@style/FloatingActionButton" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

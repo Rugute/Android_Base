@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -45,7 +45,7 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
     public SwipeRefreshLayout swipeLayout;
 
     @Control("button_add")
-    public ImageButton buttonAdd;
+    public FloatingActionButton buttonAdd;
 
     @Control(id=android.R.id.list)
     public ListView listView;
@@ -114,19 +114,7 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlphaAnimation animation = new AlphaAnimation(1F, 0.6F);
-                    animation.setDuration(200);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {}
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            onAddNew();
-                        }
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-                    });
-                    view.startAnimation(animation);
+                    onAddNew();
                 }
             });
         }
@@ -189,7 +177,7 @@ public abstract class BaseListFragment<M extends BaseModel, A extends BaseListAd
         }
     }
 
-    protected ImageButton getButtonAdd() {
+    protected FloatingActionButton getFloatingActionButton() {
         return buttonAdd;
     }
 

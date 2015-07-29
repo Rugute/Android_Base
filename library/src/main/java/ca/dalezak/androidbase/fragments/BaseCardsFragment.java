@@ -3,6 +3,7 @@ package ca.dalezak.androidbase.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,10 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -48,7 +46,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
     public RecyclerView recyclerView;
 
     @Control("button_add")
-    public ImageButton buttonAdd;
+    public FloatingActionButton buttonAdd;
 
     private int fab;
     private int empty;
@@ -135,19 +133,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlphaAnimation animation = new AlphaAnimation(1F, 0.6F);
-                    animation.setDuration(200);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {}
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            onAddNew();
-                        }
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-                    });
-                    view.startAnimation(animation);
+                    onAddNew();
                 }
             });
         }
@@ -212,7 +198,7 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
         this.tabletLandscape = tabletLandscape;
     }
 
-    protected ImageButton getButtonAdd() {
+    protected FloatingActionButton getFloatingActionButton() {
         return buttonAdd;
     }
 

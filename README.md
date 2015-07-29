@@ -1,6 +1,6 @@
 # Android Base
 
-### A base library for Android projects.
+### A Base Library For Android Projects
 
 ## License
 

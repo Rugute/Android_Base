@@ -3,6 +3,7 @@ package ca.dalezak.androidbase.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -10,9 +11,6 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.ImageButton;
 
 import ca.dalezak.androidbase.R;
 import ca.dalezak.androidbase.annotations.Control;
@@ -39,7 +37,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     protected PagerTabStrip tabStrip;
 
     @Control("button_add")
-    public ImageButton buttonAdd;
+    public FloatingActionButton buttonAdd;
 
     public BaseTabFragment() {
         super(R.layout.fragment_tabs);
@@ -93,19 +91,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlphaAnimation animation = new AlphaAnimation(1F, 0.6F);
-                    animation.setDuration(200);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {}
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            onAddNew();
-                        }
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-                    });
-                    view.startAnimation(animation);
+                    onAddNew();
                 }
             });
         }
