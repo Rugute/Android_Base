@@ -222,10 +222,10 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
     </style>
     <style name="EditText.Label">
         <item name="android:layout_width">wrap_content</item>
@@ -371,8 +371,8 @@
         <item name="android:scaleType">center</item>
     </style>
     <style name="FloatingActionButton">
-        <item name="android:layout_width">@dimen/fab_size_width</item>
-        <item name="android:layout_height">@dimen/fab_size_height</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">@dimen/fab_margin_right</item>
@@ -504,6 +504,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginRight">16dp</item>
     </style>
@@ -512,6 +513,7 @@
         <item name="android:background">@null</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:layout_gravity">left</item>
         <item name="android:layout_marginLeft">16dp</item>

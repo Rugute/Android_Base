@@ -4,8 +4,6 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_xlarge">22sp</dimen>
-    <dimen name="fab_size_width">90dp</dimen>
-    <dimen name="fab_size_height">90dp</dimen>
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="fab_margin_bottom">30dp</dimen>
     <dimen name="activity_horizontal_margin">64dp</dimen>
