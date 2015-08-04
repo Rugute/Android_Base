@@ -103,7 +103,7 @@ public abstract class BaseCardsAdapter<M extends BaseModel, C extends BaseCard> 
     }
 
     public M getItem(int position) {
-        if (filtered.size() > position) {
+        if (position > -1 && filtered.size() > position) {
             return filtered.get(position);
         }
         return null;

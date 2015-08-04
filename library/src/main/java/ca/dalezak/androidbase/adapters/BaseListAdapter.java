@@ -60,7 +60,10 @@ public abstract class BaseListAdapter<M extends BaseModel, V extends BaseView> e
     }
 
     public M getItem(int position) {
-        return filtered.get(position);
+        if (position > -1 && filtered.size() > position) {
+            return filtered.get(position);
+        }
+        return null;
     }
 
     public long getItemId(int position) {
