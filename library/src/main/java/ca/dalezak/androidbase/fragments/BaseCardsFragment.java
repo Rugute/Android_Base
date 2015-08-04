@@ -380,16 +380,18 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if (searchView.getQuery().length() > 0) {
-                            getActivity().getIntent().putExtra(SearchManager.QUERY, searchView.getQuery());
-                        }
-                        else if (!hasFocus) {
-                            getActivity().getIntent().removeExtra(SearchManager.QUERY);
-                            menuItem.collapseActionView();
+                        if (getActivity().getIntent() != null) {
+                            if (searchView.getQuery().length() > 0) {
+                                getActivity().getIntent().putExtra(SearchManager.QUERY, searchView.getQuery());
+                            }
+                            else if (!hasFocus) {
+                                getActivity().getIntent().removeExtra(SearchManager.QUERY);
+                                menuItem.collapseActionView();
+                            }
                         }
                     }
                 });
-                if (getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
+                if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
                     String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
                     if (!Strings.isNullOrEmpty(query)) {
                         menuItem.expandActionView();
