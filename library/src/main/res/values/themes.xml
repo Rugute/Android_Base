@@ -7,5 +7,7 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="searchViewStyle">@style/SearchView</item>
         <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+        <item name="android:dialogTheme">@style/AlertDialog</item>
+        <item name="android:alertDialogTheme">@style/AlertDialog</item>
     </style>
 </resources>

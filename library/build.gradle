@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-version = "1.57"
+version = "1.58"
 group = "ca.dalezak.androidbase"
 
 android {
@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 157
-        versionName "1.57"
+        versionCode 158
+        versionName "1.58"
     }
     buildTypes {
         release {

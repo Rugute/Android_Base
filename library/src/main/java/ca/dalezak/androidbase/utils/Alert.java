@@ -12,27 +12,27 @@ public class Alert {
 
     public Alert(Context context) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
         }
     }
 
     public Alert(Context context, int title) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
         }
     }
 
     public Alert(Context context, String title) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
         }
     }
 
     public Alert(Context context, Exception exception) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(Strings.splitCamelCase(exception.getClass().getSimpleName()));
             if (!Strings.isNullOrEmpty(exception.getLocalizedMessage())) {
                 builder.setMessage(exception.getLocalizedMessage());
@@ -54,7 +54,7 @@ public class Alert {
 
     public Alert(Context context, int title, int message) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
         }
@@ -62,7 +62,7 @@ public class Alert {
 
     public Alert(Context context, int title, String message) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
         }
@@ -70,7 +70,7 @@ public class Alert {
 
     public Alert(Context context, String title, String message) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
         }
@@ -78,7 +78,7 @@ public class Alert {
 
     public Alert(Context context, String title, int message) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
         }
@@ -86,7 +86,7 @@ public class Alert {
 
     public Alert(Context context, int title, boolean cancelable) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setCancelable(cancelable);
         }
@@ -94,7 +94,7 @@ public class Alert {
 
     public Alert(Context context, String title, boolean cancelable) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setCancelable(cancelable);
         }
@@ -102,7 +102,7 @@ public class Alert {
 
     public Alert(Context context, int title, int message, boolean cancelable) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
             builder.setCancelable(cancelable);
@@ -111,7 +111,7 @@ public class Alert {
 
     public Alert(Context context, int title, String message, boolean cancelable) {
         if (context != null) {
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(context, R.style.AlertDialog);
             builder.setTitle(title);
             builder.setMessage(message);
             builder.setCancelable(cancelable);

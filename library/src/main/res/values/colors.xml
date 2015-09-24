@@ -8,6 +8,7 @@
     <color name="text_error">#9b0114</color>
     <color name="text_required">#d0021b</color>
     <color name="list_view">#e7e7e7</color>
+    <color name="alert_dialog">#bbb</color>
     <color name="spinner">#dddddd</color>
     <color name="background">#eeeeee</color>
     <color name="image_button">#cccccc</color>
