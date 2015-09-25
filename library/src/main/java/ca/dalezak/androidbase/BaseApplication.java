@@ -123,8 +123,13 @@ public abstract class BaseApplication extends MultiDexApplication {
 
     protected boolean isDatabaseException(Throwable throwable) {
         if (throwable != null && throwable.getMessage() != null) {
-            if (throwable.getMessage().contains("no such column") && throwable instanceof android.database.sqlite.SQLiteException) {
-                return true;
+            if (throwable instanceof android.database.sqlite.SQLiteException) {
+                if (throwable.getMessage().contains("no such column")) {
+                    return true;
+                }
+                if (throwable.getMessage().contains("has no column")) {
+                    return true;
+                }
             }
             return throwable.getCause() != null && isDatabaseException(throwable.getCause());
         }
