@@ -10,13 +10,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 
+import android.support.multidex.MultiDexApplication;
+import android.support.multidex.MultiDex;
+
 import ca.dalezak.androidbase.activities.ShutdownActivity;
 import ca.dalezak.androidbase.managers.LocationManager;
 import ca.dalezak.androidbase.utils.Alert;
 import ca.dalezak.androidbase.utils.Log;
 import ca.dalezak.androidbase.utils.Prefs;
 
-public abstract class BaseApplication extends android.app.Application {
+public abstract class BaseApplication extends MultiDexApplication {
 
     private Activity activity;
 
@@ -32,6 +35,12 @@ public abstract class BaseApplication extends android.app.Application {
     public void onTerminate() {
         super.onTerminate();
         Log.i(this, "onTerminate");
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public String getServer() {
