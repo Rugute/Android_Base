@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.PagerTabStripV22;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
     protected ViewPager viewPager;
 
     @Control("tab_strip")
-    protected PagerTabStrip tabStrip;
+    protected PagerTabStripV22 tabStrip;
 
     @Control("button_add")
     public FloatingActionButton buttonAdd;
@@ -68,7 +69,7 @@ public abstract class BaseTabFragment<F extends BaseFragment>
         return viewPager;
     }
 
-    protected PagerTabStrip getTabStrip() {
+    protected PagerTabStripV22 getTabStrip() {
         return tabStrip;
     }
 
