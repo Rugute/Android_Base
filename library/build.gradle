@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 163
-        versionName "1.63"
+        versionCode 164
+        versionName "1.64"
         multiDexEnabled true
     }
     buildTypes {

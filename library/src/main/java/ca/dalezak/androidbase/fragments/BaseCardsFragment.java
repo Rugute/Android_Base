@@ -2,6 +2,7 @@ package ca.dalezak.androidbase.fragments;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -368,34 +369,48 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String text) {
-                        listAdapter.filter(text);
+                        if (listAdapter != null) {
+                            listAdapter.filter(text);
+                        }
                         return false;
                     }
+
                     @Override
                     public boolean onQueryTextChange(String text) {
-                        listAdapter.filter(text);
+                        if (listAdapter != null) {
+                            listAdapter.filter(text);
+                        }
                         return true;
                     }
                 });
                 searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (getActivity().getIntent() != null) {
+                    public void onFocusChange(View v, boolean focussed) {
+                        Intent intent = getActivity().getIntent();
+                        if (intent != null) {
                             if (searchView.getQuery().length() > 0) {
-                                getActivity().getIntent().putExtra(SearchManager.QUERY, searchView.getQuery());
+                                CharSequence query = searchView.getQuery();
+                                intent.putExtra(SearchManager.QUERY, query);
                             }
-                            else if (!hasFocus) {
-                                getActivity().getIntent().removeExtra(SearchManager.QUERY);
-                                menuItem.collapseActionView();
+                            else if (!focussed) {
+                                intent.removeExtra(SearchManager.QUERY);
+                                if (menuItem != null && menuItem.isActionViewExpanded()) {
+                                    menuItem.collapseActionView();
+                                }
                             }
                         }
                     }
                 });
-                if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
-                    String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
+                Intent intent = getActivity().getIntent();
+                if (intent != null && intent.hasExtra(SearchManager.QUERY)) {
+                    String query = intent.getStringExtra(SearchManager.QUERY);
                     if (!Strings.isNullOrEmpty(query)) {
-                        menuItem.expandActionView();
-                        searchView.setQuery(query, false);
+                        if (menuItem != null) {
+                            menuItem.expandActionView();
+                        }
+                        if (searchView != null) {
+                            searchView.setQuery(query, false);
+                        }
                     }
                 }
             }
