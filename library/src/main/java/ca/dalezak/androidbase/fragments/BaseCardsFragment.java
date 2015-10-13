@@ -1,6 +1,7 @@
 package ca.dalezak.androidbase.fragments;
 
 import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import ca.dalezak.androidbase.R;
@@ -362,10 +363,14 @@ public abstract class BaseCardsFragment<M extends BaseModel, C extends BaseCard,
             final MenuItem menuItem = menu.getItem(i);
             View actionView = menu.getItem(i).getActionView();
             if (actionView != null && actionView instanceof SearchView) {
+                Log.i(this, "SearchView %s", actionView);
                 SearchManager searchManager = (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+                Log.i(this, "SearchManager %s", searchManager);
+                SearchableInfo searchableInfo = searchManager.getSearchableInfo(getActivity().getComponentName());
+                Log.i(this, "SearchableInfo %s", searchableInfo);
                 searchView = (SearchView)actionView;
                 searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-                searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+                searchView.setSearchableInfo(searchableInfo);
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String text) {
