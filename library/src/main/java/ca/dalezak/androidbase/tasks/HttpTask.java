@@ -311,7 +311,7 @@ public abstract class HttpTask<M extends BaseModel> extends BaseTask<HttpTask, M
         }
         catch(UnknownHostException ex) {
             Log.w(this, "UnknownHostException %s", ex.getMessage());
-            return new UnknownHostException(getContext().getString(R.string.unknown_host_exception));
+            return new ConnectException(getContext().getString(R.string.host_connect_exception));
         }
         catch (HttpHostConnectException ex) {
             Log.w(this, "HttpHostConnectException %s", ex.getMessage());
