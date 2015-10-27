@@ -64,15 +64,20 @@ public abstract class BaseApplication extends MultiDexApplication {
 
     public void closeApplication() {
         Log.i(this, "closeApplication");
-        if (hasActivity()) {
-            Intent intent = new Intent(getApplicationContext(), ShutdownActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        try {
+            if (hasActivity()) {
+                Intent intent = new Intent(getApplicationContext(), ShutdownActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+            }
+            else {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
         }
-        else {
-            android.os.Process.killProcess(android.os.Process.myPid());
+        catch (Exception exception) {
+            Log.e(this, "closeApplication", exception);
         }
         System.exit(0);
     }
