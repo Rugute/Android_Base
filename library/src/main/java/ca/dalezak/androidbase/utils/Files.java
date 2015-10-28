@@ -49,14 +49,20 @@ public class Files {
         return new File(imagesDirectory, filename);
     }
 
-    public static File getRootDirectory() {
+    public static File getRootDirectory(Context context) {
+        if (Devices.hasKitKat()) {
+            File []files = context.getExternalFilesDirs(null);
+            if (files.length > 0) {
+                return files[0];
+            }
+        }
         return isExternalStorageWritable()
                 ? Environment.getExternalStorageDirectory()
                 : Environment.getDataDirectory();
     }
 
     public static File getAppDirectory(Context context) {
-        File rootDirectory = getRootDirectory();
+        File rootDirectory = getRootDirectory(context);
         File appDirectory = new File(rootDirectory, context.getPackageName());
         if (!appDirectory.exists() && appDirectory.mkdirs()){
             Log.i(Files.class, "Created Directory %s", appDirectory);
@@ -85,6 +91,11 @@ public class Files {
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     public static String getMimeType(String url) {
