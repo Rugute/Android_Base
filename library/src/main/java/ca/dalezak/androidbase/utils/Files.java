@@ -62,6 +62,9 @@ public class Files {
     }
 
     public static File getAppDirectory(Context context) {
+        if (Devices.hasKitKat()) {
+            return getRootDirectory(context);
+        }
         File rootDirectory = getRootDirectory(context);
         File appDirectory = new File(rootDirectory, context.getPackageName());
         if (!appDirectory.exists() && appDirectory.mkdirs()){
